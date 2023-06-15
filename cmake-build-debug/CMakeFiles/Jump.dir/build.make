@@ -66,6 +66,7 @@ include CMakeFiles/Jump.dir/progress.make
 include CMakeFiles/Jump.dir/flags.make
 
 CMakeFiles/Jump.dir/main.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/main.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
 CMakeFiles/Jump.dir/main.cpp.obj: ../main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Jump.dir/main.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Jump.dir\main.cpp.obj -c C:\Users\tudor\CLionProjects\Jump\main.cpp
@@ -78,19 +79,129 @@ CMakeFiles/Jump.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/main.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tudor\CLionProjects\Jump\main.cpp -o CMakeFiles\Jump.dir\main.cpp.s
 
+CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj: ../Application/JumperApplication.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Jump.dir\Application\JumperApplication.cpp.obj -c C:\Users\tudor\CLionProjects\Jump\Application\JumperApplication.cpp
+
+CMakeFiles/Jump.dir/Application/JumperApplication.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/JumperApplication.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tudor\CLionProjects\Jump\Application\JumperApplication.cpp > CMakeFiles\Jump.dir\Application\JumperApplication.cpp.i
+
+CMakeFiles/Jump.dir/Application/JumperApplication.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/JumperApplication.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tudor\CLionProjects\Jump\Application\JumperApplication.cpp -o CMakeFiles\Jump.dir\Application\JumperApplication.cpp.s
+
+CMakeFiles/Jump.dir/Application/GameState.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/Application/GameState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/Application/GameState.cpp.obj: ../Application/GameState.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Jump.dir/Application/GameState.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Jump.dir\Application\GameState.cpp.obj -c C:\Users\tudor\CLionProjects\Jump\Application\GameState.cpp
+
+CMakeFiles/Jump.dir/Application/GameState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/GameState.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tudor\CLionProjects\Jump\Application\GameState.cpp > CMakeFiles\Jump.dir\Application\GameState.cpp.i
+
+CMakeFiles/Jump.dir/Application/GameState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/GameState.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tudor\CLionProjects\Jump\Application\GameState.cpp -o CMakeFiles\Jump.dir\Application\GameState.cpp.s
+
+CMakeFiles/Jump.dir/Application/MenuState.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/Application/MenuState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/Application/MenuState.cpp.obj: ../Application/MenuState.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Jump.dir/Application/MenuState.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Jump.dir\Application\MenuState.cpp.obj -c C:\Users\tudor\CLionProjects\Jump\Application\MenuState.cpp
+
+CMakeFiles/Jump.dir/Application/MenuState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/MenuState.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tudor\CLionProjects\Jump\Application\MenuState.cpp > CMakeFiles\Jump.dir\Application\MenuState.cpp.i
+
+CMakeFiles/Jump.dir/Application/MenuState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/MenuState.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tudor\CLionProjects\Jump\Application\MenuState.cpp -o CMakeFiles\Jump.dir\Application\MenuState.cpp.s
+
+CMakeFiles/Jump.dir/Application/PauseState.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/Application/PauseState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/Application/PauseState.cpp.obj: ../Application/PauseState.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Jump.dir/Application/PauseState.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Jump.dir\Application\PauseState.cpp.obj -c C:\Users\tudor\CLionProjects\Jump\Application\PauseState.cpp
+
+CMakeFiles/Jump.dir/Application/PauseState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/PauseState.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tudor\CLionProjects\Jump\Application\PauseState.cpp > CMakeFiles\Jump.dir\Application\PauseState.cpp.i
+
+CMakeFiles/Jump.dir/Application/PauseState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/PauseState.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tudor\CLionProjects\Jump\Application\PauseState.cpp -o CMakeFiles\Jump.dir\Application\PauseState.cpp.s
+
+CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj: ../Application/SettingsState.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Jump.dir\Application\SettingsState.cpp.obj -c C:\Users\tudor\CLionProjects\Jump\Application\SettingsState.cpp
+
+CMakeFiles/Jump.dir/Application/SettingsState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/SettingsState.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tudor\CLionProjects\Jump\Application\SettingsState.cpp > CMakeFiles\Jump.dir\Application\SettingsState.cpp.i
+
+CMakeFiles/Jump.dir/Application/SettingsState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/SettingsState.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tudor\CLionProjects\Jump\Application\SettingsState.cpp -o CMakeFiles\Jump.dir\Application\SettingsState.cpp.s
+
+CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj: ../Application/PlayingState.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\Jump.dir\Application\PlayingState.cpp.obj -c C:\Users\tudor\CLionProjects\Jump\Application\PlayingState.cpp
+
+CMakeFiles/Jump.dir/Application/PlayingState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/PlayingState.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tudor\CLionProjects\Jump\Application\PlayingState.cpp > CMakeFiles\Jump.dir\Application\PlayingState.cpp.i
+
+CMakeFiles/Jump.dir/Application/PlayingState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/PlayingState.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tudor\CLionProjects\Jump\Application\PlayingState.cpp -o CMakeFiles\Jump.dir\Application\PlayingState.cpp.s
+
 # Object files for target Jump
 Jump_OBJECTS = \
-"CMakeFiles/Jump.dir/main.cpp.obj"
+"CMakeFiles/Jump.dir/main.cpp.obj" \
+"CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj" \
+"CMakeFiles/Jump.dir/Application/GameState.cpp.obj" \
+"CMakeFiles/Jump.dir/Application/MenuState.cpp.obj" \
+"CMakeFiles/Jump.dir/Application/PauseState.cpp.obj" \
+"CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj" \
+"CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj"
 
 # External object files for target Jump
 Jump_EXTERNAL_OBJECTS =
 
 Jump.exe: CMakeFiles/Jump.dir/main.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/Application/GameState.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/Application/MenuState.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/Application/PauseState.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/build.make
+Jump.exe: C:/SFML/lib/libsfml-system-s-d.a
+Jump.exe: C:/SFML/lib/libsfml-window-s-d.a
+Jump.exe: C:/SFML/lib/libsfml-graphics-s-d.a
+Jump.exe: C:/SFML/lib/libsfml-audio-s-d.a
+Jump.exe: C:/SFML/lib/libsfml-network-s-d.a
+Jump.exe: C:/SFML/lib/libsfml-window-s-d.a
+Jump.exe: C:/SFML/lib/libfreetype.a
+Jump.exe: C:/SFML/lib/libopenal32.a
+Jump.exe: C:/SFML/lib/libvorbisfile.a
+Jump.exe: C:/SFML/lib/libvorbisenc.a
+Jump.exe: C:/SFML/lib/libvorbis.a
+Jump.exe: C:/SFML/lib/libogg.a
+Jump.exe: C:/SFML/lib/libFLAC.a
+Jump.exe: C:/SFML/lib/libsfml-system-s-d.a
 Jump.exe: CMakeFiles/Jump.dir/linklibs.rsp
 Jump.exe: CMakeFiles/Jump.dir/objects1.rsp
 Jump.exe: CMakeFiles/Jump.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable Jump.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable Jump.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\Jump.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

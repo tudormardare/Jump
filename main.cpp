@@ -1,6 +1,8 @@
 #include <iostream>
+#include "Application/JumperApplication.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    JumperApplication jp;
+    jp.run();
     return 0;
 }

@@ -128,6 +128,189 @@ Jump/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/build
 .PHONY : Jump/fast
 
+#=============================================================================
+# Target rules for targets named runAllTests
+
+# Build rule for target.
+runAllTests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 runAllTests
+.PHONY : runAllTests
+
+# fast build rule for target.
+runAllTests/fast:
+	$(MAKE) $(MAKESILENT) -f Test\CMakeFiles\runAllTests.dir\build.make Test/CMakeFiles/runAllTests.dir/build
+.PHONY : runAllTests/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest.dir\build.make Test/lib/googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
+
+#=============================================================================
+# Target rules for targets named gtest_main
+
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 gtest_main
+.PHONY : gtest_main
+
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest_main.dir\build.make Test/lib/googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
+
+Application/GameState.obj: Application/GameState.cpp.obj
+.PHONY : Application/GameState.obj
+
+# target to build an object file
+Application/GameState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/GameState.cpp.obj
+.PHONY : Application/GameState.cpp.obj
+
+Application/GameState.i: Application/GameState.cpp.i
+.PHONY : Application/GameState.i
+
+# target to preprocess a source file
+Application/GameState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/GameState.cpp.i
+.PHONY : Application/GameState.cpp.i
+
+Application/GameState.s: Application/GameState.cpp.s
+.PHONY : Application/GameState.s
+
+# target to generate assembly for a file
+Application/GameState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/GameState.cpp.s
+.PHONY : Application/GameState.cpp.s
+
+Application/JumperApplication.obj: Application/JumperApplication.cpp.obj
+.PHONY : Application/JumperApplication.obj
+
+# target to build an object file
+Application/JumperApplication.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj
+.PHONY : Application/JumperApplication.cpp.obj
+
+Application/JumperApplication.i: Application/JumperApplication.cpp.i
+.PHONY : Application/JumperApplication.i
+
+# target to preprocess a source file
+Application/JumperApplication.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/JumperApplication.cpp.i
+.PHONY : Application/JumperApplication.cpp.i
+
+Application/JumperApplication.s: Application/JumperApplication.cpp.s
+.PHONY : Application/JumperApplication.s
+
+# target to generate assembly for a file
+Application/JumperApplication.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/JumperApplication.cpp.s
+.PHONY : Application/JumperApplication.cpp.s
+
+Application/MenuState.obj: Application/MenuState.cpp.obj
+.PHONY : Application/MenuState.obj
+
+# target to build an object file
+Application/MenuState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/MenuState.cpp.obj
+.PHONY : Application/MenuState.cpp.obj
+
+Application/MenuState.i: Application/MenuState.cpp.i
+.PHONY : Application/MenuState.i
+
+# target to preprocess a source file
+Application/MenuState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/MenuState.cpp.i
+.PHONY : Application/MenuState.cpp.i
+
+Application/MenuState.s: Application/MenuState.cpp.s
+.PHONY : Application/MenuState.s
+
+# target to generate assembly for a file
+Application/MenuState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/MenuState.cpp.s
+.PHONY : Application/MenuState.cpp.s
+
+Application/PauseState.obj: Application/PauseState.cpp.obj
+.PHONY : Application/PauseState.obj
+
+# target to build an object file
+Application/PauseState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PauseState.cpp.obj
+.PHONY : Application/PauseState.cpp.obj
+
+Application/PauseState.i: Application/PauseState.cpp.i
+.PHONY : Application/PauseState.i
+
+# target to preprocess a source file
+Application/PauseState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PauseState.cpp.i
+.PHONY : Application/PauseState.cpp.i
+
+Application/PauseState.s: Application/PauseState.cpp.s
+.PHONY : Application/PauseState.s
+
+# target to generate assembly for a file
+Application/PauseState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PauseState.cpp.s
+.PHONY : Application/PauseState.cpp.s
+
+Application/PlayingState.obj: Application/PlayingState.cpp.obj
+.PHONY : Application/PlayingState.obj
+
+# target to build an object file
+Application/PlayingState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj
+.PHONY : Application/PlayingState.cpp.obj
+
+Application/PlayingState.i: Application/PlayingState.cpp.i
+.PHONY : Application/PlayingState.i
+
+# target to preprocess a source file
+Application/PlayingState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PlayingState.cpp.i
+.PHONY : Application/PlayingState.cpp.i
+
+Application/PlayingState.s: Application/PlayingState.cpp.s
+.PHONY : Application/PlayingState.s
+
+# target to generate assembly for a file
+Application/PlayingState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PlayingState.cpp.s
+.PHONY : Application/PlayingState.cpp.s
+
+Application/SettingsState.obj: Application/SettingsState.cpp.obj
+.PHONY : Application/SettingsState.obj
+
+# target to build an object file
+Application/SettingsState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj
+.PHONY : Application/SettingsState.cpp.obj
+
+Application/SettingsState.i: Application/SettingsState.cpp.i
+.PHONY : Application/SettingsState.i
+
+# target to preprocess a source file
+Application/SettingsState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/SettingsState.cpp.i
+.PHONY : Application/SettingsState.cpp.i
+
+Application/SettingsState.s: Application/SettingsState.cpp.s
+.PHONY : Application/SettingsState.s
+
+# target to generate assembly for a file
+Application/SettingsState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/SettingsState.cpp.s
+.PHONY : Application/SettingsState.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -161,6 +344,27 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... Jump
+	@echo ... gtest
+	@echo ... gtest_main
+	@echo ... runAllTests
+	@echo ... Application/GameState.obj
+	@echo ... Application/GameState.i
+	@echo ... Application/GameState.s
+	@echo ... Application/JumperApplication.obj
+	@echo ... Application/JumperApplication.i
+	@echo ... Application/JumperApplication.s
+	@echo ... Application/MenuState.obj
+	@echo ... Application/MenuState.i
+	@echo ... Application/MenuState.s
+	@echo ... Application/PauseState.obj
+	@echo ... Application/PauseState.i
+	@echo ... Application/PauseState.s
+	@echo ... Application/PlayingState.obj
+	@echo ... Application/PlayingState.i
+	@echo ... Application/PlayingState.s
+	@echo ... Application/SettingsState.obj
+	@echo ... Application/SettingsState.i
+	@echo ... Application/SettingsState.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

@@ -63,15 +63,51 @@ CMAKE_BINARY_DIR = C:\Users\tudor\CLionProjects\Jump\cmake-build-debug
 
 # The main recursive "all" target.
 all: CMakeFiles/Jump.dir/all
+all: Test/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall:
+preinstall: Test/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/Jump.dir/clean
+clean: Test/clean
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory Test
+
+# Recursive "all" directory target.
+Test/all: Test/CMakeFiles/runAllTests.dir/all
+Test/all: Test/lib/googletest/all
+.PHONY : Test/all
+
+# Recursive "preinstall" directory target.
+Test/preinstall: Test/lib/googletest/preinstall
+.PHONY : Test/preinstall
+
+# Recursive "clean" directory target.
+Test/clean: Test/CMakeFiles/runAllTests.dir/clean
+Test/clean: Test/lib/googletest/clean
+.PHONY : Test/clean
+
+#=============================================================================
+# Directory level rules for directory Test/lib/googletest
+
+# Recursive "all" directory target.
+Test/lib/googletest/all: Test/lib/googletest/CMakeFiles/gtest.dir/all
+Test/lib/googletest/all: Test/lib/googletest/CMakeFiles/gtest_main.dir/all
+.PHONY : Test/lib/googletest/all
+
+# Recursive "preinstall" directory target.
+Test/lib/googletest/preinstall:
+.PHONY : Test/lib/googletest/preinstall
+
+# Recursive "clean" directory target.
+Test/lib/googletest/clean: Test/lib/googletest/CMakeFiles/gtest.dir/clean
+Test/lib/googletest/clean: Test/lib/googletest/CMakeFiles/gtest_main.dir/clean
+.PHONY : Test/lib/googletest/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/Jump.dir
@@ -80,12 +116,12 @@ clean: CMakeFiles/Jump.dir/clean
 CMakeFiles/Jump.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target Jump"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target Jump"
 .PHONY : CMakeFiles/Jump.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Jump.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Jump.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 0
 .PHONY : CMakeFiles/Jump.dir/rule
@@ -98,6 +134,85 @@ Jump: CMakeFiles/Jump.dir/rule
 CMakeFiles/Jump.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/clean
 .PHONY : CMakeFiles/Jump.dir/clean
+
+#=============================================================================
+# Target rules for target Test/CMakeFiles/runAllTests.dir
+
+# All Build rule for target.
+Test/CMakeFiles/runAllTests.dir/all: Test/lib/googletest/CMakeFiles/gtest.dir/all
+Test/CMakeFiles/runAllTests.dir/all: Test/lib/googletest/CMakeFiles/gtest_main.dir/all
+	$(MAKE) $(MAKESILENT) -f Test\CMakeFiles\runAllTests.dir\build.make Test/CMakeFiles/runAllTests.dir/depend
+	$(MAKE) $(MAKESILENT) -f Test\CMakeFiles\runAllTests.dir\build.make Test/CMakeFiles/runAllTests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=13,14,15,16,17,18,19,20 "Built target runAllTests"
+.PHONY : Test/CMakeFiles/runAllTests.dir/all
+
+# Build rule for subdir invocation for target.
+Test/CMakeFiles/runAllTests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 12
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Test/CMakeFiles/runAllTests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 0
+.PHONY : Test/CMakeFiles/runAllTests.dir/rule
+
+# Convenience name for target.
+runAllTests: Test/CMakeFiles/runAllTests.dir/rule
+.PHONY : runAllTests
+
+# clean rule for target.
+Test/CMakeFiles/runAllTests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f Test\CMakeFiles\runAllTests.dir\build.make Test/CMakeFiles/runAllTests.dir/clean
+.PHONY : Test/CMakeFiles/runAllTests.dir/clean
+
+#=============================================================================
+# Target rules for target Test/lib/googletest/CMakeFiles/gtest.dir
+
+# All Build rule for target.
+Test/lib/googletest/CMakeFiles/gtest.dir/all:
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest.dir\build.make Test/lib/googletest/CMakeFiles/gtest.dir/depend
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest.dir\build.make Test/lib/googletest/CMakeFiles/gtest.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=9,10 "Built target gtest"
+.PHONY : Test/lib/googletest/CMakeFiles/gtest.dir/all
+
+# Build rule for subdir invocation for target.
+Test/lib/googletest/CMakeFiles/gtest.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Test/lib/googletest/CMakeFiles/gtest.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 0
+.PHONY : Test/lib/googletest/CMakeFiles/gtest.dir/rule
+
+# Convenience name for target.
+gtest: Test/lib/googletest/CMakeFiles/gtest.dir/rule
+.PHONY : gtest
+
+# clean rule for target.
+Test/lib/googletest/CMakeFiles/gtest.dir/clean:
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest.dir\build.make Test/lib/googletest/CMakeFiles/gtest.dir/clean
+.PHONY : Test/lib/googletest/CMakeFiles/gtest.dir/clean
+
+#=============================================================================
+# Target rules for target Test/lib/googletest/CMakeFiles/gtest_main.dir
+
+# All Build rule for target.
+Test/lib/googletest/CMakeFiles/gtest_main.dir/all: Test/lib/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest_main.dir\build.make Test/lib/googletest/CMakeFiles/gtest_main.dir/depend
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest_main.dir\build.make Test/lib/googletest/CMakeFiles/gtest_main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles --progress-num=11,12 "Built target gtest_main"
+.PHONY : Test/lib/googletest/CMakeFiles/gtest_main.dir/all
+
+# Build rule for subdir invocation for target.
+Test/lib/googletest/CMakeFiles/gtest_main.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Test/lib/googletest/CMakeFiles/gtest_main.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\tudor\CLionProjects\Jump\cmake-build-debug\CMakeFiles 0
+.PHONY : Test/lib/googletest/CMakeFiles/gtest_main.dir/rule
+
+# Convenience name for target.
+gtest_main: Test/lib/googletest/CMakeFiles/gtest_main.dir/rule
+.PHONY : gtest_main
+
+# clean rule for target.
+Test/lib/googletest/CMakeFiles/gtest_main.dir/clean:
+	$(MAKE) $(MAKESILENT) -f Test\lib\googletest\CMakeFiles\gtest_main.dir\build.make Test/lib/googletest/CMakeFiles/gtest_main.dir/clean
+.PHONY : Test/lib/googletest/CMakeFiles/gtest_main.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

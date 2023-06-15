@@ -1,4 +1,10 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Jump.dir/Application/GameState.cpp.obj"
+  "CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj"
+  "CMakeFiles/Jump.dir/Application/MenuState.cpp.obj"
+  "CMakeFiles/Jump.dir/Application/PauseState.cpp.obj"
+  "CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj"
+  "CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj"
   "CMakeFiles/Jump.dir/main.cpp.obj"
   "Jump.exe"
   "Jump.exe.manifest"
