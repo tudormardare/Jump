@@ -7,13 +7,12 @@
 
 
 #include "GameState.h"
-#include "PlayingState.h"
 #include "MenuState.h"
 
-class PauseState: GameState{
+class PauseState: public GameState{
 public:
-
-private:
+    static PauseState*  GetInstance();
+    virtual void handleRequest();
 };
 
 

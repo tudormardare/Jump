@@ -5,8 +5,14 @@
 #ifndef JUMPER_GAME_H
 #define JUMPER_GAME_H
 
-class PlayingState {
-private:
+#include "GameState.h"
+#include "MenuState.h"
+#include "PauseState.h"
+
+class PlayingState:public GameState {
+public:
+    static PlayingState* GetInstance();
+    virtual void handleRequest();
 };
 
 

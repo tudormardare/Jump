@@ -6,8 +6,14 @@
 #define JUMPER_MAINMENU_H
 
 
-class MenuState {
+#include "GameState.h"
+#include "PauseState.h"
+#include "PlayingState.h"
 
+class MenuState: public GameState{
+public:
+    static MenuState* GetInstance();
+    virtual void handleRequest();
 };
 
 

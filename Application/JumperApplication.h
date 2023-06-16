@@ -18,15 +18,9 @@
 
 class JumperApplication {
 public:
+    GameState* gameState;
     JumperApplication();
     void run();
-private:
-    sf::RenderWindow window;
-
-    MenuState menuState;
-    PlayingState playingState;
-
-    GameState *currentState; // <-- delegate to the object pointed
 };
 
 

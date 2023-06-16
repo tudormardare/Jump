@@ -6,8 +6,12 @@
 #define JUMPER_SETTINGSMENU_H
 
 
-class SettingsState {
+#include "GameState.h"
 
+class SettingsState:public GameState{
+public:
+    static SettingsState* GetInstance();
+    virtual void handleRequest();
 };
 
 

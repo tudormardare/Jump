@@ -13,11 +13,9 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 
-struct GameState {
-    virtual GameState* handleEvent(const sf::Event&) = 0;
-    virtual void update(sf::Time) = 0;
-    virtual void render() = 0;
-    virtual ~GameState() = default;
+class GameState {
+public:
+    virtual void handleRequest() = 0;
 };
 
 
