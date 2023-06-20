@@ -274,6 +274,14 @@
 			<Option target="Jump"/>
 			<Option target="runAllTests"/>
 		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/MenuButton.cpp">
+			<Option target="Jump"/>
+			<Option target="runAllTests"/>
+		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/MenuButton.h">
+			<Option target="Jump"/>
+			<Option target="runAllTests"/>
+		</Unit>
 		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Test/lib/googletest/src/gtest-all.cc">
 			<Option target="gtest"/>
 		</Unit>

@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/PauseState.cpp" "CMakeFiles/Jump.dir/Application/PauseState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/PauseState.cpp.obj.d"
   "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/PlayingState.cpp" "CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj.d"
   "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/SettingsState.cpp" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj.d"
+  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/MenuButton.cpp" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj" "gcc" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj.d"
   "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/main.cpp" "CMakeFiles/Jump.dir/main.cpp.obj" "gcc" "CMakeFiles/Jump.dir/main.cpp.obj.d"
   )
 

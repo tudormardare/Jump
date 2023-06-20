@@ -5,13 +5,4 @@
 #include <iostream>
 #include "PlayingState.h"
 
-PlayingState *PlayingState::GetInstance() {
-    static PlayingState playingState;
-    return &playingState;
-}
-
-
-void PlayingState::handleRequest() {
-    std::cout<<"Playing\n";
-}
 

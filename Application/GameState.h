@@ -12,10 +12,15 @@
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class GameState {
 public:
-    virtual void handleRequest() = 0;
+    virtual void handleEvents(sf::RenderWindow& window) = 0;
+    virtual void update() = 0;
+    virtual void render(sf::RenderWindow& window) = 0;
+    virtual GameState* changeState() = 0;
+    virtual ~GameState() = default;
 };
 
 

@@ -8,28 +8,44 @@
 
 
 JumperApplication::JumperApplication() {
-    gameState = nullptr;
+    window.create(sf::VideoMode(800, 600), "Jumper");
+    currentState = &MenuState::GetInstance(window);
 }
 
 void JumperApplication::run(){
-    int i = 0;
-    while (i < 3) {
-        gameState = PauseState::GetInstance();
-        gameState->handleRequest();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
-        gameState = MenuState::GetInstance();
-        gameState->handleRequest();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
-        gameState = PlayingState::GetInstance();
-        gameState->handleRequest();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
-        gameState = SettingsState::GetInstance();
-        gameState->handleRequest();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        i++;
+    while (window.isOpen())
+    {
+        handleEvents();
+        update();
+        render();
     }
-
 }
+
+void JumperApplication::handleEvents() {
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+        {
+            window.close();
+        }
+    }
+    if(event.type == sf::Event::MouseButtonPressed) {
+        currentState->handleEvents(window);
+        GameState *nextState = currentState->changeState();
+        if (nextState != nullptr) {
+            currentState = nextState;
+        }
+    }
+}
+
+void JumperApplication::update() {
+    currentState->update();
+}
+
+void JumperApplication::render() {
+    window.clear();
+    currentState->render(window);
+    window.display();
+}
+

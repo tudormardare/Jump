@@ -9,10 +9,8 @@
 #include "MenuState.h"
 #include "PauseState.h"
 
-class PlayingState:public GameState {
-public:
-    static PlayingState* GetInstance();
-    virtual void handleRequest();
+class PlayingState{
+
 };
 
 

@@ -17,10 +17,19 @@
 #include "MenuState.h"
 
 class JumperApplication {
+
 public:
-    GameState* gameState;
     JumperApplication();
     void run();
+
+private:
+    GameState* currentState;
+    sf::RenderWindow window;
+    void handleEvents();
+    void update();
+    void render();
+
+
 };
 
 

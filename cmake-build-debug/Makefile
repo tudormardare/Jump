@@ -311,6 +311,30 @@ Application/SettingsState.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/SettingsState.cpp.s
 .PHONY : Application/SettingsState.cpp.s
 
+GUI/MenuButton.obj: GUI/MenuButton.cpp.obj
+.PHONY : GUI/MenuButton.obj
+
+# target to build an object file
+GUI/MenuButton.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj
+.PHONY : GUI/MenuButton.cpp.obj
+
+GUI/MenuButton.i: GUI/MenuButton.cpp.i
+.PHONY : GUI/MenuButton.i
+
+# target to preprocess a source file
+GUI/MenuButton.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/MenuButton.cpp.i
+.PHONY : GUI/MenuButton.cpp.i
+
+GUI/MenuButton.s: GUI/MenuButton.cpp.s
+.PHONY : GUI/MenuButton.s
+
+# target to generate assembly for a file
+GUI/MenuButton.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/MenuButton.cpp.s
+.PHONY : GUI/MenuButton.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -365,6 +389,9 @@ help:
 	@echo ... Application/SettingsState.obj
 	@echo ... Application/SettingsState.i
 	@echo ... Application/SettingsState.s
+	@echo ... GUI/MenuButton.obj
+	@echo ... GUI/MenuButton.i
+	@echo ... GUI/MenuButton.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

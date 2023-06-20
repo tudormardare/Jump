@@ -8,10 +8,8 @@
 
 #include "GameState.h"
 
-class SettingsState:public GameState{
-public:
-    static SettingsState* GetInstance();
-    virtual void handleRequest();
+class SettingsState{
+
 };
 
 
