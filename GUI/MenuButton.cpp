@@ -2,12 +2,22 @@
 // Created by tudor on 20/06/2023.
 //
 
+#include <iostream>
 #include "MenuButton.h"
 
 MenuButton::MenuButton(sf::Vector2f size, sf::Vector2f position, sf::Texture &texture) {
-    button.setTexture(texture);
+    texture.setSmooth(true);
     button.setPosition(position);
-    button.setScale(size.x / button.getLocalBounds().width, size.y / button.getLocalBounds().height);
+    button.setTexture(texture);
+
+    float scaleX = size.x / button.getGlobalBounds().width;
+    float scaleY = size.y /button.getGlobalBounds().height;
+
+    float scale = std::min(scaleX, scaleY);
+
+    button.setScale(scale, scale);
+    button.setOrigin(size.x / 2 , size.y / 2 );
+    button.setPosition(position);
 
 }
 
@@ -33,4 +43,12 @@ bool MenuButton::isMouseOver(sf::Vector2<int> mousePosition) {
 
 void MenuButton::update(sf::RenderWindow &window) {
 
+}
+
+void MenuButton::setPosition(sf::Vector2f position) {
+    button.setPosition(position);
+}
+
+sf::FloatRect MenuButton::getGlobalBounds() {
+    return button.getGlobalBounds();
 }

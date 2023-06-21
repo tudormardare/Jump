@@ -29,6 +29,7 @@ private:
     void handleEvents();
     void update();
     void render();
+    void changeState();
 
 
 };

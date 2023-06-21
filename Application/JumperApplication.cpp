@@ -8,61 +8,48 @@
 
 
 JumperApplication::JumperApplication() {
-    window.create(sf::VideoMode(800, 600), "Jumper");
+    window.create(sf::VideoMode(1080, 720), "Jumper");
     currentState = &MenuState::GetInstance(window);
 }
 
 void JumperApplication::run() {
-    bool isButtonPressed = false; // Nuova variabile per gestire il clic del pulsante
 
     while (window.isOpen()) {
 
         // Gestione degli eventi
-        sf::Event event{};
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            } else if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Left && !isButtonPressed) {
-                    isButtonPressed = true;
-                    currentState->handleEvents(window, event); // Gestisci l'evento solo una volta
-                }
-            } else if (event.type == sf::Event::MouseButtonReleased) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    isButtonPressed = false;
-                }
-            }
-        }
+        handleEvents();
 
         // Aggiornamento dello stato corrente
-        currentState->update();
+        update();
 
         // Cambio di stato se necessario
-        GameState *nextState = currentState->changeState();
-        if (nextState != nullptr) {
-            currentState = nextState;
-        }
+        changeState();
 
         // Disegno dello stato corrente
-        currentState->render(window);
+        render();
     }
 }
 
 
 void JumperApplication::handleEvents() {
+
+    bool isButtonPressed = false; // Nuova variabile per gestire il clic del pulsante
+
     sf::Event event{};
-    while (window.pollEvent(event)){
-        if (event.type == sf::Event::Closed){
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
             window.close();
+        } else if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left && !isButtonPressed) {
+                isButtonPressed = true;
+                currentState->handleEvents(window, event); // Gestisci l'evento solo una volta
+            }
+        } else if (event.type == sf::Event::MouseButtonReleased) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                isButtonPressed = false;
+            }
         }
     }
-    /*if(event.type == sf::Event::MouseButtonPressed) {
-        currentState->handleEvents(window);
-        GameState *nextState = currentState->changeState();
-        if (nextState != nullptr) {
-            currentState = nextState;
-        }
-    }*/
 }
 
 void JumperApplication::update() {
@@ -70,8 +57,13 @@ void JumperApplication::update() {
 }
 
 void JumperApplication::render() {
-    window.clear();
     currentState->render(window);
-    window.display();
+}
+
+void JumperApplication::changeState() {
+    GameState *nextState = currentState->changeState();
+    if (nextState != nullptr) {
+        currentState = nextState;
+    }
 }
 

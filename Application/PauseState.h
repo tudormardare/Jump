@@ -6,12 +6,12 @@
 #define JUMPER_PAUSEMENU_H
 
 
-#define BUTTON_WIDTH 200
-#define BUTTON_HEIGHT 50
-#define BUTTON_DISTANCE 100
-#define BUTTONS_NUMBER 3
-#define BUTTONS_STARTING_X 200
-#define BUTTONS_STARTING_Y 200
+#define PAUSE_BUTTON_WIDTH 300
+#define PAUSE_BUTTON_SCALE_Y 100
+#define PAUSE_BUTTON_DISTANCE 100
+#define PAUSE_BUTTONS_NUMBER 2
+#define PAUSE_BUTTONS_STARTING_X 350
+#define PAUSE_BUTTONS_STARTING_Y 100
 #define PAUSE_BUTTONS_PATH "../PNG/ButtonStart.png"
 
 
@@ -37,18 +37,20 @@ private:
         if (!buttonTexture.loadFromFile(PAUSE_BUTTONS_PATH)){
             std::cerr << "Errore durante il caricamento della texture del pulsante." << std::endl;
         }
-        sf::Vector2f size(BUTTON_WIDTH, BUTTON_HEIGHT);
-        sf::Vector2f startingPosition(BUTTONS_STARTING_X, BUTTONS_STARTING_Y);
+        sf::Vector2f scale(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_SCALE_Y);
+        sf::Vector2f startingPosition(PAUSE_BUTTONS_STARTING_X, PAUSE_BUTTONS_STARTING_Y);
 
-        buttons[0] = std::make_unique<MenuButton>(size,startingPosition, buttonTexture);
-        buttons[1] = std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, BUTTON_DISTANCE), buttonTexture);
-        buttons[2] = std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, 2*BUTTON_DISTANCE), buttonTexture);
+        //Inizializzazione dei bottoni
+        for(int i = 0; i < PAUSE_BUTTONS_NUMBER; i++){
+            buttons[i] = std::make_unique<MenuButton>(scale, startingPosition + sf::Vector2f(0, i * PAUSE_BUTTON_DISTANCE), buttonTexture);
+
+        }
     };
 
     bool changeStateToNext = false;
     sf::RenderWindow& window;
     sf::Texture buttonTexture;
-    std::unique_ptr<MenuButton> buttons[BUTTONS_NUMBER];
+    std::unique_ptr<MenuButton> buttons[PAUSE_BUTTONS_NUMBER];
 };
 
 

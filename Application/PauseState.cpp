@@ -2,7 +2,6 @@
 // Created by tudor on 15/06/2023.
 //
 
-#include <iostream>
 #include "PauseState.h"
 
 PauseState &PauseState::GetInstance(sf::RenderWindow &window){
@@ -43,9 +42,11 @@ void PauseState::render(sf::RenderWindow &window) {
 GameState* PauseState::changeState() {
     if(changeStateToNext) {
         if (buttons[0]->isClicked(window)) {
-            std::cout << "Passo a Menu" << std::endl;
             changeStateToNext = false;
-            return &MenuState::GetInstance(window);
+            return &PlayingState::GetInstance(window);
+        }
+        else if(buttons[1]->isClicked(window)){
+           window.close();
         }
     }
     return nullptr;
