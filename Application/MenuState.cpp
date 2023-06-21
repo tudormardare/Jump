@@ -66,7 +66,7 @@ void MenuState::initButtons() {
         std::cout << "Errore durante il caricamento della texture del pulsante." << std::endl;
     }
     sf::Vector2f size(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT);
-    sf::Vector2f startingPosition(WINDOW_WIDTH -/ (float) 2, (WINDOW_HEIGHT/(float) 2));
+    sf::Vector2f startingPosition(WINDOW_WIDTH / (float) 2, (WINDOW_HEIGHT/(float) 2));
 
 
     //Inizializzazione dei bottoni
