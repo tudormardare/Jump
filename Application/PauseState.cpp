@@ -10,14 +10,19 @@ PauseState &PauseState::GetInstance(sf::RenderWindow &window){
     return pauseState;
 }
 
-void PauseState::handleEvents(sf::RenderWindow &window){
-
-    sf::Event event;
-    while (window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-        {
-            window.close();
+void PauseState::handleEvents(sf::RenderWindow &window, const sf::Event& event){
+    if (event.type == sf::Event::Closed){
+        window.close();
+    }
+    else if (event.type == sf::Event::MouseButtonPressed){
+        if (event.mouseButton.button == sf::Mouse::Left){
+            for (auto & button : buttons){
+                if (button->isClicked(window)){
+                    button->update(window);
+                    changeStateToNext = true; // Imposta il flag per il cambio di stato
+                    break; // Esci dal ciclo dopo il primo bottone cliccato
+                }
+            }
         }
     }
 }
@@ -28,20 +33,22 @@ void PauseState::update() {
 
 void PauseState::render(sf::RenderWindow &window) {
     window.clear();
-
-    for (int i = 0; i < 3; ++i)
-    {
-        buttons[i]->draw(window);
+    for (auto & button : buttons){
+        button->draw(window);
     }
 
     window.display();
 }
 
 GameState* PauseState::changeState() {
-    if (buttons[0]->isClicked(window)){
-        return &MenuState::GetInstance(window);
-        std::cout << "Passo a Menu" << std::endl;
+    if(changeStateToNext) {
+        if (buttons[0]->isClicked(window)) {
+            std::cout << "Passo a Menu" << std::endl;
+            changeStateToNext = false;
+            return &MenuState::GetInstance(window);
+        }
     }
     return nullptr;
 }
+
 

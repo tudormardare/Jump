@@ -23,6 +23,7 @@ public:
     void run();
 
 private:
+
     GameState* currentState;
     sf::RenderWindow window;
     void handleEvents();
