@@ -11,10 +11,10 @@ target_link_libraries(runAllTests gtest gtest_main )
 # Detect and add SFML - to read FindSFML.cmake file
 
 if (APPLE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIRS})
-set_target_properties(Jumper PROPERTIES
+set_target_properties(Jump PROPERTIES
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_BUNDLE_NAME Jump
         MACOSX_BUNDLE_BUNDLE_VERSION "1.0"

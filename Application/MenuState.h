@@ -11,7 +11,7 @@
 #define MENU_BUTTONS_NUMBER 3
 #define MENU_BUTTONS_STARTING_X 350
 #define MENU_BUTTONS_STARTING_Y 100
-#define MENU_BUTTONS_PATH "../PNG/Button.png"
+#define MENU_BUTTONS_PATH "PNG/Button.png"
 
 #include "GameState.h"
 #include "PauseState.h"

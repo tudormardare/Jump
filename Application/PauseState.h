@@ -12,7 +12,7 @@
 #define PAUSE_BUTTONS_NUMBER 2
 #define PAUSE_BUTTONS_STARTING_X 350
 #define PAUSE_BUTTONS_STARTING_Y 100
-#define PAUSE_BUTTONS_PATH "../PNG/ButtonStart.png"
+#define PAUSE_BUTTONS_PATH "PNG/ButtonStart.png"
 
 
 #include "GameState.h"
