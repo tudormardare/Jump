@@ -8,7 +8,35 @@
 
 #include "Entity.h"
 
-class Player : public Entity {
+class Player : public Entity
+{
+private:
+    sf::Sprite sprite;
+    sf::Texture texture;
+
+    float movementSpeed;
+
+    //Private functions
+    void initTexture();
+    void initSprite();
+
+public:
+    Player();
+    virtual ~Player();
+
+    //Functions
+    void move(const float dirX, const float dirY);
+
+    void update() override;
+    void render(sf::RenderTarget& target) override;
+
+};
+
+
+
+/*
+class Player : public Entity
+{
 
 public:
         Player();
@@ -20,6 +48,6 @@ public:
 
 
 };
-
+*/
 
 #endif //JUMP_PLAYER_H
