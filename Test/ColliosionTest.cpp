@@ -14,8 +14,8 @@ TEST(CollisionManager, checkCollision){
     s2.setTexture(texture);
     s1.setPosition(0,0);
     s2.setPosition(0,10);
-    EXPECT_EQ(CollisionManager::checkCollision(s1.getGlobalBounds(),s2.getGlobalBounds()), true);
-};
+    EXPECT_TRUE(CollisionManager::checkCollision(s1.getGlobalBounds(),s2.getGlobalBounds()));
+}
 
 TEST(CollisionManager, checkCollision2){
     sf::Sprite s1;
@@ -26,5 +26,5 @@ TEST(CollisionManager, checkCollision2){
     s2.setTexture(texture);
     s1.setPosition(0,0);
     s2.setPosition(0,200);
-    EXPECT_EQ(CollisionManager::checkCollision(s1.getGlobalBounds(),s2.getGlobalBounds()), false);
+    EXPECT_FALSE(CollisionManager::checkCollision(s1.getGlobalBounds(),s2.getGlobalBounds()));
 }

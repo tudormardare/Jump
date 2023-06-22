@@ -2,7 +2,7 @@
 // Created by Denis Jaupi on 22/06/23.
 //
 
-#include "lib/googletest/include/gtest/gtest.h"
+#include "gtest/gtest.h"
 #include "../GUI/Player.h"
 #include "SFML/Graphics.hpp"
 

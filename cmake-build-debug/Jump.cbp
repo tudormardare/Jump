@@ -282,6 +282,12 @@
 			<Option target="Jump"/>
 			<Option target="runAllTests"/>
 		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/Entity.cpp">
+			<Option target="runAllTests"/>
+		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/Entity.h">
+			<Option target="runAllTests"/>
+		</Unit>
 		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/MenuButton.cpp">
 			<Option target="Jump"/>
 			<Option target="runAllTests"/>
@@ -290,7 +296,16 @@
 			<Option target="Jump"/>
 			<Option target="runAllTests"/>
 		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/Player.cpp">
+			<Option target="runAllTests"/>
+		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/Player.h">
+			<Option target="runAllTests"/>
+		</Unit>
 		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Test/ColliosionTest.cpp">
+			<Option target="runAllTests"/>
+		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Test/PlayerTest.cpp">
 			<Option target="runAllTests"/>
 		</Unit>
 		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Test/lib/googletest/src/gtest-all.cc">
