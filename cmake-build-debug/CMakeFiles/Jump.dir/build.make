@@ -181,6 +181,34 @@ CMakeFiles/Jump.dir/GUI/MenuButton.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/GUI/MenuButton.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/denis/CLionProjects/Jump/GUI/MenuButton.cpp -o CMakeFiles/Jump.dir/GUI/MenuButton.cpp.s
 
+CMakeFiles/Jump.dir/GUI/Entity.cpp.o: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/GUI/Entity.cpp.o: /Users/denis/CLionProjects/Jump/GUI/Entity.cpp
+CMakeFiles/Jump.dir/GUI/Entity.cpp.o: CMakeFiles/Jump.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/Jump.dir/GUI/Entity.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Jump.dir/GUI/Entity.cpp.o -MF CMakeFiles/Jump.dir/GUI/Entity.cpp.o.d -o CMakeFiles/Jump.dir/GUI/Entity.cpp.o -c /Users/denis/CLionProjects/Jump/GUI/Entity.cpp
+
+CMakeFiles/Jump.dir/GUI/Entity.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/GUI/Entity.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/denis/CLionProjects/Jump/GUI/Entity.cpp > CMakeFiles/Jump.dir/GUI/Entity.cpp.i
+
+CMakeFiles/Jump.dir/GUI/Entity.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/GUI/Entity.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/denis/CLionProjects/Jump/GUI/Entity.cpp -o CMakeFiles/Jump.dir/GUI/Entity.cpp.s
+
+CMakeFiles/Jump.dir/GUI/Player.cpp.o: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/GUI/Player.cpp.o: /Users/denis/CLionProjects/Jump/GUI/Player.cpp
+CMakeFiles/Jump.dir/GUI/Player.cpp.o: CMakeFiles/Jump.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Jump.dir/GUI/Player.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Jump.dir/GUI/Player.cpp.o -MF CMakeFiles/Jump.dir/GUI/Player.cpp.o.d -o CMakeFiles/Jump.dir/GUI/Player.cpp.o -c /Users/denis/CLionProjects/Jump/GUI/Player.cpp
+
+CMakeFiles/Jump.dir/GUI/Player.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/GUI/Player.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/denis/CLionProjects/Jump/GUI/Player.cpp > CMakeFiles/Jump.dir/GUI/Player.cpp.i
+
+CMakeFiles/Jump.dir/GUI/Player.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/GUI/Player.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/denis/CLionProjects/Jump/GUI/Player.cpp -o CMakeFiles/Jump.dir/GUI/Player.cpp.s
+
 # Object files for target Jump
 Jump_OBJECTS = \
 "CMakeFiles/Jump.dir/main.cpp.o" \
@@ -190,7 +218,9 @@ Jump_OBJECTS = \
 "CMakeFiles/Jump.dir/Application/PauseState.cpp.o" \
 "CMakeFiles/Jump.dir/Application/SettingsState.cpp.o" \
 "CMakeFiles/Jump.dir/Application/PlayingState.cpp.o" \
-"CMakeFiles/Jump.dir/GUI/MenuButton.cpp.o"
+"CMakeFiles/Jump.dir/GUI/MenuButton.cpp.o" \
+"CMakeFiles/Jump.dir/GUI/Entity.cpp.o" \
+"CMakeFiles/Jump.dir/GUI/Player.cpp.o"
 
 # External object files for target Jump
 Jump_EXTERNAL_OBJECTS =
@@ -203,6 +233,8 @@ Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/Application/PauseState.cpp.o
 Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/Application/SettingsState.cpp.o
 Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/Application/PlayingState.cpp.o
 Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/GUI/MenuButton.cpp.o
+Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/GUI/Entity.cpp.o
+Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/GUI/Player.cpp.o
 Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/build.make
 Jump.app/Contents/MacOS/Jump: /usr/local/lib/libsfml-graphics.2.5.1.dylib
 Jump.app/Contents/MacOS/Jump: /usr/local/lib/libsfml-audio.2.5.1.dylib
@@ -210,7 +242,7 @@ Jump.app/Contents/MacOS/Jump: /usr/local/lib/libsfml-network.2.5.1.dylib
 Jump.app/Contents/MacOS/Jump: /usr/local/lib/libsfml-window.2.5.1.dylib
 Jump.app/Contents/MacOS/Jump: /usr/local/lib/libsfml-system.2.5.1.dylib
 Jump.app/Contents/MacOS/Jump: CMakeFiles/Jump.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable Jump.app/Contents/MacOS/Jump"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable Jump.app/Contents/MacOS/Jump"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Jump.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

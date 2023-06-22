@@ -117,12 +117,12 @@ Test/lib/googletest/clean: Test/lib/googletest/CMakeFiles/gtest_main.dir/clean
 CMakeFiles/Jump.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target Jump"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target Jump"
 .PHONY : CMakeFiles/Jump.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Jump.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Jump.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/Jump.dir/rule
@@ -144,12 +144,12 @@ Test/CMakeFiles/runAllTests.dir/all: Test/lib/googletest/CMakeFiles/gtest.dir/al
 Test/CMakeFiles/runAllTests.dir/all: Test/lib/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f Test/CMakeFiles/runAllTests.dir/build.make Test/CMakeFiles/runAllTests.dir/depend
 	$(MAKE) $(MAKESILENT) -f Test/CMakeFiles/runAllTests.dir/build.make Test/CMakeFiles/runAllTests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=14,15,16,17,18,19,20,21,22 "Built target runAllTests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25 "Built target runAllTests"
 .PHONY : Test/CMakeFiles/runAllTests.dir/all
 
 # Build rule for subdir invocation for target.
 Test/CMakeFiles/runAllTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles 14
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Test/CMakeFiles/runAllTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles 0
 .PHONY : Test/CMakeFiles/runAllTests.dir/rule
@@ -170,7 +170,7 @@ Test/CMakeFiles/runAllTests.dir/clean:
 Test/lib/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f Test/lib/googletest/CMakeFiles/gtest.dir/build.make Test/lib/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f Test/lib/googletest/CMakeFiles/gtest.dir/build.make Test/lib/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=10,11 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=12,13 "Built target gtest"
 .PHONY : Test/lib/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -196,7 +196,7 @@ Test/lib/googletest/CMakeFiles/gtest.dir/clean:
 Test/lib/googletest/CMakeFiles/gtest_main.dir/all: Test/lib/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f Test/lib/googletest/CMakeFiles/gtest_main.dir/build.make Test/lib/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f Test/lib/googletest/CMakeFiles/gtest_main.dir/build.make Test/lib/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=12,13 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/denis/CLionProjects/Jump/cmake-build-debug/CMakeFiles --progress-num=14,15 "Built target gtest_main"
 .PHONY : Test/lib/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.

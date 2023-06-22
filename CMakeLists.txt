@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(Jump)
 
 
-add_executable(Jump main.cpp Application/JumperApplication.cpp Application/JumperApplication.h Application/GameState.cpp Application/GameState.h Application/MenuState.cpp Application/MenuState.h Application/PauseState.cpp Application/PauseState.h Application/SettingsState.cpp Application/SettingsState.h Application/PlayingState.cpp Application/PlayingState.h GUI/MenuButton.cpp GUI/MenuButton.h)
+add_executable(Jump main.cpp Application/JumperApplication.cpp Application/JumperApplication.h Application/GameState.cpp Application/GameState.h Application/MenuState.cpp Application/MenuState.h Application/PauseState.cpp Application/PauseState.h Application/SettingsState.cpp Application/SettingsState.h Application/PlayingState.cpp Application/PlayingState.h GUI/MenuButton.cpp GUI/MenuButton.h GUI/Entity.cpp GUI/Entity.h GUI/Player.cpp GUI/Player.h)
 
 add_subdirectory(Test)
 

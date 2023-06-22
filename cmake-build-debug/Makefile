@@ -312,6 +312,30 @@ Application/SettingsState.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/Application/SettingsState.cpp.s
 .PHONY : Application/SettingsState.cpp.s
 
+GUI/Entity.o: GUI/Entity.cpp.o
+.PHONY : GUI/Entity.o
+
+# target to build an object file
+GUI/Entity.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/GUI/Entity.cpp.o
+.PHONY : GUI/Entity.cpp.o
+
+GUI/Entity.i: GUI/Entity.cpp.i
+.PHONY : GUI/Entity.i
+
+# target to preprocess a source file
+GUI/Entity.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/GUI/Entity.cpp.i
+.PHONY : GUI/Entity.cpp.i
+
+GUI/Entity.s: GUI/Entity.cpp.s
+.PHONY : GUI/Entity.s
+
+# target to generate assembly for a file
+GUI/Entity.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/GUI/Entity.cpp.s
+.PHONY : GUI/Entity.cpp.s
+
 GUI/MenuButton.o: GUI/MenuButton.cpp.o
 .PHONY : GUI/MenuButton.o
 
@@ -335,6 +359,30 @@ GUI/MenuButton.s: GUI/MenuButton.cpp.s
 GUI/MenuButton.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/GUI/MenuButton.cpp.s
 .PHONY : GUI/MenuButton.cpp.s
+
+GUI/Player.o: GUI/Player.cpp.o
+.PHONY : GUI/Player.o
+
+# target to build an object file
+GUI/Player.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/GUI/Player.cpp.o
+.PHONY : GUI/Player.cpp.o
+
+GUI/Player.i: GUI/Player.cpp.i
+.PHONY : GUI/Player.i
+
+# target to preprocess a source file
+GUI/Player.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/GUI/Player.cpp.i
+.PHONY : GUI/Player.cpp.i
+
+GUI/Player.s: GUI/Player.cpp.s
+.PHONY : GUI/Player.s
+
+# target to generate assembly for a file
+GUI/Player.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Jump.dir/build.make CMakeFiles/Jump.dir/GUI/Player.cpp.s
+.PHONY : GUI/Player.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
@@ -390,9 +438,15 @@ help:
 	@echo "... Application/SettingsState.o"
 	@echo "... Application/SettingsState.i"
 	@echo "... Application/SettingsState.s"
+	@echo "... GUI/Entity.o"
+	@echo "... GUI/Entity.i"
+	@echo "... GUI/Entity.s"
 	@echo "... GUI/MenuButton.o"
 	@echo "... GUI/MenuButton.i"
 	@echo "... GUI/MenuButton.s"
+	@echo "... GUI/Player.o"
+	@echo "... GUI/Player.i"
+	@echo "... GUI/Player.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

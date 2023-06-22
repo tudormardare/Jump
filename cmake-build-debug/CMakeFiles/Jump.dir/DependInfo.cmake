@@ -14,7 +14,9 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/denis/CLionProjects/Jump/Application/PauseState.cpp" "CMakeFiles/Jump.dir/Application/PauseState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/PauseState.cpp.o.d"
   "/Users/denis/CLionProjects/Jump/Application/PlayingState.cpp" "CMakeFiles/Jump.dir/Application/PlayingState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/PlayingState.cpp.o.d"
   "/Users/denis/CLionProjects/Jump/Application/SettingsState.cpp" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.o.d"
+  "/Users/denis/CLionProjects/Jump/GUI/Entity.cpp" "CMakeFiles/Jump.dir/GUI/Entity.cpp.o" "gcc" "CMakeFiles/Jump.dir/GUI/Entity.cpp.o.d"
   "/Users/denis/CLionProjects/Jump/GUI/MenuButton.cpp" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.o" "gcc" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.o.d"
+  "/Users/denis/CLionProjects/Jump/GUI/Player.cpp" "CMakeFiles/Jump.dir/GUI/Player.cpp.o" "gcc" "CMakeFiles/Jump.dir/GUI/Player.cpp.o.d"
   "/Users/denis/CLionProjects/Jump/main.cpp" "CMakeFiles/Jump.dir/main.cpp.o" "gcc" "CMakeFiles/Jump.dir/main.cpp.o.d"
   )
 
