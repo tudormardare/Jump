@@ -8,7 +8,7 @@
 
 #define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 720
-#define PLAYING_BUTTONS_PATH "PNG/PlayingButton.png"
+#define PLAYING_BUTTONS_PATH "PNG/PlayingButton/PlayingButton.png"
 #define PLAYING_BUTTONS_WIDTH 200
 #define PLAYING_BUTTONS_HEIGHT 50
 #define PLAYING_BUTTONS_DISTANCE 100
@@ -40,7 +40,6 @@ private:
         }
         sf::Vector2f scale(PLAYING_BUTTONS_WIDTH, PLAYING_BUTTONS_HEIGHT);
         sf::Vector2f position(PLAYING_BUTTONS_STARTING_X, PLAYING_BUTTONS_STARTING_Y);
-
         //Inizializzazione dei bottoni
         for(int i = 0; i < PLAYING_BUTTONS_NUMBER; i++){
             buttons[i] = std::make_unique<MenuButton>(scale, position + sf::Vector2f(0, i * PLAYING_BUTTONS_DISTANCE), buttonTexture);
