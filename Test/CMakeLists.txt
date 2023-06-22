@@ -4,7 +4,7 @@ add_subdirectory(./lib/googletest)
 set(gtest_SOURCE_DIR, ./lib/googletest/)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-set(TEST_SOURCE_FILES runAllTests.cpp ../Application/JumperApplication.cpp ../Application/JumperApplication.h ../Application/GameState.cpp ../Application/GameState.h ../Application/MenuState.cpp ../Application/MenuState.h ../Application/PauseState.cpp ../Application/PauseState.h ../Application/SettingsState.cpp ../Application/SettingsState.h ../Application/PlayingState.cpp ../Application/PlayingState.h ../GUI/MenuButton.cpp ../GUI/MenuButton.h)
+set(TEST_SOURCE_FILES runAllTests.cpp ../Controllers/CollisionManager.h ../Controllers/CollisionManager.cpp ../Application/JumperApplication.cpp ../Application/JumperApplication.h ../Application/GameState.cpp ../Application/GameState.h ../Application/MenuState.cpp ../Application/MenuState.h ../Application/PauseState.cpp ../Application/PauseState.h ../Application/SettingsState.cpp ../Application/SettingsState.h ../Application/PlayingState.cpp ../Application/PlayingState.h ../GUI/MenuButton.cpp ../GUI/MenuButton.h ColliosionTest.cpp)
 add_executable(runAllTests ${TEST_SOURCE_FILES})
 target_link_libraries(runAllTests gtest gtest_main )
 
