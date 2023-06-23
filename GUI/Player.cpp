@@ -12,7 +12,6 @@ Player::Player()
 
     initTexture();
     initSprite();
-
 }
 
 Player::~Player()
@@ -20,7 +19,7 @@ Player::~Player()
 
 }
 
-
+//Private functions
 void Player::initTexture()
 {
     //Load a texture from file
@@ -38,12 +37,51 @@ void Player::initSprite()
 
 }
 
+
+void Player::setSpeed(float newSpeed)
+{
+    movementSpeed = newSpeed;
+}
+
+float Player::getSpeed() const
+{
+    return movementSpeed;
+}
+
+
+void Player::setHealth(int newHealth)
+{
+    health = newHealth;
+}
+
+int Player::getHealth() const
+{
+    return health;
+}
+
+
+//Functions
+void Player::setPosition(sf::Vector2f newPosition)
+{
+    position = newPosition;
+}
+
+sf::Vector2f Player::getPosition() const
+{
+    return position;
+}
+
+
+
+
 void Player::move(const float dirX, const float dirY)
 {
     sprite.move(movementSpeed*dirX, movementSpeed*dirY);
 }
 
-//Function
+
+
+
 void Player::update()
 {
 
@@ -51,8 +89,13 @@ void Player::update()
 
 void Player::render(sf::RenderTarget &target)
 {
+    sprite.setPosition(position);
     target.draw(sprite);
 }
+
+
+
+
 
 
 

@@ -14,17 +14,35 @@ Entity::~Entity()
 }
 
 
-//Function
+
+//Functions
+void Entity::setPosition(sf::Vector2f newPosition)
+{
+    position = newPosition;
+}
+
+sf::Vector2f Entity::getPosition() const
+{
+    return position;
+}
+
+
+
+
+
 void Entity::update()
 {
 
 }
 
-
 void Entity::render(sf::RenderTarget &target)
 {
+    sprite.setPosition(position);
     target.draw(sprite);
 }
+
+
+
 
 
 

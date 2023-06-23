@@ -13,14 +13,18 @@ class Entity
 private:
     sf::Sprite sprite;
     sf::Texture texture;
+    sf::Vector2f position;
 
-    //Private functions
 
 public:
     Entity();
     virtual ~Entity();
 
+
     //Functions
+    virtual void setPosition(sf::Vector2f newPosition);
+    virtual sf::Vector2f getPosition() const;
+
     virtual void update();
     virtual void render(sf::RenderTarget& target);
 
