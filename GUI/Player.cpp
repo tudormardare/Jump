@@ -19,6 +19,18 @@ Player::~Player()
 
 }
 
+void Player::update()
+{
+
+}
+
+void Player::render(sf::RenderTarget &target)
+{
+    sprite.setPosition(position);
+    target.draw(sprite);
+}
+
+
 //Private functions
 void Player::initTexture()
 {
@@ -78,22 +90,6 @@ void Player::move(const float dirX, const float dirY)
 {
     sprite.move(movementSpeed*dirX, movementSpeed*dirY);
 }
-
-
-
-
-void Player::update()
-{
-
-}
-
-void Player::render(sf::RenderTarget &target)
-{
-    sprite.setPosition(position);
-    target.draw(sprite);
-}
-
-
 
 
 

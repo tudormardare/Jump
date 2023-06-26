@@ -4,7 +4,7 @@ add_subdirectory(./lib/googletest)
 set(gtest_SOURCE_DIR, ./lib/googletest/)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-set(TEST_SOURCE_FILES runAllTests.cpp ../GUI/Player.h ../GUI/Player.cpp ../GUI/Entity.h ../GUI/Entity.cpp ../Controllers/CollisionManager.h ../Controllers/CollisionManager.cpp ../Application/JumperApplication.cpp ../Application/JumperApplication.h ../Application/GameState.cpp ../Application/GameState.h ../Application/MenuState.cpp ../Application/MenuState.h ../Application/PauseState.cpp ../Application/PauseState.h ../Application/SettingsState.cpp ../Application/SettingsState.h ../Application/PlayingState.cpp ../Application/PlayingState.h ../GUI/MenuButton.cpp ../GUI/MenuButton.h ColliosionTest.cpp PlayerTest.cpp)
+set(TEST_SOURCE_FILES runAllTests.cpp ../GUI/Player.h ../GUI/Player.cpp ../GUI/Entity.h ../GUI/Entity.cpp ../Controllers/CollisionManager.h ../Controllers/CollisionManager.cpp ../Application/JumperApplication.cpp ../Application/JumperApplication.h ../Application/GameState.cpp ../Application/GameState.h ../Application/MenuState.cpp ../Application/MenuState.h ../Application/PauseState.cpp ../Application/PauseState.h ../Application/SettingsState.cpp ../Application/SettingsState.h ../Application/PlayingState.cpp ../Application/PlayingState.h ../GUI/MenuButton.cpp ../GUI/MenuButton.h ColliosionTest.cpp PlayerTest.cpp ../GUI/Ghost.cpp ../GUI/Ghost.h)
 add_executable(runAllTests ${TEST_SOURCE_FILES})
 target_link_libraries(runAllTests gtest gtest_main )
 
