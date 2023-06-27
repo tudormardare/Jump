@@ -23,19 +23,24 @@ class JumperApplication {
 
 public:
     JumperApplication();
+
     void run();
 
 private:
 
-    GameState* currentState;
+    GameState *currentState;
     sf::RenderWindow window;
     sf::RectangleShape backgroundShape;
     sf::Texture backgroundTexture;
 
     void handleEvents();
+
     void update();
+
     void render();
+
     void changeState();
+
     void initWindow();
 
 

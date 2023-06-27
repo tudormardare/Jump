@@ -8,8 +8,7 @@
 #include "SFML/Graphics.hpp"
 
 
-class Entity
-{
+class Entity {
 private:
     sf::Sprite sprite;
     sf::Texture texture;
@@ -18,15 +17,18 @@ private:
 
 public:
     Entity();
+
     virtual ~Entity();
 
 
     //Functions
     virtual void setPosition(sf::Vector2f newPosition);
+
     virtual sf::Vector2f getPosition() const;
 
     virtual void update();
-    virtual void render(sf::RenderTarget& target);
+
+    virtual void render(sf::RenderTarget &target);
 
 };
 /*

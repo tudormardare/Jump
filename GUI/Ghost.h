@@ -10,8 +10,7 @@
 #include <cmath>
 
 
-class Ghost : public Entity
-{
+class Ghost : public Entity {
 private:
     sf::Texture texture;
     sf::Sprite sprite;

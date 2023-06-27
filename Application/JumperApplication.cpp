@@ -73,8 +73,8 @@ void JumperApplication::changeState() {
 }
 
 void JumperApplication::initWindow() {
-    if(!backgroundTexture.loadFromFile(currentState->getBackgroundPath())){
-        std::cout<<"errore";
+    if (!backgroundTexture.loadFromFile(currentState->getBackgroundPath())) {
+        std::cout << "errore";
     }
 
     backgroundShape.setSize(sf::Vector2f(backgroundTexture.getSize().x, backgroundTexture.getSize().y));

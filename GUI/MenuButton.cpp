@@ -8,15 +8,14 @@
 MenuButton::MenuButton(sf::Vector2f size, sf::Vector2f position, sf::Texture &texture) {
     texture.setSmooth(true);
     button.setPosition(position);
-    button.setTexture(texture);
+    button.setTexture(texture, true);
 
     float scaleX = size.x / button.getGlobalBounds().width;
     float scaleY = size.y /button.getGlobalBounds().height;
 
     float scale = std::min(scaleX, scaleY);
-
     button.setScale(scale, scale);
-    button.setOrigin(size.x / 2 , size.y / 2 );
+    button.setOrigin((float)button.getTextureRect().width / 2, (float)button.getTextureRect().height / 2 );
     button.setPosition(position);
 
 }

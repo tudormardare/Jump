@@ -6,41 +6,35 @@
 #include "Player.h"
 
 
-Player::Player()
-{
+Player::Player() {
     movementSpeed = 4.f;
 
     initTexture();
     initSprite();
 }
 
-Player::~Player()
-{
+Player::~Player() {
 
 }
 
-void Player::update()
-{
+void Player::update() {
 
 }
 
-void Player::render(sf::RenderTarget &target)
-{
+void Player::render(sf::RenderTarget &target) {
     sprite.setPosition(position);
     target.draw(sprite);
 }
 
 
 //Private functions
-void Player::initTexture()
-{
+void Player::initTexture() {
     //Load a texture from file
     texture.loadFromFile(PLAYER_TEXTURE);
 
 }
 
-void Player::initSprite()
-{
+void Player::initSprite() {
     //Set the texture to the sprite
     sprite.setTexture(texture);
 
@@ -50,45 +44,36 @@ void Player::initSprite()
 }
 
 
-void Player::setSpeed(float newSpeed)
-{
+void Player::setSpeed(float newSpeed) {
     movementSpeed = newSpeed;
 }
 
-float Player::getSpeed() const
-{
+float Player::getSpeed() const {
     return movementSpeed;
 }
 
 
-void Player::setHealth(int newHealth)
-{
+void Player::setHealth(int newHealth) {
     health = newHealth;
 }
 
-int Player::getHealth() const
-{
+int Player::getHealth() const {
     return health;
 }
 
 
 //Functions
-void Player::setPosition(sf::Vector2f newPosition)
-{
+void Player::setPosition(sf::Vector2f newPosition) {
     position = newPosition;
 }
 
-sf::Vector2f Player::getPosition() const
-{
+sf::Vector2f Player::getPosition() const {
     return position;
 }
 
 
-
-
-void Player::move(const float dirX, const float dirY)
-{
-    sprite.move(movementSpeed*dirX, movementSpeed*dirY);
+void Player::move(const float dirX, const float dirY) {
+    sprite.move(movementSpeed * dirX, movementSpeed * dirY);
 }
 
 

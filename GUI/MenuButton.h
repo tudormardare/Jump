@@ -15,11 +15,17 @@ private:
 
 public:
     MenuButton(sf::Vector2f size, sf::Vector2f position, sf::Texture &texture);
+
     bool isClicked(sf::RenderWindow &window);
+
     void draw(sf::RenderWindow &window);
+
     bool isMouseOver(sf::Vector2<int> mousePosition);
+
     void update(sf::RenderWindow &window);
+
     void setPosition(sf::Vector2f position);
+
     sf::FloatRect getGlobalBounds();
 };
 

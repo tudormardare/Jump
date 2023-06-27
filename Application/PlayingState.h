@@ -6,15 +6,14 @@
 #define JUMPER_GAME_H
 
 
-
-#define PLAYING_BUTTONS_PATH "PNG/PlayingButton/PlayingButton.png"
-#define PLAYING_BUTTONS_WIDTH 200
-#define PLAYING_BUTTONS_HEIGHT 50
-#define PLAYING_BUTTONS_DISTANCE 100
-#define PLAYING_BUTTONS_STARTING_X 350
-#define PLAYING_BUTTONS_STARTING_Y 100
-#define PLAYING_BUTTONS_NUMBER 4
-
+#define PLAYING_BUTTON_PATH "PNG/PlayingButton/PlayingButton.png"
+#define PLAYING_BUTTON_WIDTH 200
+#define PLAYING_BUTTON_HEIGHT 50
+#define PLAYING_BUTTON_DISTANCE 100
+#define PLAYING_BUTTON_STARTING_X 350
+#define PLAYING_BUTTON_STARTING_Y 100
+#define PLAYING_BUTTON_NUMBER 4
+#define PLATING_MENU_BACKGROUND_PATH "PNG/Background/background.png"
 
 #include "GameState.h"
 #include "MenuState.h"
@@ -23,34 +22,36 @@
 #include "SFML/Graphics.hpp"
 #include "iostream"
 
-class PlayingState: public GameState{
+class PlayingState : public GameState {
 public:
-        static PlayingState& GetInstance(sf::RenderWindow &window);
-        void handleEvents(sf::RenderWindow& window, const sf::Event& event) override;
-        void update() override;
-        void render(sf::RenderWindow& window) override;
-        GameState* changeState() override;
-        PlayingState(const PlayingState&) = delete;
-        void operator=(PlayingState const&) = delete;
-        std::string getBackgroundPath()const override;
+    static PlayingState &GetInstance(sf::RenderWindow &window);
+
+    void handleEvents(sf::RenderWindow &window, const sf::Event &event) override;
+
+    void update() override;
+
+    void render(sf::RenderWindow &window) override;
+
+    GameState *changeState() override;
+
+    PlayingState(const PlayingState &) = delete;
+
+    void operator=(PlayingState const &) = delete;
+
+    std::string getBackgroundPath() const override;
+
 private:
-    PlayingState(sf::RenderWindow &window): window(window){
-        if(!buttonTexture.loadFromFile(PLAYING_BUTTONS_PATH)){
-            std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
-        }
-        sf::Vector2f scale(PLAYING_BUTTONS_WIDTH, PLAYING_BUTTONS_HEIGHT);
-        sf::Vector2f position(PLAYING_BUTTONS_STARTING_X, PLAYING_BUTTONS_STARTING_Y);
-        //Inizializzazione dei bottoni
-        for(int i = 0; i < PLAYING_BUTTONS_NUMBER; i++){
-            buttons[i] = std::make_unique<MenuButton>(scale, position + sf::Vector2f(0, i * PLAYING_BUTTONS_DISTANCE), buttonTexture);
-        }
+    PlayingState(sf::RenderWindow &window) : window(window) {
+        initButtons();
     };
 
-    const std::string backgroundPath = "PNG/Background/background.png";
+    void initButtons();
+
+    const std::string backgroundPath = PLATING_MENU_BACKGROUND_PATH;
     bool changeStateToNext = false;
-    sf::RenderWindow& window;
+    sf::RenderWindow &window;
     sf::Texture buttonTexture;
-    std::unique_ptr<MenuButton> buttons[PLAYING_BUTTONS_NUMBER];
+    std::unique_ptr<MenuButton> buttons[PLAYING_BUTTON_NUMBER];
 
 };
 

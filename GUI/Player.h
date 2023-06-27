@@ -8,8 +8,7 @@
 
 #include "Entity.h"
 
-class Player : public Entity
-{
+class Player : public Entity {
 private:
     sf::Sprite sprite;
     sf::Texture texture;
@@ -20,27 +19,33 @@ private:
 
     //Private functions
     void initTexture();
+
     void initSprite();
 
     void setSpeed(float newSpeed);
+
     float getSpeed() const;
 
     void setHealth(int newHealth);
+
     int getHealth() const;
 
 public:
     Player();
+
     virtual ~Player();
 
 
     void setPosition(sf::Vector2f newPosition) override;
+
     sf::Vector2f getPosition() const override;
 
 
     void move(const float dirX, const float dirY);
 
     void update() override;
-    void render(sf::RenderTarget& target) override;
+
+    void render(sf::RenderTarget &target) override;
 
 };
 
