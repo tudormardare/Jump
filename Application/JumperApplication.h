@@ -9,6 +9,9 @@
 #ifndef JUMPER_JUMPERAPPLICATION_H
 #define JUMPER_JUMPERAPPLICATION_H
 
+#define WINDOW_WIDTH 1080
+#define WINDOW_HEIGHT 675
+
 #include <iostream>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "PlayingState.h"
@@ -26,10 +29,14 @@ private:
 
     GameState* currentState;
     sf::RenderWindow window;
+    sf::RectangleShape backgroundShape;
+    sf::Texture backgroundTexture;
+
     void handleEvents();
     void update();
     void render();
     void changeState();
+    void initWindow();
 
 
 };

@@ -35,12 +35,9 @@ void PlayingState::update() {
 }
 
 void PlayingState::render(sf::RenderWindow &window) {
-    window.clear();
     for (auto & button : buttons){
         button->draw(window);
     }
-
-    window.display();
 }
 
 GameState *PlayingState::changeState() {
@@ -57,4 +54,8 @@ GameState *PlayingState::changeState() {
         }
     }
     return nullptr;
+}
+
+std::string PlayingState::getBackgroundPath() const {
+    return backgroundPath;
 }

@@ -6,8 +6,7 @@
 #define JUMPER_GAME_H
 
 
-#define WINDOW_WIDTH 1080
-#define WINDOW_HEIGHT 720
+
 #define PLAYING_BUTTONS_PATH "PNG/PlayingButton/PlayingButton.png"
 #define PLAYING_BUTTONS_WIDTH 200
 #define PLAYING_BUTTONS_HEIGHT 50
@@ -33,10 +32,11 @@ public:
         GameState* changeState() override;
         PlayingState(const PlayingState&) = delete;
         void operator=(PlayingState const&) = delete;
+        std::string getBackgroundPath()const override;
 private:
     PlayingState(sf::RenderWindow &window): window(window){
         if(!buttonTexture.loadFromFile(PLAYING_BUTTONS_PATH)){
-            std::cout << "Errore durante il caricamento della texture del pulsante." << std::endl;
+            std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
         }
         sf::Vector2f scale(PLAYING_BUTTONS_WIDTH, PLAYING_BUTTONS_HEIGHT);
         sf::Vector2f position(PLAYING_BUTTONS_STARTING_X, PLAYING_BUTTONS_STARTING_Y);
@@ -46,6 +46,7 @@ private:
         }
     };
 
+    const std::string backgroundPath = "PNG/Background/background.png";
     bool changeStateToNext = false;
     sf::RenderWindow& window;
     sf::Texture buttonTexture;

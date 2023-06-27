@@ -5,6 +5,8 @@
 #ifndef JUMPER_MAINMENU_H
 #define JUMPER_MAINMENU_H
 
+#define WINDOW_WIDTH 1080
+#define WINDOW_HEIGHT 675
 #define MENU_BUTTON_WIDTH 300
 #define MENU_BUTTON_HEIGHT 200
 #define MENU_BUTTON_DISTANCE 100
@@ -30,13 +32,15 @@ public:
     GameState* changeState() override;
     MenuState(const MenuState&) = delete;
     void operator=(MenuState const&) = delete;
+    std::string getBackgroundPath()const override;
+
 private:
     MenuState(sf::RenderWindow &window): window(window){
         initButtons();
     };
 
     void initButtons();
-
+    const std::string backgroundPath = "PNG/Background/background.png";
     bool changeStateToNext = false;
     sf::RenderWindow& window;
     sf::Texture buttonTexture;

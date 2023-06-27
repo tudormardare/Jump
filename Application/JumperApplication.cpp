@@ -6,15 +6,17 @@
 #include "JumperApplication.h"
 #include "SettingsState.h"
 
-
 JumperApplication::JumperApplication() {
-    window.create(sf::VideoMode(1080, 720), "Jumper");
+    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jumper");
     currentState = &MenuState::GetInstance(window);
+    initWindow();
 }
 
 void JumperApplication::run() {
 
     while (window.isOpen()) {
+
+        //inizializzazione finestra
 
         // Gestione degli eventi
         handleEvents();
@@ -57,7 +59,10 @@ void JumperApplication::update() {
 }
 
 void JumperApplication::render() {
+    window.clear();
+    window.draw(backgroundShape);
     currentState->render(window);
+    window.display();
 }
 
 void JumperApplication::changeState() {
@@ -65,5 +70,20 @@ void JumperApplication::changeState() {
     if (nextState != nullptr) {
         currentState = nextState;
     }
+}
+
+void JumperApplication::initWindow() {
+    if(!backgroundTexture.loadFromFile(currentState->getBackgroundPath())){
+        std::cout<<"errore";
+    }
+
+    backgroundShape.setSize(sf::Vector2f(backgroundTexture.getSize().x, backgroundTexture.getSize().y));
+    float scaleX = WINDOW_WIDTH / (float) backgroundTexture.getSize().x;
+    float scaleY = WINDOW_HEIGHT / (float) backgroundTexture.getSize().y;
+
+    float scale = std::min(scaleX, scaleY);
+
+    backgroundShape.setTexture(&backgroundTexture);
+    backgroundShape.setScale(scale, scale);
 }
 

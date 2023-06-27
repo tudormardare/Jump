@@ -30,12 +30,13 @@ public:
     GameState* changeState() override;
     PauseState(const PauseState&) = delete;
     void operator=(PauseState const&) = delete;
+    std::string getBackgroundPath()const override;
 
 
 private:
     PauseState(sf::RenderWindow &window): window(window){
         if (!buttonTexture.loadFromFile(PAUSE_BUTTONS_PATH)){
-            std::cerr << "Errore durante il caricamento della texture del pulsante." << std::endl;
+            std::cerr << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
         }
         sf::Vector2f scale(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_SCALE_Y);
         sf::Vector2f startingPosition(PAUSE_BUTTONS_STARTING_X, PAUSE_BUTTONS_STARTING_Y);
@@ -47,6 +48,7 @@ private:
         }
     };
 
+    const std::string backgroundPath = "PNG/Background/background.png";
     bool changeStateToNext = false;
     sf::RenderWindow& window;
     sf::Texture buttonTexture;

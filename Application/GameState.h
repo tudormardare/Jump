@@ -21,6 +21,7 @@ public:
     virtual void render(sf::RenderWindow& window) = 0;
     virtual GameState* changeState() = 0;
     virtual ~GameState() = default;
+    virtual std::string getBackgroundPath() const = 0;
 };
 
 

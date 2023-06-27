@@ -37,12 +37,9 @@ void MenuState::update() {
 }
 
 void MenuState::render(sf::RenderWindow &window) {
-    window.clear();
     for (auto & button : buttons){
         button->draw(window);
     }
-
-    window.display();
 }
 
 GameState* MenuState::changeState() {
@@ -63,7 +60,7 @@ GameState* MenuState::changeState() {
 
 void MenuState::initButtons() {
     if (!buttonTexture.loadFromFile(MENU_BUTTONS_PATH)){
-        std::cout << "Errore durante il caricamento della texture del pulsante." << std::endl;
+        std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
     }
     sf::Vector2f size(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT);
     sf::Vector2f startingPosition(WINDOW_WIDTH / (float) 2, (WINDOW_HEIGHT/(float) 2));
@@ -73,6 +70,10 @@ void MenuState::initButtons() {
     for(int i = 0; i < MENU_BUTTONS_NUMBER; i++){
         buttons[i] = std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, i * MENU_BUTTON_DISTANCE), buttonTexture);
     }
+}
+
+std::string MenuState::getBackgroundPath() const {
+    return backgroundPath;
 }
 
 

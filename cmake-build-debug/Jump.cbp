@@ -302,6 +302,9 @@
 		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/Player.h">
 			<Option target="runAllTests"/>
 		</Unit>
+		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Test/BackGroundTests.cpp">
+			<Option target="runAllTests"/>
+		</Unit>
 		<Unit filename="C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Test/ColliosionTest.cpp">
 			<Option target="runAllTests"/>
 		</Unit>

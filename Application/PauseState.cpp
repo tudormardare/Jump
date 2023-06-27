@@ -31,12 +31,9 @@ void PauseState::update() {
 }
 
 void PauseState::render(sf::RenderWindow &window) {
-    window.clear();
     for (auto & button : buttons){
         button->draw(window);
     }
-
-    window.display();
 }
 
 GameState* PauseState::changeState() {
@@ -50,6 +47,10 @@ GameState* PauseState::changeState() {
         }
     }
     return nullptr;
+}
+
+std::string PauseState::getBackgroundPath() const {
+    return backgroundPath;
 }
 
 
