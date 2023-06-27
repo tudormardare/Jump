@@ -25,7 +25,7 @@ void PauseState::handleEvents(sf::RenderWindow &window, const sf::Event &event) 
     }
 }
 
-void PauseState::update() {
+void PauseState::update(sf::RenderWindow &window) {
 
 }
 
@@ -35,7 +35,7 @@ void PauseState::render(sf::RenderWindow &window) {
     }
 }
 
-GameState *PauseState::changeState() {
+GameState *PauseState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         if (buttons[0]->isClicked(window)) {
             changeStateToNext = false;

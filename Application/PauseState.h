@@ -26,11 +26,11 @@ public:
 
     void handleEvents(sf::RenderWindow &window, const sf::Event &event) override;
 
-    void update() override;
+    void update(sf::RenderWindow &window) override;
 
     void render(sf::RenderWindow &window) override;
 
-    GameState *changeState() override;
+    GameState *changeState(sf::RenderWindow &window) override;
 
     PauseState(const PauseState &) = delete;
 
@@ -40,7 +40,7 @@ public:
 
 
 private:
-    PauseState(sf::RenderWindow &window) : window(window) {
+    PauseState(sf::RenderWindow &window){
         initButtons();
     };
 
@@ -48,7 +48,6 @@ private:
 
     const std::string backgroundPath = PAUSE_MENU_BACKGROUND_PATH;
     bool changeStateToNext = false;
-    sf::RenderWindow &window;
     sf::Texture buttonTexture;
     std::unique_ptr<MenuButton> buttons[PAUSE_BUTTONS_NUMBER];
 };

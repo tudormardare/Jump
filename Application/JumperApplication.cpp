@@ -55,7 +55,7 @@ void JumperApplication::handleEvents() {
 }
 
 void JumperApplication::update() {
-    currentState->update();
+    currentState->update(window);
 }
 
 void JumperApplication::render() {
@@ -66,7 +66,7 @@ void JumperApplication::render() {
 }
 
 void JumperApplication::changeState() {
-    GameState *nextState = currentState->changeState();
+    GameState *nextState = currentState->changeState(window);
     if (nextState != nullptr) {
         currentState = nextState;
     }
@@ -77,7 +77,7 @@ void JumperApplication::initWindow() {
         std::cout << "errore";
     }
 
-    backgroundShape.setSize(sf::Vector2f(backgroundTexture.getSize().x, backgroundTexture.getSize().y));
+    backgroundShape.setSize(sf::Vector2f((float) backgroundTexture.getSize().x, (float) backgroundTexture.getSize().y));
     float scaleX = WINDOW_WIDTH / (float) backgroundTexture.getSize().x;
     float scaleY = WINDOW_HEIGHT / (float) backgroundTexture.getSize().y;
 

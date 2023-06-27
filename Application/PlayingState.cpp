@@ -27,7 +27,7 @@ void PlayingState::handleEvents(sf::RenderWindow &window, const sf::Event &event
     }
 }
 
-void PlayingState::update() {
+void PlayingState::update(sf::RenderWindow &window) {
     for (auto &button: buttons) {
         button->update(window);
     }
@@ -39,7 +39,7 @@ void PlayingState::render(sf::RenderWindow &window) {
     }
 }
 
-GameState *PlayingState::changeState() {
+GameState *PlayingState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         changeStateToNext = false;
         if (buttons[0]->isClicked(window)) {

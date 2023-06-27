@@ -29,7 +29,7 @@ void MenuState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
 }
 
 
-void MenuState::update() {
+void MenuState::update(sf::RenderWindow &window) {
     for (auto &button: buttons) {
         button->update(window);
     }
@@ -41,7 +41,7 @@ void MenuState::render(sf::RenderWindow &window) {
     }
 }
 
-GameState *MenuState::changeState() {
+GameState *MenuState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         changeStateToNext = false;
         if (buttons[0]->isClicked(window)) {

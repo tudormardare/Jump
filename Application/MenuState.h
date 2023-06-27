@@ -30,11 +30,11 @@ public:
 
     void handleEvents(sf::RenderWindow &window, const sf::Event &event) override;
 
-    void update() override;
+    void update(sf::RenderWindow &window) override;
 
     void render(sf::RenderWindow &window) override;
 
-    GameState *changeState() override;
+    GameState *changeState(sf::RenderWindow &window) override;
 
     MenuState(const MenuState &) = delete;
 
@@ -43,7 +43,7 @@ public:
     std::string getBackgroundPath() const override;
 
 private:
-    MenuState(sf::RenderWindow &window) : window(window) {
+    MenuState(sf::RenderWindow &window){
         initButtons();
     };
 
@@ -51,7 +51,6 @@ private:
 
     const std::string backgroundPath = MENU_BACKGROUND_PATH;
     bool changeStateToNext = false;
-    sf::RenderWindow &window;
     sf::Texture buttonTexture;
     std::unique_ptr<MenuButton> buttons[MENU_BUTTONS_NUMBER];
 
