@@ -5,10 +5,31 @@
 #ifndef JUMP_ENTITY_H
 #define JUMP_ENTITY_H
 
-
 #include "SFML/Graphics.hpp"
 
 
+class Entity
+{
+private:
+    sf::Sprite sprite;
+    sf::Texture texture;
+    sf::Vector2f position;
+
+
+public:
+    Entity();
+    virtual ~Entity();
+
+
+    //Functions
+    virtual void setPosition(sf::Vector2f newPosition);
+    virtual sf::Vector2f getPosition() const;
+
+    virtual void update();
+    virtual void render(sf::RenderTarget& target);
+
+};
+/*
 class Entity {
 
 public:
@@ -32,6 +53,6 @@ protected:
     sf::Texture texture;
 
 };
-
+*/
 
 #endif //JUMP_ENTITY_H
