@@ -14,6 +14,9 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 }
 
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
+    if(event.type == sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+        window.close();
+    }
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
