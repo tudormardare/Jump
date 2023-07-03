@@ -9,27 +9,24 @@
 
 
 class Entity {
-private:
+
+protected:
     sf::Sprite sprite;
-    sf::Texture texture;
-    sf::Vector2f position;
+    sf::Texture currentTexture;
+    sf::Vector2f velocity;
+    float speed = 0;
 
 
 public:
-    Entity();
-
-    virtual ~Entity();
-
-
     //Functions
     virtual void setPosition(sf::Vector2f newPosition);
-
+    virtual void setVelocity(sf::Vector2f newVelocity);
+    virtual void setSpeed(float newSpeed);
     virtual sf::Vector2f getPosition() const;
-
-    virtual void update();
-
-    virtual void render(sf::RenderTarget &target);
-
+    virtual sf::Vector2f getVelocity() const;
+    virtual void update(sf::RenderWindow& window) = 0;
+    virtual void draw(sf::RenderWindow& window) = 0;
+    virtual void setVelocity(float newVelocityX, float newVelocityY);
 };
 /*
 class Entity {
@@ -52,7 +49,7 @@ protected:
 
     sf::Sprite sprite;
     sf::Vector2f velocity;
-    sf::Texture texture;
+    sf::Texture currentTexture;
 
 };
 */

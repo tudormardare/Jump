@@ -6,6 +6,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "SFML/Graphics.hpp"
 #include "MenuState.h"
+#include "GamingState.h"
 
 MenuState &MenuState::GetInstance(sf::RenderWindow &window) {
     static MenuState instance(window);
@@ -29,7 +30,7 @@ void MenuState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
 }
 
 
-void MenuState::update(sf::RenderWindow &window) {
+void MenuState::update(sf::RenderWindow &window, float deltaTime) {
     for (auto &button: buttons) {
         button->update(window);
     }
@@ -47,7 +48,7 @@ GameState *MenuState::changeState(sf::RenderWindow &window) {
         if (buttons[0]->isClicked(window)) {
             return &PauseState::GetInstance(window);
         } else if (buttons[1]->isClicked(window)) {
-            return &PlayingState::GetInstance(window);
+            return &GamingState::GetInstance(window);
         } else if (buttons[2]->isClicked(window)) {
             window.close();
         }
@@ -55,7 +56,7 @@ GameState *MenuState::changeState(sf::RenderWindow &window) {
     return nullptr;
 }
 
-void MenuState::initButtons() {
+void MenuState::initState() {
 
     if (!buttonTexture.loadFromFile(MENU_BUTTONS_PATH)) {
         std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;

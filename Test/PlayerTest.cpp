@@ -8,7 +8,7 @@
 
 TEST(Player, move){
     Player p;
-    p.setPosition(sf::Vector2f(0,0));
-    p.move(5, 5);
-    EXPECT_EQ(p.getPosition().x, 5);
+    p.setPosition(sf::Vector2f(5,5));
+    p.move(10, 5);
+    EXPECT_EQ(p.getPosition().x, 45);
 }

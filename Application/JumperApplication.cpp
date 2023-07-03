@@ -4,25 +4,27 @@
 
 #include <thread>
 #include "JumperApplication.h"
-#include "SettingsState.h"
+#include "GamingState.h"
 
 JumperApplication::JumperApplication() {
-    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jumper");
+    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jumper", sf::Style::Titlebar);
     currentState = &MenuState::GetInstance(window);
     initWindow();
 }
 
 void JumperApplication::run() {
 
-    while (window.isOpen()) {
+    sf::Clock clock;
+    float deltaTime = 0.f;
 
-        //inizializzazione finestra
+    while (window.isOpen()) {
+        deltaTime = clock.restart().asSeconds();
 
         // Gestione degli eventi
         handleEvents();
 
         // Aggiornamento dello stato corrente
-        update();
+        update(deltaTime);
 
         // Cambio di stato se necessario
         changeState();
@@ -44,7 +46,7 @@ void JumperApplication::handleEvents() {
         } else if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left && !isButtonPressed) {
                 isButtonPressed = true;
-                currentState->handleEvents(window, event); // Gestisci l'evento solo una volta
+                currentState->handleEvents(window, event);
             }
         } else if (event.type == sf::Event::MouseButtonReleased) {
             if (event.mouseButton.button == sf::Mouse::Left) {
@@ -54,8 +56,8 @@ void JumperApplication::handleEvents() {
     }
 }
 
-void JumperApplication::update() {
-    currentState->update(window);
+void JumperApplication::update(float deltaTime) {
+    currentState->update(window, deltaTime);
 }
 
 void JumperApplication::render() {
@@ -69,20 +71,30 @@ void JumperApplication::changeState() {
     GameState *nextState = currentState->changeState(window);
     if (nextState != nullptr) {
         currentState = nextState;
+        setBackground();
     }
 }
 
 void JumperApplication::initWindow() {
-    if (!backgroundTexture.loadFromFile(currentState->getBackgroundPath())) {
-        std::cout << "errore";
-    }
 
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    int screenWidth = (int) desktopMode.width;
+    int screenHeight = (int) desktopMode.height;
+
+    int windowPosX = (screenWidth - WINDOW_WIDTH) / 2;
+    int windowPosY = (screenHeight - WINDOW_HEIGHT) / 2;
+
+    window.setPosition(sf::Vector2i(windowPosX, windowPosY));
+    setBackground();
+}
+
+void JumperApplication::setBackground() {
+    backgroundTexture.loadFromFile(currentState->getBackgroundPath());
     backgroundShape.setSize(sf::Vector2f((float) backgroundTexture.getSize().x, (float) backgroundTexture.getSize().y));
     float scaleX = WINDOW_WIDTH / (float) backgroundTexture.getSize().x;
     float scaleY = WINDOW_HEIGHT / (float) backgroundTexture.getSize().y;
 
     float scale = std::min(scaleX, scaleY);
-
     backgroundShape.setTexture(&backgroundTexture);
     backgroundShape.setScale(scale, scale);
 }

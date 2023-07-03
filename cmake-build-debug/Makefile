@@ -191,6 +191,30 @@ Application/GameState.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/GameState.cpp.s
 .PHONY : Application/GameState.cpp.s
 
+Application/GamingState.obj: Application/GamingState.cpp.obj
+.PHONY : Application/GamingState.obj
+
+# target to build an object file
+Application/GamingState.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/GamingState.cpp.obj
+.PHONY : Application/GamingState.cpp.obj
+
+Application/GamingState.i: Application/GamingState.cpp.i
+.PHONY : Application/GamingState.i
+
+# target to preprocess a source file
+Application/GamingState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/GamingState.cpp.i
+.PHONY : Application/GamingState.cpp.i
+
+Application/GamingState.s: Application/GamingState.cpp.s
+.PHONY : Application/GamingState.s
+
+# target to generate assembly for a file
+Application/GamingState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/GamingState.cpp.s
+.PHONY : Application/GamingState.cpp.s
+
 Application/JumperApplication.obj: Application/JumperApplication.cpp.obj
 .PHONY : Application/JumperApplication.obj
 
@@ -263,30 +287,6 @@ Application/PauseState.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PauseState.cpp.s
 .PHONY : Application/PauseState.cpp.s
 
-Application/PlayingState.obj: Application/PlayingState.cpp.obj
-.PHONY : Application/PlayingState.obj
-
-# target to build an object file
-Application/PlayingState.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj
-.PHONY : Application/PlayingState.cpp.obj
-
-Application/PlayingState.i: Application/PlayingState.cpp.i
-.PHONY : Application/PlayingState.i
-
-# target to preprocess a source file
-Application/PlayingState.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PlayingState.cpp.i
-.PHONY : Application/PlayingState.cpp.i
-
-Application/PlayingState.s: Application/PlayingState.cpp.s
-.PHONY : Application/PlayingState.s
-
-# target to generate assembly for a file
-Application/PlayingState.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Application/PlayingState.cpp.s
-.PHONY : Application/PlayingState.cpp.s
-
 Application/SettingsState.obj: Application/SettingsState.cpp.obj
 .PHONY : Application/SettingsState.obj
 
@@ -335,6 +335,30 @@ Controllers/CollisionManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.s
 .PHONY : Controllers/CollisionManager.cpp.s
 
+GUI/Entity.obj: GUI/Entity.cpp.obj
+.PHONY : GUI/Entity.obj
+
+# target to build an object file
+GUI/Entity.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/Entity.cpp.obj
+.PHONY : GUI/Entity.cpp.obj
+
+GUI/Entity.i: GUI/Entity.cpp.i
+.PHONY : GUI/Entity.i
+
+# target to preprocess a source file
+GUI/Entity.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/Entity.cpp.i
+.PHONY : GUI/Entity.cpp.i
+
+GUI/Entity.s: GUI/Entity.cpp.s
+.PHONY : GUI/Entity.s
+
+# target to generate assembly for a file
+GUI/Entity.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/Entity.cpp.s
+.PHONY : GUI/Entity.cpp.s
+
 GUI/MenuButton.obj: GUI/MenuButton.cpp.obj
 .PHONY : GUI/MenuButton.obj
 
@@ -358,6 +382,30 @@ GUI/MenuButton.s: GUI/MenuButton.cpp.s
 GUI/MenuButton.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/MenuButton.cpp.s
 .PHONY : GUI/MenuButton.cpp.s
+
+GUI/Player.obj: GUI/Player.cpp.obj
+.PHONY : GUI/Player.obj
+
+# target to build an object file
+GUI/Player.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/Player.cpp.obj
+.PHONY : GUI/Player.cpp.obj
+
+GUI/Player.i: GUI/Player.cpp.i
+.PHONY : GUI/Player.i
+
+# target to preprocess a source file
+GUI/Player.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/Player.cpp.i
+.PHONY : GUI/Player.cpp.i
+
+GUI/Player.s: GUI/Player.cpp.s
+.PHONY : GUI/Player.s
+
+# target to generate assembly for a file
+GUI/Player.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Jump.dir\build.make CMakeFiles/Jump.dir/GUI/Player.cpp.s
+.PHONY : GUI/Player.cpp.s
 
 main.obj: main.cpp.obj
 .PHONY : main.obj
@@ -398,6 +446,9 @@ help:
 	@echo ... Application/GameState.obj
 	@echo ... Application/GameState.i
 	@echo ... Application/GameState.s
+	@echo ... Application/GamingState.obj
+	@echo ... Application/GamingState.i
+	@echo ... Application/GamingState.s
 	@echo ... Application/JumperApplication.obj
 	@echo ... Application/JumperApplication.i
 	@echo ... Application/JumperApplication.s
@@ -407,18 +458,21 @@ help:
 	@echo ... Application/PauseState.obj
 	@echo ... Application/PauseState.i
 	@echo ... Application/PauseState.s
-	@echo ... Application/PlayingState.obj
-	@echo ... Application/PlayingState.i
-	@echo ... Application/PlayingState.s
 	@echo ... Application/SettingsState.obj
 	@echo ... Application/SettingsState.i
 	@echo ... Application/SettingsState.s
 	@echo ... Controllers/CollisionManager.obj
 	@echo ... Controllers/CollisionManager.i
 	@echo ... Controllers/CollisionManager.s
+	@echo ... GUI/Entity.obj
+	@echo ... GUI/Entity.i
+	@echo ... GUI/Entity.s
 	@echo ... GUI/MenuButton.obj
 	@echo ... GUI/MenuButton.i
 	@echo ... GUI/MenuButton.s
+	@echo ... GUI/Player.obj
+	@echo ... GUI/Player.i
+	@echo ... GUI/Player.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

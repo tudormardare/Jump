@@ -25,7 +25,7 @@ void PauseState::handleEvents(sf::RenderWindow &window, const sf::Event &event) 
     }
 }
 
-void PauseState::update(sf::RenderWindow &window) {
+void PauseState::update(sf::RenderWindow &window, float deltaTime) {
 
 }
 
@@ -39,7 +39,7 @@ GameState *PauseState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         if (buttons[0]->isClicked(window)) {
             changeStateToNext = false;
-            return &PlayingState::GetInstance(window);
+            return &SettingsState::GetInstance(window);
         } else if (buttons[1]->isClicked(window)) {
             window.close();
         }
@@ -51,7 +51,7 @@ std::string PauseState::getBackgroundPath() const {
     return backgroundPath;
 }
 
-void PauseState::initButtons() {
+void PauseState::initState() {
     if (!buttonTexture.loadFromFile(PAUSE_BUTTONS_PATH)) {
         std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
     }

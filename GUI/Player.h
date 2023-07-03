@@ -5,49 +5,63 @@
 #ifndef JUMP_PLAYER_H
 #define JUMP_PLAYER_H
 
+#define PLAYER_TEXTURE "PNG/Player/Player.png"
+#define PLAYER_SPEED 0.5f
+#define PLAYER_HEALTH 3
+#define PLAYER_VELOCITY 1.5f
+#define PLAYER_RUNNING_TEXTURES 6
+#define PLAYER_RUNNING_PATH "PNG/Player/RunningTextures/adventurer-run-0"
+#define PLAYER_RUNNING_PATH_END ".png"
+#define PLAYER_SCALE 2.f
+
+#include "SFML/Graphics.hpp"
 
 #include "Entity.h"
 
 class Player : public Entity {
-private:
-    sf::Sprite sprite;
-    sf::Texture texture;
-    sf::Vector2f position;
 
-    float movementSpeed;
-    int health;
+private:
+    std::unique_ptr<sf::Texture> runningTextures[PLAYER_RUNNING_TEXTURES];
+    sf::Texture standardTexture;
+    sf::Vector2f position;
+    int health = PLAYER_HEALTH;
+    bool inverseX = false;
 
     //Private functions
     void initTexture();
 
     void initSprite();
 
-    void setSpeed(float newSpeed);
+
+
+public:
+    Player();
+
+    void move(float dirX, float dirY);
+
+    void update(sf::RenderWindow &window)  override;
+
+    void draw(sf::RenderWindow &window) override;
 
     float getSpeed() const;
+
+    void changeRunningTexture(int textureNumber);
+
+    sf::Vector2f getOrigin() const;
 
     void setHealth(int newHealth);
 
     int getHealth() const;
 
-public:
-    Player();
+    void setDefaultTexture();
 
-    virtual ~Player();
+    static int getRunningTexturesNumber() ;
 
+    void inverse();
 
-    void setPosition(sf::Vector2f newPosition) override;
-
-    sf::Vector2f getPosition() const override;
-
-
-    void move(const float dirX, const float dirY);
-
-    void update() override;
-
-    void render(sf::RenderTarget &target) override;
-
+    bool getInverse() const;
 };
+
 
 
 

@@ -19,13 +19,12 @@ Ghost::~Ghost() {
 
 }
 
-void Ghost::update() {
+void Ghost::update(sf::RenderWindow &window){
 
 }
 
-void Ghost::render(sf::RenderTarget &target) {
-    sprite.setPosition(position);
-    target.draw(sprite);
+void Ghost::draw(sf::RenderWindow &window){
+    window.draw(sprite);
 }
 
 
@@ -67,9 +66,6 @@ void Ghost::initSprite() {
     sprite.scale(4.0f, 4.0f);
 }
 
-void Ghost::setSpeed(float newSpeed) {
-    movementSpeed = newSpeed;
-}
 
 float Ghost::getSpeed() const {
     return movementSpeed;

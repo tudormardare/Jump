@@ -3,43 +3,33 @@
 //
 #include "Entity.h"
 
-Entity::Entity()
-{
-
-}
-
-Entity::~Entity()
-{
-
-}
-
-
-
 //Functions
 void Entity::setPosition(sf::Vector2f newPosition)
 {
-    position = newPosition;
+    sprite.setPosition(newPosition);
 }
 
-sf::Vector2f Entity::getPosition() const
-{
-    return position;
+sf::Vector2f Entity::getPosition() const{
+    return sprite.getPosition();
 }
 
-
-
-
-
-void Entity::update()
-{
-
+void Entity::setVelocity(sf::Vector2f newVelocity) {
+    this->velocity = newVelocity;
 }
 
-void Entity::render(sf::RenderTarget &target)
-{
-    sprite.setPosition(position);
-    target.draw(sprite);
+void Entity::setSpeed(float newSpeed) {
+    this->speed = newSpeed;
 }
+
+sf::Vector2f Entity::getVelocity() const {
+    return velocity;
+}
+
+void Entity::setVelocity(float newVelocityX, float newVelocityY) {
+    this->velocity.x = newVelocityX;
+    this->velocity.y = newVelocityY;
+}
+
 
 
 

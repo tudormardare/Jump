@@ -1,55 +1,45 @@
 //
 // Created by Denis Jaupi on 22/06/23.
 //
-#define PLAYER_TEXTURE "PNG/Player/Player.png"
 
+#include <iostream>
 #include "Player.h"
 
 
-Player::Player() {
-    movementSpeed = 4.f;
 
+Player::Player() {
     initTexture();
     initSprite();
 }
 
-Player::~Player() {
-
-}
-
-void Player::update() {
-
-}
-
-void Player::render(sf::RenderTarget &target) {
-    sprite.setPosition(position);
-    target.draw(sprite);
-}
-
-
 //Private functions
 void Player::initTexture() {
-    //Load a texture from file
-    texture.loadFromFile(PLAYER_TEXTURE);
-
+    std::string beginningPath(PLAYER_RUNNING_PATH);
+    //Load a currentTexture from file
+    standardTexture.loadFromFile(PLAYER_TEXTURE);
+    for(int i = 0; i < PLAYER_RUNNING_TEXTURES; i++){
+        std::string path = beginningPath + std::to_string(i) + PLAYER_RUNNING_PATH_END;
+        runningTextures[i] = std::make_unique<sf::Texture>();
+        if(!runningTextures[i]->loadFromFile(path)){
+            std::cout << "Error loading texture from file: " << path << std::endl;
+        }
+    }
+    currentTexture = standardTexture;
 }
 
 void Player::initSprite() {
-    //Set the texture to the sprite
-    sprite.setTexture(texture);
-
+    //Set the currentTexture to the sprite
+    sprite.setTexture(currentTexture);
+    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+    sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
     //Resize the sprite
-    sprite.scale(4.0f, 4.0f);
-
+    setVelocity(sf::Vector2f (PLAYER_VELOCITY, PLAYER_VELOCITY));
+    setSpeed(PLAYER_SPEED);
 }
 
-
-void Player::setSpeed(float newSpeed) {
-    movementSpeed = newSpeed;
-}
 
 float Player::getSpeed() const {
-    return movementSpeed;
+    return speed;
 }
 
 
@@ -61,20 +51,47 @@ int Player::getHealth() const {
     return health;
 }
 
-
-//Functions
-void Player::setPosition(sf::Vector2f newPosition) {
-    position = newPosition;
+void Player::move(float dirX, float dirY) {
+    sprite.move(speed * dirX, speed * dirY);
 }
 
-sf::Vector2f Player::getPosition() const {
-    return position;
+void Player::update(sf::RenderWindow &window) {
 }
 
-
-void Player::move(const float dirX, const float dirY) {
-    sprite.move(movementSpeed * dirX, movementSpeed * dirY);
+void Player::draw(sf::RenderWindow &window) {
+    window.draw(sprite);
 }
+
+int Player::getRunningTexturesNumber() {
+    return PLAYER_RUNNING_TEXTURES;
+}
+
+sf::Vector2f Player::getOrigin() const {
+    return sprite.getOrigin();
+}
+
+void Player::changeRunningTexture(int textureNumber) {
+    currentTexture = *runningTextures[textureNumber];
+}
+
+void Player::setDefaultTexture() {
+    currentTexture = standardTexture;
+}
+
+void Player::inverse() {
+    if(sprite.getScale().x > 0){
+        sprite.setScale(-PLAYER_SCALE, PLAYER_SCALE);
+        inverseX = true;
+    } else {
+        sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
+        inverseX = false;
+    }
+}
+
+bool Player::getInverse() const {
+    return inverseX;
+}
+
 
 
 
@@ -82,7 +99,7 @@ void Player::move(const float dirX, const float dirY) {
 
 /*
 Player::Player() {
-    texture.loadFromFile(PLAYER_TEXTURE);
+    currentTexture.loadFromFile(PLAYER_TEXTURE);
 }
 
 void Player::draw(sf::RenderWindow &window) {

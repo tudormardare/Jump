@@ -143,11 +143,26 @@ CMakeFiles/Jump.dir/Application/PauseState.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/PauseState.cpp.s"
 	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\PauseState.cpp" -o CMakeFiles\Jump.dir\Application\PauseState.cpp.s
 
+CMakeFiles/Jump.dir/Application/GamingState.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/Application/GamingState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/Application/GamingState.cpp.obj: ../Application/GamingState.cpp
+CMakeFiles/Jump.dir/Application/GamingState.cpp.obj: CMakeFiles/Jump.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Jump.dir/Application/GamingState.cpp.obj"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Jump.dir/Application/GamingState.cpp.obj -MF CMakeFiles\Jump.dir\Application\GamingState.cpp.obj.d -o CMakeFiles\Jump.dir\Application\GamingState.cpp.obj -c "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\GamingState.cpp"
+
+CMakeFiles/Jump.dir/Application/GamingState.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/GamingState.cpp.i"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\GamingState.cpp" > CMakeFiles\Jump.dir\Application\GamingState.cpp.i
+
+CMakeFiles/Jump.dir/Application/GamingState.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/GamingState.cpp.s"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\GamingState.cpp" -o CMakeFiles\Jump.dir\Application\GamingState.cpp.s
+
 CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj: CMakeFiles/Jump.dir/flags.make
 CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
 CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj: ../Application/SettingsState.cpp
 CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj: CMakeFiles/Jump.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj"
 	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj -MF CMakeFiles\Jump.dir\Application\SettingsState.cpp.obj.d -o CMakeFiles\Jump.dir\Application\SettingsState.cpp.obj -c "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\SettingsState.cpp"
 
 CMakeFiles/Jump.dir/Application/SettingsState.cpp.i: cmake_force
@@ -157,21 +172,6 @@ CMakeFiles/Jump.dir/Application/SettingsState.cpp.i: cmake_force
 CMakeFiles/Jump.dir/Application/SettingsState.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/SettingsState.cpp.s"
 	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\SettingsState.cpp" -o CMakeFiles\Jump.dir\Application\SettingsState.cpp.s
-
-CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj: CMakeFiles/Jump.dir/flags.make
-CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
-CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj: ../Application/PlayingState.cpp
-CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj: CMakeFiles/Jump.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj -MF CMakeFiles\Jump.dir\Application\PlayingState.cpp.obj.d -o CMakeFiles\Jump.dir\Application\PlayingState.cpp.obj -c "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\PlayingState.cpp"
-
-CMakeFiles/Jump.dir/Application/PlayingState.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/Application/PlayingState.cpp.i"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\PlayingState.cpp" > CMakeFiles\Jump.dir\Application\PlayingState.cpp.i
-
-CMakeFiles/Jump.dir/Application/PlayingState.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Application/PlayingState.cpp.s"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Application\PlayingState.cpp" -o CMakeFiles\Jump.dir\Application\PlayingState.cpp.s
 
 CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj: CMakeFiles/Jump.dir/flags.make
 CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
@@ -203,6 +203,36 @@ CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.s"
 	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\Controllers\CollisionManager.cpp" -o CMakeFiles\Jump.dir\Controllers\CollisionManager.cpp.s
 
+CMakeFiles/Jump.dir/GUI/Player.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/GUI/Player.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/GUI/Player.cpp.obj: ../GUI/Player.cpp
+CMakeFiles/Jump.dir/GUI/Player.cpp.obj: CMakeFiles/Jump.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Jump.dir/GUI/Player.cpp.obj"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Jump.dir/GUI/Player.cpp.obj -MF CMakeFiles\Jump.dir\GUI\Player.cpp.obj.d -o CMakeFiles\Jump.dir\GUI\Player.cpp.obj -c "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\GUI\Player.cpp"
+
+CMakeFiles/Jump.dir/GUI/Player.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/GUI/Player.cpp.i"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\GUI\Player.cpp" > CMakeFiles\Jump.dir\GUI\Player.cpp.i
+
+CMakeFiles/Jump.dir/GUI/Player.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/GUI/Player.cpp.s"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\GUI\Player.cpp" -o CMakeFiles\Jump.dir\GUI\Player.cpp.s
+
+CMakeFiles/Jump.dir/GUI/Entity.cpp.obj: CMakeFiles/Jump.dir/flags.make
+CMakeFiles/Jump.dir/GUI/Entity.cpp.obj: CMakeFiles/Jump.dir/includes_CXX.rsp
+CMakeFiles/Jump.dir/GUI/Entity.cpp.obj: ../GUI/Entity.cpp
+CMakeFiles/Jump.dir/GUI/Entity.cpp.obj: CMakeFiles/Jump.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/Jump.dir/GUI/Entity.cpp.obj"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Jump.dir/GUI/Entity.cpp.obj -MF CMakeFiles\Jump.dir\GUI\Entity.cpp.obj.d -o CMakeFiles\Jump.dir\GUI\Entity.cpp.obj -c "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\GUI\Entity.cpp"
+
+CMakeFiles/Jump.dir/GUI/Entity.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Jump.dir/GUI/Entity.cpp.i"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\GUI\Entity.cpp" > CMakeFiles\Jump.dir\GUI\Entity.cpp.i
+
+CMakeFiles/Jump.dir/GUI/Entity.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Jump.dir/GUI/Entity.cpp.s"
+	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\GUI\Entity.cpp" -o CMakeFiles\Jump.dir\GUI\Entity.cpp.s
+
 # Object files for target Jump
 Jump_OBJECTS = \
 "CMakeFiles/Jump.dir/main.cpp.obj" \
@@ -210,10 +240,12 @@ Jump_OBJECTS = \
 "CMakeFiles/Jump.dir/Application/GameState.cpp.obj" \
 "CMakeFiles/Jump.dir/Application/MenuState.cpp.obj" \
 "CMakeFiles/Jump.dir/Application/PauseState.cpp.obj" \
+"CMakeFiles/Jump.dir/Application/GamingState.cpp.obj" \
 "CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj" \
-"CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj" \
 "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj" \
-"CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.obj"
+"CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.obj" \
+"CMakeFiles/Jump.dir/GUI/Player.cpp.obj" \
+"CMakeFiles/Jump.dir/GUI/Entity.cpp.obj"
 
 # External object files for target Jump
 Jump_EXTERNAL_OBJECTS =
@@ -223,10 +255,12 @@ Jump.exe: CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/Application/GameState.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/Application/MenuState.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/Application/PauseState.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/Application/GamingState.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj
-Jump.exe: CMakeFiles/Jump.dir/Application/PlayingState.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/GUI/Player.cpp.obj
+Jump.exe: CMakeFiles/Jump.dir/GUI/Entity.cpp.obj
 Jump.exe: CMakeFiles/Jump.dir/build.make
 Jump.exe: C:/SFML/lib/libsfml-system-s-d.a
 Jump.exe: C:/SFML/lib/libsfml-window-s-d.a
@@ -245,7 +279,7 @@ Jump.exe: C:/SFML/lib/libsfml-system-s-d.a
 Jump.exe: CMakeFiles/Jump.dir/linklibs.rsp
 Jump.exe: CMakeFiles/Jump.dir/objects1.rsp
 Jump.exe: CMakeFiles/Jump.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable Jump.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\tudor\OneDrive - stud.unifi.it\Documenti\CLionProjects\Jump\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable Jump.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\Jump.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

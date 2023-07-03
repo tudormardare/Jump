@@ -14,7 +14,7 @@
 
 #include <iostream>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include "PlayingState.h"
+#include "SettingsState.h"
 #include "GameState.h"
 #include "PauseState.h"
 #include "MenuState.h"
@@ -23,25 +23,21 @@ class JumperApplication {
 
 public:
     JumperApplication();
-
     void run();
 
 private:
 
-    GameState *currentState;
+    GameState* currentState;
     sf::RenderWindow window;
     sf::RectangleShape backgroundShape;
     sf::Texture backgroundTexture;
 
     void handleEvents();
-
-    void update();
-
+    void update(float deltaTime);
     void render();
-
     void changeState();
-
     void initWindow();
+    void setBackground();
 
 
 };

@@ -23,8 +23,6 @@ private:
     //Private functions
     void initTexture();
     void initSprite();
-
-    void setSpeed(float newSpeed);
     float getSpeed() const;
 
 
@@ -43,8 +41,8 @@ public:
      */
 
 
-    void update() override;
-    void render(sf::RenderTarget& target) override;
+    void update(sf::RenderWindow& window) override;
+    void draw(sf::RenderWindow& window) override;
 
 
 };
