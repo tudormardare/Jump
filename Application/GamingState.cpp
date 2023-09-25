@@ -14,13 +14,13 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 }
 
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
-    if(event.type == sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-        window.close();
-    }
+  if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape){
+      window.close();
+  }
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
-
+/*
     player.setVelocity(0.f, 0.f);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -66,6 +66,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
         }
         runningAnimation(deltaTime);
     }
+    */
 }
 
 void GamingState::render(sf::RenderWindow &window) {

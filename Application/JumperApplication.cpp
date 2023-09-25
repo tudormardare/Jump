@@ -15,7 +15,7 @@ JumperApplication::JumperApplication() {
 void JumperApplication::run() {
 
     sf::Clock clock;
-    float deltaTime = 0.f;
+    float deltaTime = 0.016f;
 
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
@@ -53,6 +53,8 @@ void JumperApplication::handleEvents() {
                 isButtonPressed = false;
             }
         }
+
+        currentState->handleEvents(window, event);
     }
 }
 
