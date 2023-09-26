@@ -8,17 +8,18 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/GameState.cpp" "CMakeFiles/Jump.dir/Application/GameState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/GameState.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/GamingState.cpp" "CMakeFiles/Jump.dir/Application/GamingState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/GamingState.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/JumperApplication.cpp" "CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/JumperApplication.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/MenuState.cpp" "CMakeFiles/Jump.dir/Application/MenuState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/MenuState.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/PauseState.cpp" "CMakeFiles/Jump.dir/Application/PauseState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/PauseState.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Application/SettingsState.cpp" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/Controllers/CollisionManager.cpp" "CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.obj" "gcc" "CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/Entity.cpp" "CMakeFiles/Jump.dir/GUI/Entity.cpp.obj" "gcc" "CMakeFiles/Jump.dir/GUI/Entity.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/MenuButton.cpp" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj" "gcc" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/GUI/Player.cpp" "CMakeFiles/Jump.dir/GUI/Player.cpp.obj" "gcc" "CMakeFiles/Jump.dir/GUI/Player.cpp.obj.d"
-  "C:/Users/tudor/OneDrive - stud.unifi.it/Documenti/CLionProjects/Jump/main.cpp" "CMakeFiles/Jump.dir/main.cpp.obj" "gcc" "CMakeFiles/Jump.dir/main.cpp.obj.d"
+  "/Users/denis/Projects/Jump/Application/GameState.cpp" "CMakeFiles/Jump.dir/Application/GameState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/GameState.cpp.o.d"
+  "/Users/denis/Projects/Jump/Application/GamingState.cpp" "CMakeFiles/Jump.dir/Application/GamingState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/GamingState.cpp.o.d"
+  "/Users/denis/Projects/Jump/Application/JumperApplication.cpp" "CMakeFiles/Jump.dir/Application/JumperApplication.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/JumperApplication.cpp.o.d"
+  "/Users/denis/Projects/Jump/Application/MenuState.cpp" "CMakeFiles/Jump.dir/Application/MenuState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/MenuState.cpp.o.d"
+  "/Users/denis/Projects/Jump/Application/PauseState.cpp" "CMakeFiles/Jump.dir/Application/PauseState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/PauseState.cpp.o.d"
+  "/Users/denis/Projects/Jump/Application/SettingsState.cpp" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.o" "gcc" "CMakeFiles/Jump.dir/Application/SettingsState.cpp.o.d"
+  "/Users/denis/Projects/Jump/Controllers/CollisionManager.cpp" "CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.o" "gcc" "CMakeFiles/Jump.dir/Controllers/CollisionManager.cpp.o.d"
+  "/Users/denis/Projects/Jump/GUI/Entity.cpp" "CMakeFiles/Jump.dir/GUI/Entity.cpp.o" "gcc" "CMakeFiles/Jump.dir/GUI/Entity.cpp.o.d"
+  "/Users/denis/Projects/Jump/GUI/Map.cpp" "CMakeFiles/Jump.dir/GUI/Map.cpp.o" "gcc" "CMakeFiles/Jump.dir/GUI/Map.cpp.o.d"
+  "/Users/denis/Projects/Jump/GUI/MenuButton.cpp" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.o" "gcc" "CMakeFiles/Jump.dir/GUI/MenuButton.cpp.o.d"
+  "/Users/denis/Projects/Jump/GUI/Player.cpp" "CMakeFiles/Jump.dir/GUI/Player.cpp.o" "gcc" "CMakeFiles/Jump.dir/GUI/Player.cpp.o.d"
+  "/Users/denis/Projects/Jump/main.cpp" "CMakeFiles/Jump.dir/main.cpp.o" "gcc" "CMakeFiles/Jump.dir/main.cpp.o.d"
   )
 
 # Targets to which this target links.
