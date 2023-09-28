@@ -17,9 +17,6 @@ void Entity::setVelocity(sf::Vector2f newVelocity) {
     this->velocity = newVelocity;
 }
 
-void Entity::setSpeed(float newSpeed) {
-    this->speed = newSpeed;
-}
 
 sf::Vector2f Entity::getVelocity() const {
     return velocity;
@@ -28,6 +25,14 @@ sf::Vector2f Entity::getVelocity() const {
 void Entity::setVelocity(float newVelocityX, float newVelocityY) {
     this->velocity.x = newVelocityX;
     this->velocity.y = newVelocityY;
+}
+
+void Entity::setAcceleration(sf::Vector2f newAcceleration) {
+    this->acceleration = newAcceleration;
+}
+
+void Entity::setTexture(sf::Texture &texture) {
+    sprite.setTexture(texture);
 }
 
 
