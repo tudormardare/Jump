@@ -35,6 +35,22 @@ void Entity::setTexture(sf::Texture &texture) {
     sprite.setTexture(texture);
 }
 
+void Entity::setPosition(float x, float y) {
+    sprite.setPosition(x, y);
+}
+
+float Entity::getVerticalVelocity() const {
+    return velocity.y;
+}
+
+void Entity::setVerticalVelocity(float velocityY) {
+    velocity.y = velocityY;
+}
+
+
+
+
+
 
 
 

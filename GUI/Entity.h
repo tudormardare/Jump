@@ -22,12 +22,18 @@ public:
     virtual void setTexture(sf::Texture& texture);
     virtual void setAcceleration(sf::Vector2f newAcceleration);
     virtual void setPosition(sf::Vector2f newPosition);
+    void setPosition(float x, float y);
     virtual void setVelocity(sf::Vector2f newVelocity);
     virtual sf::Vector2f getPosition() const;
     virtual sf::Vector2f getVelocity() const;
-    virtual void update(sf::RenderWindow& window) = 0;
+    virtual void update(float deltaTime) = 0;
     virtual void draw(sf::RenderWindow& window) = 0;
+    virtual void move(float offsetX, float offsetY) = 0;
     virtual void setVelocity(float newVelocityX, float newVelocityY);
+
+    float getVerticalVelocity() const;
+
+    void setVerticalVelocity(float d);
 };
 /*
 class Entity {

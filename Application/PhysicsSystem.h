@@ -2,13 +2,12 @@
 // Created by tudor on 04/10/2023.
 //
 
-#ifndef JUMP_PHYSICSSYSTEM_H
-#define JUMP_PHYSICSSYSTEM_H
-
+#include "../GUI/Entity.h"
 
 class PhysicsSystem {
+public:
+    static const float GRAVITY;
 
+    static void applyGravity(Entity& entity, float deltaTime);
 };
 
-
-#endif //JUMP_PHYSICSSYSTEM_H
