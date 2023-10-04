@@ -4,14 +4,14 @@ add_subdirectory(./lib/googletest)
 set(gtest_SOURCE_DIR, ./lib/googletest/)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-set(TEST_SOURCE_FILES runAllTests.cpp ../GUI/Player.h ../GUI/Player.cpp ../GUI/Entity.h ../GUI/Entity.cpp ../Controllers/CollisionManager.h ../Controllers/CollisionManager.cpp ../Application/JumperApplication.cpp ../Application/JumperApplication.h ../Application/GameState.cpp ../Application/GameState.h ../Application/MenuState.cpp ../Application/MenuState.h ../Application/PauseState.cpp ../Application/PauseState.h ../Application/GamingState.cpp ../Application/GamingState.h ../Application/SettingsState.cpp ../Application/SettingsState.h ../GUI/MenuButton.cpp ../GUI/MenuButton.h ColliosionTest.cpp PlayerTest.cpp)
+set(TEST_SOURCE_FILES runAllTests.cpp ../GUI/Player.h ../GUI/Player.cpp ../GUI/Entity.h ../GUI/Entity.cpp ../Controllers/CollisionManager.h ../Controllers/CollisionManager.cpp ../Application/JumperApplication.cpp ../Application/JumperApplication.h ../Application/GameState.cpp ../Application/GameState.h ../Application/MenuState.cpp ../Application/MenuState.h ../Application/PauseState.cpp ../Application/PauseState.h ../Application/GamingState.cpp ../Application/GamingState.h ../Application/SettingsState.cpp ../Application/SettingsState.h ../GUI/MenuButton.cpp ../GUI/MenuButton.h ColliosionTest.cpp PlayerTest.cpp ../Utilities/TextureManager.cpp ../Utilities/TextureManager.h)
 add_executable(runAllTests ${TEST_SOURCE_FILES})
 target_link_libraries(runAllTests gtest gtest_main )
 
 # Detect and add SFML - to read FindSFML.cmake file
 
 if (APPLE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIRS})
 set_target_properties(Jump PROPERTIES

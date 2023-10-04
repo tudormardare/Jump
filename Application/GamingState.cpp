@@ -24,7 +24,6 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
     }
 }
 
-
 void GamingState::render(sf::RenderWindow &window) {
     player.draw(window);
 }
@@ -40,6 +39,13 @@ std::string GamingState::getBackgroundPath() const {
 
 void GamingState::initState() {
     player.setPosition(sf::Vector2f(100, 100));
+    std::map<std::string, std::pair<std::string, int>> playerAnimations = {
+            {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES}},
+            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES}},
+            {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES}},
+            {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES}}
+    };
+    textureManager.loadEntityTextures("Player", playerAnimations);
 }
 
 
@@ -64,62 +70,21 @@ void GamingState::handlePlayerMovements(float deltaTime) {
 
 }
 
-void GamingState::handlePlayerAnimations(float deltaTime) {
-    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-
-    if (isKeyPressedW) {
-        jumpingAnimation(deltaTime);
-    } else if (isKeyPressedA || isKeyPressedD) {
-        runningAnimation(deltaTime);
-    } else {
-        idleAnimation(deltaTime);
+void GamingState::handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount) {
+    animationTimer += deltaTime;
+    if (animationTimer >= FRAME_DURATION) {
+        animationTimer = 0.f;
+        currentFrame = (currentFrame + 1) % frameCount;
+        player.setTexture(textureManager.getTexture("Player", animationType, currentFrame));
     }
 }
+
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
     handlePlayerMovements(deltaTime);
-    handlePlayerAnimations(deltaTime);
-    // ... Altri aggiornamenti specifici dello stato
+    handleAnimations(deltaTime);
 }
 
-
-void GamingState::runningAnimation(float deltaTime) {
-    animationTimer += deltaTime;
-    if (animationTimer >= FRAME_DURATION) {
-        animationTimer = 0.f;
-        currentFrame = (currentFrame + 1) % PLAYER_RUNNING_TEXTURES;
-        player.changeRunningTexture(currentFrame);
-    }
-}
-
-void GamingState::jumpingAnimation(float deltaTime) {
-    animationTimer += deltaTime;
-    if (animationTimer >= FRAME_DURATION) {
-        animationTimer = 0.f;
-        currentFrame = (currentFrame + 1) % PLAYER_JUMPING_TEXTURES;
-        player.changeJumpingTexture(currentFrame);
-    }
-}
-
-void GamingState::idleAnimation(float deltaTime) {
-    animationTimer += deltaTime;
-    if (animationTimer >= FRAME_DURATION) {
-        animationTimer = 0.f;
-        currentFrame = (currentFrame + 1) % PLAYER_IDLE_TEXTURES;
-        player.changeIdleTexture(currentFrame);
-    }
-}
-
-void GamingState::fallingAnimation(float deltaTime) {
-    animationTimer += deltaTime;
-    if (animationTimer >= FRAME_DURATION) {
-        animationTimer = 0.f;
-        currentFrame = (currentFrame + 1) % PLAYER_FALLING_TEXTURES;
-        player.changeFallingTexture(currentFrame);
-    }
-}
 
 void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
     if (isKeyPressedA && !isKeyPressedD) {
@@ -177,6 +142,21 @@ void GamingState::handleCollisions() {
     if (player.getPosition().y > 500) {
         player.setPosition(player.getPosition().x, 500);
         player.setVerticalVelocity(0.0f);
+    }
+}
+
+void GamingState::handleAnimations(float deltaTime) {
+    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+
+
+    if (isKeyPressedW) {
+        handlePlayerAnimations(deltaTime, "Jumping", PLAYER_JUMPING_TEXTURES);
+    } else if (isKeyPressedA || isKeyPressedD) {
+        handlePlayerAnimations(deltaTime, "Running", PLAYER_RUNNING_TEXTURES);
+    } else {
+        handlePlayerAnimations(deltaTime, "Idle", PLAYER_IDLE_TEXTURES);
     }
 }
 

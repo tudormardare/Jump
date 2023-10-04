@@ -31,7 +31,7 @@ void Entity::setAcceleration(sf::Vector2f newAcceleration) {
     this->acceleration = newAcceleration;
 }
 
-void Entity::setTexture(sf::Texture &texture) {
+void Entity::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
 }
 

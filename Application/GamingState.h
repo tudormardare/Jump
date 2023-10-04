@@ -10,10 +10,10 @@
 #include "GameState.h"
 #include "../Controllers/CollisionManager.h"
 #include "../GUI/Player.h"
-#include "PhysicsSystem.h"
+#include "../Utilities/PhysicsSystem.h"
+#include "../Utilities/TextureManager.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
-#define GRAVITY 980.f
 
 class GamingState : public GameState {
 
@@ -56,19 +56,14 @@ private:
 
      static void clampPlayerVelocity(sf::Vector2f& velocity);
 
-    void handlePlayerAnimations(float deltaTime);
+    void handlePlayerAnimations(float deltaTime, const std::string& animationType, int frameCount);
+
+    void handleAnimations(float deltaTime);
 
     void handleCollisions();
 
-    void runningAnimation(float deltaTime);
-
-    void jumpingAnimation(float deltaTime);
-
-    void fallingAnimation(float deltaTime);
-
-    void idleAnimation(float deltaTime);
-
     //attributi relativi al gioco
+    TextureManager textureManager;
     Player player;
     CollisionManager collisionManager;
     float animationTimer = 0.f;

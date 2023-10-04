@@ -19,7 +19,7 @@ protected:
 
 public:
     //Functions
-    virtual void setTexture(sf::Texture& texture);
+    virtual void setTexture(const sf::Texture& texture);
     virtual void setAcceleration(sf::Vector2f newAcceleration);
     virtual void setPosition(sf::Vector2f newPosition);
     void setPosition(float x, float y);

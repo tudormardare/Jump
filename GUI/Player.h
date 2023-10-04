@@ -7,7 +7,6 @@
 
 #define PLAYER_TEXTURE "PNG/Player/Player.png"
 #define PLAYER_HEALTH 3
-#define PLAYER_VELOCITY 200.f
 #define PLAYER_RUNNING_TEXTURES 6
 #define PLAYER_JUMPING_TEXTURES 4
 #define PLAYER_FALLING_TEXTURES 2
@@ -21,8 +20,6 @@
 #define PLAYER_MAX_SPEED 250.f
 #define PLAYER_DECELERATION_RATE 1000.f
 #define PLAYER_CHANGE_DIRECTION_SPEED 3.f // The higher the value, the faster the player will change direction
-#define PLAYER_JUMP_FORCE -450.f
-
 
 class Player : public Entity {
 private:
@@ -43,12 +40,7 @@ private:
 
 
     // Private functions
-    void initTexture();
     void initSprite();
-
-    void loadStandardTexture();
-    void loadAnimationTextures(const std::string& basePath, int textureCount, std::unique_ptr<sf::Texture> texturesArray[]);
-
 public:
     Player();
 
@@ -62,10 +54,6 @@ public:
     // Getters & Setters
     sf::Vector2f getAcceleration() const;
     void setAccelerationX(float newAccelerationX);
-    void changeRunningTexture(int textureNumber);
-    void changeJumpingTexture(int textureNumber);
-    void changeIdleTexture(int textureNumber);
-    void changeFallingTexture(int textureNumber);
     void jump(float initialVelocity);
     sf::Vector2f getOrigin() const;
     void setHealth(int newHealth);
