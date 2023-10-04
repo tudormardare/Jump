@@ -14,14 +14,15 @@ protected:
     sf::Sprite sprite;
     sf::Texture currentTexture;
     sf::Vector2f velocity;
-    float speed = 0;
+    sf::Vector2f acceleration;
 
 
 public:
     //Functions
+    virtual void setTexture(sf::Texture& texture);
+    virtual void setAcceleration(sf::Vector2f newAcceleration);
     virtual void setPosition(sf::Vector2f newPosition);
     virtual void setVelocity(sf::Vector2f newVelocity);
-    virtual void setSpeed(float newSpeed);
     virtual sf::Vector2f getPosition() const;
     virtual sf::Vector2f getVelocity() const;
     virtual void update(sf::RenderWindow& window) = 0;
@@ -44,6 +45,7 @@ public:
     sf::Vector2f getPosition();
 
     sf::FloatRect getGlobalBounds();
+    banananaisdjisj
 
 protected:
 
