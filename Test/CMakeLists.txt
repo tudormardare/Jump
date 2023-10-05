@@ -1,31 +1,23 @@
-cmake_minimum_required(VERSION 3.20)
+# File sorgente per i test
+set(TEST_SOURCE_FILES
+        runAllTests.cpp
+        CollisionTest.cpp
+        PlayerTest.cpp
+        ../GUI/Player.cpp
+        ../GUI/Entity.cpp
+        # Aggiungi altri file sorgente dei test qui
+        )
 
+# Configurazione Google Test
 add_subdirectory(./lib/googletest)
 set(gtest_SOURCE_DIR, ./lib/googletest/)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-set(TEST_SOURCE_FILES runAllTests.cpp ../GUI/Player.h ../GUI/Player.cpp ../GUI/Entity.h ../GUI/Entity.cpp ../Controllers/CollisionManager.h ../Controllers/CollisionManager.cpp ../Application/JumperApplication.cpp ../Application/JumperApplication.h ../Application/GameState.cpp ../Application/GameState.h ../Application/MenuState.cpp ../Application/MenuState.h ../Application/PauseState.cpp ../Application/PauseState.h ../Application/GamingState.cpp ../Application/GamingState.h ../Application/SettingsState.cpp ../Application/SettingsState.h ../GUI/MenuButton.cpp ../GUI/MenuButton.h ColliosionTest.cpp PlayerTest.cpp ../Utilities/TextureManager.cpp ../Utilities/TextureManager.h)
+# Crea l'eseguibile per i test
 add_executable(runAllTests ${TEST_SOURCE_FILES})
-target_link_libraries(runAllTests gtest gtest_main )
 
-# Detect and add SFML - to read FindSFML.cmake file
+# Link delle librerie per i test
+target_link_libraries(runAllTests gtest gtest_main sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
 
-if (APPLE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
-include_directories(${SFML_INCLUDE_DIRS})
-set_target_properties(Jump PROPERTIES
-        MACOSX_BUNDLE TRUE
-        MACOSX_BUNDLE_BUNDLE_NAME Jump
-        MACOSX_BUNDLE_BUNDLE_VERSION "1.0"
-        )
-endif()
-
-# Configurazioni per Windows
-if (WIN32)
-set (SFML_STATIC_LIBRARIES TRUE)
-set (SFML_DIR C:/SFML/lib/cmake/SFML)
-find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
-endif()
-
-target_link_libraries(runAllTests sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
+# Link file header
+target_include_directories(runAllTests PRIVATE ../GUI/)
