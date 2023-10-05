@@ -50,17 +50,20 @@ private:
 
     void handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime);
 
-    void adjustAccelerationForDirectionChange(float accelerationRate, float changeDirectionSpeed, float deltaTime, bool isMovingLeft);
+    void adjustAccelerationForDirectionChange(float accelerationRate, float changeDirectionSpeed, float deltaTime,
+                                              bool isMovingLeft);
 
     void deceleratePlayer(float deltaTime);
 
-     static void clampPlayerVelocity(sf::Vector2f& velocity);
+    static void clampPlayerVelocity(sf::Vector2f &velocity);
 
-    void handlePlayerAnimations(float deltaTime, const std::string& animationType, int frameCount);
+    void handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount);
 
     void handleAnimations(float deltaTime);
 
     void handleCollisions();
+
+    void setTextureForPlayer();
 
     //attributi relativi al gioco
     TextureManager textureManager;

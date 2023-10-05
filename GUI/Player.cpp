@@ -9,11 +9,8 @@ Player::Player() {
 // Private functions
 
 void Player::initSprite() {
-    standardTexture.loadFromFile(PLAYER_TEXTURE);
-    sprite.setTexture(standardTexture);
-    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+    sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
-
     setVelocity(sf::Vector2f(0, 0));
     setAcceleration(sf::Vector2f(0, 0));
 }
@@ -59,14 +56,9 @@ int Player::getHealth() const {
     return health;
 }
 
-void Player::setDefaultTexture() {
-    sprite.setTexture(standardTexture);
-}
-
-
 
 void Player::inverse() {
-    if(sprite.getScale().x > 0) {
+    if (sprite.getScale().x > 0) {
         sprite.setScale(-PLAYER_SCALE, PLAYER_SCALE);
         inverseX = true;
     } else {
@@ -84,15 +76,17 @@ bool Player::isJumping() const {
     return jumping;
 }
 
-void Player::setJumping(bool jumping) {
-    Player::jumping = jumping;
-}
 
 void Player::jump(float initialVelocity) {
     if (!jumping) { // Controlla se il giocatore non sta già saltando
         velocity.y = -initialVelocity; // Velocità negativa per muoversi verso l'alto
         jumping = true;
     }
+}
+
+void Player::setTexture(const sf::Texture &texture) {
+    sprite.setTexture(texture);
+    sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 }
 
 

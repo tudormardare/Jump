@@ -19,7 +19,7 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
     }
     if (event.type == sf::Event::KeyReleased) {
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D) {
-            player.setDefaultTexture();
+            player.setTexture(textureManager.getTexture("Player", "Idle", 0));
         }
     }
 }
@@ -38,14 +38,7 @@ std::string GamingState::getBackgroundPath() const {
 }
 
 void GamingState::initState() {
-    player.setPosition(sf::Vector2f(100, 100));
-    std::map<std::string, std::pair<std::string, int>> playerAnimations = {
-            {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES}},
-            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES}},
-            {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES}},
-            {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES}}
-    };
-    textureManager.loadEntityTextures("Player", playerAnimations);
+    setTextureForPlayer();
 }
 
 
@@ -158,6 +151,19 @@ void GamingState::handleAnimations(float deltaTime) {
     } else {
         handlePlayerAnimations(deltaTime, "Idle", PLAYER_IDLE_TEXTURES);
     }
+}
+
+void GamingState::setTextureForPlayer() {
+
+    std::map<std::string, std::pair<std::string, int>> playerAnimations = {
+            {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES}},
+            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES}},
+            {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES}},
+            {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES}}
+    };
+    textureManager.loadEntityTextures("Player", playerAnimations);
+    player.setTexture(textureManager.getTexture("Player", "Idle", 0));
+    player.setPosition(sf::Vector2f(100, 100));
 }
 
 

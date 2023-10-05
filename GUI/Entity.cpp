@@ -4,12 +4,11 @@
 #include "Entity.h"
 
 //Functions
-void Entity::setPosition(sf::Vector2f newPosition)
-{
+void Entity::setPosition(sf::Vector2f newPosition) {
     sprite.setPosition(newPosition);
 }
 
-sf::Vector2f Entity::getPosition() const{
+sf::Vector2f Entity::getPosition() const {
     return sprite.getPosition();
 }
 
@@ -31,9 +30,6 @@ void Entity::setAcceleration(sf::Vector2f newAcceleration) {
     this->acceleration = newAcceleration;
 }
 
-void Entity::setTexture(const sf::Texture &texture) {
-    sprite.setTexture(texture);
-}
 
 void Entity::setPosition(float x, float y) {
     sprite.setPosition(x, y);

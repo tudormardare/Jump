@@ -23,43 +23,40 @@
 
 class Player : public Entity {
 private:
-    std::unique_ptr<sf::Texture> runningTextures[PLAYER_RUNNING_TEXTURES];
-    std::unique_ptr<sf::Texture> jumpingTextures[PLAYER_JUMPING_TEXTURES];
-    std::unique_ptr<sf::Texture> idleTextures[PLAYER_IDLE_TEXTURES];
-    std::unique_ptr<sf::Texture> fallingTextures[PLAYER_FALLING_TEXTURES];
-    sf::Texture standardTexture;
+
     int health = PLAYER_HEALTH;
     bool inverseX = false;
     bool jumping = false;
-public:
-    bool isJumping() const;
 
-    void setJumping(bool jumping);
-
-private:
-
-
-    // Private functions
     void initSprite();
+
 public:
     Player();
 
-    // Movement
-    void move(float dirX, float dirY);
+    bool isJumping() const;
 
-    // Update & Draw
+    void move(float dirX, float dirY) override;
+
     void update(float deltaTime) override;
+
     void draw(sf::RenderWindow &window) override;
 
-    // Getters & Setters
     sf::Vector2f getAcceleration() const;
+
     void setAccelerationX(float newAccelerationX);
+
     void jump(float initialVelocity);
+
     sf::Vector2f getOrigin() const;
+
     void setHealth(int newHealth);
+
     int getHealth() const;
-    void setDefaultTexture();
+
+    void setTexture(const sf::Texture &texture) override;
+
     void inverse();
+
     bool getInverse() const;
 };
 
