@@ -5,6 +5,7 @@ set(TEST_SOURCE_FILES
         PlayerTest.cpp
         ../GUI/Player.cpp
         ../GUI/Entity.cpp
+        ../Controllers/CollisionManager.cpp
         # Aggiungi altri file sorgente dei test qui
         )
 
@@ -21,3 +22,4 @@ target_link_libraries(runAllTests gtest gtest_main sfml-system sfml-window sfml-
 
 # Link file header
 target_include_directories(runAllTests PRIVATE ../GUI/)
+target_include_directories(runAllTests PRIVATE ../Controllers/)

@@ -10,6 +10,7 @@
 #include "GameState.h"
 #include "../Controllers/CollisionManager.h"
 #include "../GUI/Player.h"
+#include "../GUI/Map.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define RUNNING_FRAMES 6
@@ -48,6 +49,7 @@ private:
 
     void stopAnimation();
     //attributi relativi al gioco
+    Map gameMap;
     Player  player;
     CollisionManager collisionManager;
     float animationTimer = 0.f;

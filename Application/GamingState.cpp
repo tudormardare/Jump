@@ -71,6 +71,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 
 
 void GamingState::render(sf::RenderWindow &window) {
+    gameMap.render(window);
     player.draw(window);
 }
 
