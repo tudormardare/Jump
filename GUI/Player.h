@@ -58,6 +58,8 @@ public:
     void inverse();
 
     bool getInverse() const;
+
+    sf::Sprite getSprite() const;
 };
 
 #endif //JUMP_PLAYER_H

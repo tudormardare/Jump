@@ -5,8 +5,10 @@ set(TEST_SOURCE_FILES
         PlayerTest.cpp
         ../GUI/Player.cpp
         ../GUI/Entity.cpp
+        ../Utilities/TextureManager.cpp
+        ../Utilities/PhysicsSystem.cpp
         # Aggiungi altri file sorgente dei test qui
-        )
+        ../Application/GamingState.cpp)
 
 # Configurazione Google Test
 add_subdirectory(./lib/googletest)
@@ -21,3 +23,5 @@ target_link_libraries(runAllTests gtest gtest_main sfml-system sfml-window sfml-
 
 # Link file header
 target_include_directories(runAllTests PRIVATE ../GUI/)
+target_include_directories(runAllTests PRIVATE ../Application/)
+target_include_directories(runAllTests PRIVATE ../Utilities/)

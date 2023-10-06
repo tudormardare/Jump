@@ -89,4 +89,8 @@ void Player::setTexture(const sf::Texture &texture) {
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 }
 
+sf::Sprite Player::getSprite() const {
+    return sprite;
+}
+
 
