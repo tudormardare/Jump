@@ -18,7 +18,7 @@
 #define PLAYER_SCALE 2.f
 #define PLAYER_ACCELERATION_RATE 150.f
 #define PLAYER_MAX_SPEED 250.f
-#define PLAYER_DECELERATION_RATE 1000.f
+#define PLAYER_DECELERATION_RATE 600.f
 #define PLAYER_CHANGE_DIRECTION_SPEED 3.f // The higher the value, the faster the player will change direction
 
 class Player : public Entity {
@@ -40,8 +40,6 @@ public:
     void update(float deltaTime) override;
 
     void draw(sf::RenderWindow &window) override;
-
-    sf::Vector2f getAcceleration() const;
 
     void setAccelerationX(float newAccelerationX);
 

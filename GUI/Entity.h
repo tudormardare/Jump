@@ -44,6 +44,8 @@ public:
     float getVerticalVelocity() const;
 
     void setVerticalVelocity(float d);
+
+    sf::Vector2f getAcceleration() const;
 };
 
 #endif //JUMP_ENTITY_H

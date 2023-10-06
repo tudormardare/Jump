@@ -4,11 +4,11 @@
 
 #include "PhysicsSystem.h"
 
-const float PhysicsSystem::GRAVITY = -9.81f;
+const float PhysicsSystem::GRAVITY = -150.f;
 
 void PhysicsSystem::applyGravity(Entity& entity, float deltaTime) {
-    float verticalVelocity = entity.getVerticalVelocity();
-    verticalVelocity -= GRAVITY * deltaTime;
-    entity.setVerticalVelocity(verticalVelocity);
-    entity.move(0.f, verticalVelocity * deltaTime);
+    float verticalAcceleration = entity.getAcceleration().y;
+    verticalAcceleration -= GRAVITY * deltaTime;
+    entity.setVerticalVelocity(verticalAcceleration );
+    entity.move(0.f, entity.getVerticalVelocity() * deltaTime);
 }

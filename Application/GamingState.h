@@ -50,8 +50,7 @@ private:
 
     void handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime);
 
-    void adjustAccelerationForDirectionChange(float accelerationRate, float changeDirectionSpeed, float deltaTime,
-                                              bool isMovingLeft);
+    void adjustAccelerationForDirectionChange(float accelerationRate, bool isMovingLeft);
 
     void deceleratePlayer(float deltaTime);
 

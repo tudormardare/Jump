@@ -43,6 +43,10 @@ void Entity::setVerticalVelocity(float velocityY) {
     velocity.y = velocityY;
 }
 
+sf::Vector2f Entity::getAcceleration() const {
+    return acceleration;
+}
+
 
 
 

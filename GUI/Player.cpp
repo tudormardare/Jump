@@ -1,12 +1,9 @@
 #include <iostream>
 #include "Player.h"
 
-// Constructor
 Player::Player() {
     initSprite();
 }
-
-// Private functions
 
 void Player::initSprite() {
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
@@ -15,28 +12,16 @@ void Player::initSprite() {
     setAcceleration(sf::Vector2f(0, 0));
 }
 
-// Movement
 void Player::move(float dirX, float dirY) {
     sprite.move(dirX, dirY);
 }
 
-// Update & Draw
 void Player::update(float deltaTime) {
-    // Implement the update logic here
-    velocity.x += acceleration.x * deltaTime;
-    velocity.y += acceleration.y * deltaTime;
-
-    // Aggiorna la posizione basandoti sulla velocità
-    move(velocity.x * deltaTime, velocity.y * deltaTime);
+    move(velocity.x * deltaTime , velocity.y * deltaTime);
 }
 
 void Player::draw(sf::RenderWindow &window) {
     window.draw(sprite);
-}
-
-// Getters & Setters
-sf::Vector2f Player::getAcceleration() const {
-    return acceleration;
 }
 
 void Player::setAccelerationX(float newAccelerationX) {
@@ -75,7 +60,6 @@ bool Player::getInverse() const {
 bool Player::isJumping() const {
     return jumping;
 }
-
 
 void Player::jump(float initialVelocity) {
     if (!jumping) { // Controlla se il giocatore non sta già saltando

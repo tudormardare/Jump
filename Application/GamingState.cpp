@@ -84,13 +84,12 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
         if (!player.getInverse()) {
             player.inverse();
         }
-        adjustAccelerationForDirectionChange(PLAYER_ACCELERATION_RATE, PLAYER_CHANGE_DIRECTION_SPEED, deltaTime, true);
+        adjustAccelerationForDirectionChange(-PLAYER_ACCELERATION_RATE, true);
     } else if (isKeyPressedD && !isKeyPressedA) {
         if (player.getInverse()) {
             player.inverse();
         }
-        adjustAccelerationForDirectionChange(-PLAYER_ACCELERATION_RATE, PLAYER_CHANGE_DIRECTION_SPEED, deltaTime,
-                                             false);
+        adjustAccelerationForDirectionChange(PLAYER_ACCELERATION_RATE, false);
     } else {
         deceleratePlayer(deltaTime);
     }
@@ -98,31 +97,26 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
     sf::Vector2f currentVelocity = player.getVelocity();
     currentVelocity.x += player.getAcceleration().x * deltaTime;
     clampPlayerVelocity(currentVelocity);
-
     player.setVelocity(currentVelocity);
-    player.move(currentVelocity.x * deltaTime, currentVelocity.y * deltaTime);
 }
 
-void
-GamingState::adjustAccelerationForDirectionChange(float accelerationRate, float changeDirectionSpeed, float deltaTime,
-                                                  bool isMovingLeft) {
+// TODO: Rivedere questa funzione
+
+void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, bool isMovingLeft) {
     if ((isMovingLeft && player.getVelocity().x > 0) || (!isMovingLeft && player.getVelocity().x < 0)) {
-        player.setAccelerationX(-changeDirectionSpeed * accelerationRate);
+        player.setAccelerationX(-PLAYER_CHANGE_DIRECTION_SPEED * accelerationRate);
     } else {
         player.setAccelerationX(accelerationRate);
     }
 }
 
 void GamingState::deceleratePlayer(float deltaTime) {
-    player.setAccelerationX(0.f);
-    if (player.getVelocity().x > 0) {
-        player.setVelocity(
-                sf::Vector2f(player.getVelocity().x - PLAYER_DECELERATION_RATE * deltaTime, player.getVelocity().y));
-        if (player.getVelocity().x < 0) player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-    } else if (player.getVelocity().x < 0) {
-        player.setVelocity(
-                sf::Vector2f(player.getVelocity().x + PLAYER_DECELERATION_RATE * deltaTime, player.getVelocity().y));
-        if (player.getVelocity().x > 0) player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+    float deceleration = (player.getVelocity().x > 0) ? -PLAYER_DECELERATION_RATE : PLAYER_DECELERATION_RATE;
+    player.setAccelerationX(deceleration);
+
+    if (std::abs(player.getVelocity().x) < 0.1) { // Se la velocità è molto bassa, fermala completamente
+        player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+        player.setAccelerationX(0.f);
     }
 }
 
