@@ -64,15 +64,13 @@ void GamingState::handlePlayerMovements(float deltaTime) {
 }
 
 void GamingState::handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount) {
-    float animationLength = 0.f;
+    std::pair<float, float> animationLength;
 
-    if (animationType == "Idle") {
-        animationLength = 0.5f;
-    } else if (animationType == "Running") {
-        animationLength = 0.9f;
-    }
+    animationLength = textureManager.getAnimationDurations("Player", animationType);
+    float minFrameDuration = animationLength.first;
+    float maxFrameDuration = animationLength.second;
 
-    float frameDuration = animationLength / (float) frameCount;
+    float frameDuration = maxFrameDuration / (float) frameCount;
 
     // Aggiornamento dell'animazione
     animationTimer += deltaTime;
@@ -175,9 +173,19 @@ void GamingState::setTextureForPlayer() {
             {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES}},
             {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES}}
     };
+
     textureManager.loadEntityTextures("Player", playerAnimations);
+
+// Imposta le durate per ciascuna animazione
+    textureManager.setAnimationDurations("Player", "Running", PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION);
+    textureManager.setAnimationDurations("Player", "Jumping", PLAYER_JUMPING_MIN_FRAME_DURATION, PLAYER_JUMPING_MAX_FRAME_DURATION);
+    textureManager.setAnimationDurations("Player", "Idle",    PLAYER_IDLE_MIN_FRAME_DURATION,    PLAYER_IDLE_MAX_FRAME_DURATION);
+    textureManager.setAnimationDurations("Player", "Falling", PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION);
+
+// Imposta la texture iniziale e la posizione del player
     player.setTexture(textureManager.getTexture("Player", "Idle", 0));
     player.setPosition(sf::Vector2f(100, 100));
+
 }
 
 
