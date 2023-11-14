@@ -7,22 +7,31 @@
 
 
 #include <map>
-#include <memory>
+#include <vector>
+#include <string>
 #include <SFML/Graphics.hpp>
+
+struct AnimationData {
+    std::vector<sf::Texture> frames;
+};
+
+struct AnimationInfo {
+    AnimationData animationData;
+    float minFrameDuration{};
+    float maxFrameDuration{};
+};
 
 class TextureManager {
 public:
     TextureManager();
 
-    // Carica tutte le texture necessarie per un'entità
     void loadEntityTextures(const std::string& entityName, const std::map<std::string, std::pair<std::string, int>>& animations);
-
-    // Ottieni una texture specifica
-     [[nodiscard]] const sf::Texture& getTexture(const std::string& entity, const std::string& type, int index) const;
+    void setAnimationDurations(const std::string& entityName, const std::string& animationType, float minDuration, float maxDuration);
+    [[nodiscard]] const sf::Texture& getTexture(const std::string& entity, const std::string& animationType, int frameIndex) const;
+    [[nodiscard]] std::pair<float, float> getAnimationDurations(const std::string& entity, const std::string& animationType) const;
 
 private:
-    // Mappa nidificata per contenere le texture
-    std::map<std::string, std::map<std::string, std::vector<sf::Texture>>> textures;
+    std::map<std::string, std::map<std::string, AnimationInfo>> textures;
 };
 
-#endif //JUMP_TEXTUREMANAGER_H
+#endif // TEXTUREMANAGER_H
