@@ -16,10 +16,9 @@
 #define PLAYER_JUMPING_PATH "PNG/Player/JumpingTextures/adventurer-jump-0"
 #define PLAYER_IDLE_PATH "PNG/Player/IdleTextures/adventurer-idle-0"
 #define PLAYER_SCALE 2.f
-#define PLAYER_ACCELERATION_RATE 150.f
+#define PLAYER_ACCELERATION_RATE 200.f
 #define PLAYER_MAX_SPEED 250.f
-#define PLAYER_DECELERATION_RATE 600.f
-#define PLAYER_CHANGE_DIRECTION_SPEED 3.f // The higher the value, the faster the player will change direction
+#define PLAYER_DECELERATION_RATE 1000.f
 
 class Player : public Entity {
 private:

@@ -2,7 +2,7 @@
 // Created by tudor on 15/06/2023.
 //
 
-#define FRAME_DURATION 0.15f
+#define FRAME_DURATION 0.016f
 
 #include <valarray>
 #include <iostream>
@@ -64,9 +64,21 @@ void GamingState::handlePlayerMovements(float deltaTime) {
 }
 
 void GamingState::handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount) {
+    float animationLength = 0.f;
+
+    if (animationType == "Idle") {
+        animationLength = 0.5f;
+    } else if (animationType == "Running") {
+        animationLength = 0.9f;
+    }
+
+    float frameDuration = animationLength / (float) frameCount;
+
+    // Aggiornamento dell'animazione
     animationTimer += deltaTime;
-    if (animationTimer >= FRAME_DURATION) {
-        animationTimer = 0.f;
+
+    if (animationTimer >= frameDuration) {
+        animationTimer -= frameDuration; // Più preciso che azzerarlo
         currentFrame = (currentFrame + 1) % frameCount;
         player.setTexture(textureManager.getTexture("Player", animationType, currentFrame));
     }
@@ -80,16 +92,13 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 
 
 void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
-    if (isKeyPressedA && !isKeyPressedD) {
-        if (!player.getInverse()) {
+    int movementDirection = (isKeyPressedA ? -1 : 0) + (isKeyPressedD ? 1 : 0);
+
+    if (movementDirection != 0) {
+        if (player.getInverse() != (movementDirection < 0)) {
             player.inverse();
         }
-        adjustAccelerationForDirectionChange(-PLAYER_ACCELERATION_RATE, true);
-    } else if (isKeyPressedD && !isKeyPressedA) {
-        if (player.getInverse()) {
-            player.inverse();
-        }
-        adjustAccelerationForDirectionChange(PLAYER_ACCELERATION_RATE, false);
+        adjustAccelerationForDirectionChange((float) movementDirection * PLAYER_ACCELERATION_RATE, deltaTime);
     } else {
         deceleratePlayer(deltaTime);
     }
@@ -100,29 +109,40 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
     player.setVelocity(currentVelocity);
 }
 
+
+
 // TODO: Rivedere questa funzione
 
-void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, bool isMovingLeft) {
-    if ((isMovingLeft && player.getVelocity().x > 0) || (!isMovingLeft && player.getVelocity().x < 0)) {
-        player.setAccelerationX(-PLAYER_CHANGE_DIRECTION_SPEED * accelerationRate);
+void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime) {
+    float direction = (accelerationRate > 0) ? 1.0f : -1.0f;
+    if (direction * player.getVelocity().x < 0) { // Cambio di direzione
+        deceleratePlayer(deltaTime); // Prima decelera
+        if (player.getVelocity().x == 0) {
+            player.setAccelerationX(accelerationRate); // Poi inizia ad accelerare nella nuova direzione
+        }
     } else {
-        player.setAccelerationX(accelerationRate);
+        player.setAccelerationX(accelerationRate); // Accelerazione normale
     }
 }
 
-void GamingState::deceleratePlayer(float deltaTime) {
+
+bool GamingState::deceleratePlayer(float deltaTime) {
+    const float Threshold = 0.1f; // Velocità sotto la quale il giocatore si ferma
     float deceleration = (player.getVelocity().x > 0) ? -PLAYER_DECELERATION_RATE : PLAYER_DECELERATION_RATE;
     player.setAccelerationX(deceleration);
 
-    if (std::abs(player.getVelocity().x) < 0.1) { // Se la velocità è molto bassa, fermala completamente
+    // Se la velocità è minore di un certo valore, il giocatore si ferma
+    if (std::abs(player.getVelocity().x) < Threshold) {
         player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
         player.setAccelerationX(0.f);
+        return true; // Il giocatore si è fermato
     }
+    return false; // Il giocatore è ancora in movimento
 }
 
+
 void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
-    if (velocity.x > PLAYER_MAX_SPEED) velocity.x = PLAYER_MAX_SPEED;
-    if (velocity.x < -PLAYER_MAX_SPEED) velocity.x = -PLAYER_MAX_SPEED;
+    velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
 }
 
 void GamingState::handleCollisions() {

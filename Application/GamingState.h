@@ -50,9 +50,9 @@ private:
 
     void handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime);
 
-    void adjustAccelerationForDirectionChange(float accelerationRate, bool isMovingLeft);
+    void adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime);
 
-    void deceleratePlayer(float deltaTime);
+    bool deceleratePlayer(float deltaTime);
 
     static void clampPlayerVelocity(sf::Vector2f &velocity);
 
