@@ -64,6 +64,10 @@ private:
 
     void setTextureForPlayer();
 
+    void loadAllTextures();
+
+    void handleMovements(float deltaTime);
+
     //attributi relativi al gioco
     TextureManager textureManager;
     Player player;

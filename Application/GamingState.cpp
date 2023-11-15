@@ -13,6 +13,23 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
     return instance;
 }
 
+void GamingState::initState() {
+    //inizializzazione di tutti gli elementi dello stato
+    loadAllTextures();
+    //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
+    //setTextureForPlayer();
+}
+
+std::string GamingState::getBackgroundPath() const {
+    return GAME_BACKGROUND_PATH;
+}
+
+
+GameState *GamingState::changeState(sf::RenderWindow &window) {
+    //inserire il cambio di stato quando finisce il gioco  o quando viene premuto esc
+    return nullptr;
+}
+
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
         window.close();
@@ -25,22 +42,21 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 }
 
 void GamingState::render(sf::RenderWindow &window) {
+    //inserire tutti i draw di tutti gli elemenenti
     player.draw(window);
 }
 
-GameState *GamingState::changeState(sf::RenderWindow &window) {
-
-    return nullptr;
+void GamingState::update(sf::RenderWindow &window, float deltaTime) {
+    handleMovements(deltaTime);
+    handleAnimations(deltaTime);
 }
 
-std::string GamingState::getBackgroundPath() const {
-    return GAME_BACKGROUND_PATH;
-}
 
-void GamingState::initState() {
-    setTextureForPlayer();
-}
 
+void GamingState::handleMovements(float deltaTime) {
+    handlePlayerMovements(deltaTime);
+    //Aggiungi altri movimenti
+}
 
 void GamingState::handlePlayerMovements(float deltaTime) {
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
@@ -63,32 +79,6 @@ void GamingState::handlePlayerMovements(float deltaTime) {
 
 }
 
-void GamingState::handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount) {
-    std::pair<float, float> animationLength;
-
-    animationLength = textureManager.getAnimationDurations("Player", animationType);
-    float minFrameDuration = animationLength.first;
-    float maxFrameDuration = animationLength.second;
-
-    float frameDuration = maxFrameDuration / (float) frameCount;
-
-    // Aggiornamento dell'animazione
-    animationTimer += deltaTime;
-
-    if (animationTimer >= frameDuration) {
-        animationTimer -= frameDuration; // Più preciso che azzerarlo
-        currentFrame = (currentFrame + 1) % frameCount;
-        player.setTexture(textureManager.getTexture("Player", animationType, currentFrame));
-    }
-}
-
-
-void GamingState::update(sf::RenderWindow &window, float deltaTime) {
-    handlePlayerMovements(deltaTime);
-    handleAnimations(deltaTime);
-}
-
-
 void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
     int movementDirection = (isKeyPressedA ? -1 : 0) + (isKeyPressedD ? 1 : 0);
 
@@ -109,47 +99,6 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
 
 
 
-// TODO: Rivedere questa funzione
-
-void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime) {
-    float direction = (accelerationRate > 0) ? 1.0f : -1.0f;
-    if (direction * player.getVelocity().x < 0) { // Cambio di direzione
-        deceleratePlayer(deltaTime); // Prima decelera
-        if (player.getVelocity().x == 0) {
-            player.setAccelerationX(accelerationRate); // Poi inizia ad accelerare nella nuova direzione
-        }
-    } else {
-        player.setAccelerationX(accelerationRate); // Accelerazione normale
-    }
-}
-
-
-bool GamingState::deceleratePlayer(float deltaTime) {
-    const float Threshold = 0.1f; // Velocità sotto la quale il giocatore si ferma
-    float deceleration = (player.getVelocity().x > 0) ? -PLAYER_DECELERATION_RATE : PLAYER_DECELERATION_RATE;
-    player.setAccelerationX(deceleration);
-
-    // Se la velocità è minore di un certo valore, il giocatore si ferma
-    if (std::abs(player.getVelocity().x) < Threshold) {
-        player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-        player.setAccelerationX(0.f);
-        return true; // Il giocatore si è fermato
-    }
-    return false; // Il giocatore è ancora in movimento
-}
-
-
-void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
-    velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
-}
-
-void GamingState::handleCollisions() {
-    if (player.getPosition().y > 500) {
-        player.setPosition(player.getPosition().x, 500);
-        player.setVerticalVelocity(0.0f);
-    }
-}
-
 void GamingState::handleAnimations(float deltaTime) {
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
@@ -163,6 +112,39 @@ void GamingState::handleAnimations(float deltaTime) {
     } else {
         handlePlayerAnimations(deltaTime, "Idle", PLAYER_IDLE_TEXTURES);
     }
+}
+
+void GamingState::handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount) {
+    std::pair<float, float> animationLength;
+    animationLength = textureManager.getAnimationDurations("Player", animationType);
+    float minFrameDuration = animationLength.first;
+    float maxFrameDuration = animationLength.second;
+    float frameDuration = minFrameDuration / (float) frameCount;
+    float playerVelocity = player.getVelocity().x;
+    if(playerVelocity < 0) {
+        playerVelocity = -playerVelocity;
+    }
+
+    frameDuration = (minFrameDuration - ( playerVelocity/ PLAYER_MAX_SPEED) * (minFrameDuration - maxFrameDuration)) / (float) frameCount;
+    if(frameDuration < maxFrameDuration / (float) frameCount) {
+        frameDuration = maxFrameDuration / (float) frameCount ;
+    }
+
+    // Aggiornamento dell'animazione
+    animationTimer += deltaTime;
+
+    if (animationTimer >= frameDuration) {
+        animationTimer -= frameDuration; // Più preciso che azzerarlo
+        currentFrame = (currentFrame + 1) % frameCount;
+        player.setTexture(textureManager.getTexture("Player", animationType, currentFrame));
+    }
+}
+
+
+
+void GamingState::loadAllTextures() {
+    setTextureForPlayer();
+    //Aggiungi altre texture
 }
 
 void GamingState::setTextureForPlayer() {
@@ -187,6 +169,48 @@ void GamingState::setTextureForPlayer() {
     player.setPosition(sf::Vector2f(100, 100));
 
 }
+
+
+void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime) {
+    float direction = (accelerationRate > 0) ? 1.0f : -1.0f;
+    if (direction * player.getVelocity().x < 0) { // Cambio di direzione
+        deceleratePlayer(deltaTime); // Prima decelera
+        if (player.getVelocity().x == 0) {
+            player.setAccelerationX(accelerationRate); // Poi inizia ad accelerare nella nuova direzione
+        }
+    } else {
+        player.setAccelerationX(accelerationRate); // Accelerazione normale
+    }
+}
+
+bool GamingState::deceleratePlayer(float deltaTime) {
+    const float Threshold = 0.1f; // Velocità sotto la quale il giocatore si ferma
+    float deceleration = (player.getVelocity().x > 0) ? -PLAYER_DECELERATION_RATE : PLAYER_DECELERATION_RATE;
+    player.setAccelerationX(deceleration);
+
+    // Se la velocità è minore di un certo valore, il giocatore si ferma
+    if (std::abs(player.getVelocity().x) < Threshold) {
+        player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+        player.setAccelerationX(0.f);
+        return true; // Il giocatore si è fermato
+    }
+    return false; // Il giocatore è ancora in movimento
+}
+
+void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
+    velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
+}
+
+
+void GamingState::handleCollisions() {
+    if (player.getPosition().y > 500) {
+        player.setPosition(player.getPosition().x, 500);
+        player.setVerticalVelocity(0.0f);
+    }
+}
+
+
+
 
 
 
