@@ -26,6 +26,8 @@ public:
     TextureManager();
 
     void loadEntityTextures(const std::string& entityName, const std::map<std::string, std::pair<std::string, int>>& animations);
+    void loadTexturesFromSpriteSheetWithLineNumber(const std::string& entityName, const std::string& spriteSheetPath, const std::map<std::string, std::pair<int, int>>& animationDetails, int frameWidth, int frameHeight);
+    void loadTexturesFromSpriteSheetRegular(const std::string& entityName, const std::string& spriteSheetPath, const std::map<std::string, std::tuple<int, int, int>>& animationDetails, int frameWidth, int frameHeight);
     void setAnimationDurations(const std::string& entityName, const std::string& animationType, float minDuration, float maxDuration);
     [[nodiscard]] const sf::Texture& getTexture(const std::string& entity, const std::string& animationType, int frameIndex) const;
     [[nodiscard]] std::pair<float, float> getAnimationDurations(const std::string& entity, const std::string& animationType) const;

@@ -26,6 +26,60 @@ void TextureManager::loadEntityTextures(const std::string& entityName, const std
     }
 }
 
+void TextureManager::loadTexturesFromSpriteSheetWithLineNumber(const std::string& entityName, const std::string& spriteSheetPath, const std::map<std::string, std::pair<int, int>>& animationDetails, int frameWidth, int frameHeight) {
+    sf::Texture spriteSheet;
+    if (!spriteSheet.loadFromFile(spriteSheetPath)) {
+        std::cerr << "Error loading sprite sheet from file: " << spriteSheetPath << std::endl;
+        return;
+    }
+
+    for (const auto& [animationName, details] : animationDetails) {
+        const auto [frameCount, row] = details;
+        AnimationData newAnimationData;
+
+        for (int i = 0; i < frameCount; i++) {
+            sf::IntRect frameRect(i * frameWidth, row * frameHeight, frameWidth, frameHeight);
+            sf::Texture texture;
+            texture.loadFromImage(spriteSheet.copyToImage(), frameRect);
+            newAnimationData.frames.push_back(std::move(texture));
+        }
+
+        AnimationInfo animInfo;
+        animInfo.animationData = std::move(newAnimationData);
+
+        textures[entityName][animationName] = std::move(animInfo);
+    }
+}
+void TextureManager::loadTexturesFromSpriteSheetRegular(const std::string& entityName, const std::string& spriteSheetPath, const std::map<std::string, std::tuple<int, int, int>>& animationDetails, int frameWidth, int frameHeight) {
+    sf::Texture spriteSheet;
+    if (!spriteSheet.loadFromFile(spriteSheetPath)) {
+        std::cerr << "Error loading sprite sheet from file: " << spriteSheetPath << std::endl;
+        return;
+    }
+
+    for (const auto& [animationName, details] : animationDetails) {
+        const auto [startRow, frameCount, framesPerRow] = details;
+        AnimationData newAnimationData;
+
+        for (int i = 0; i < frameCount; i++) {
+            int x = (i % framesPerRow) * frameWidth;
+            int y = (startRow + i / framesPerRow) * frameHeight;
+            sf::IntRect frameRect(x, y, frameWidth, frameHeight);
+            sf::Texture texture;
+            texture.loadFromImage(spriteSheet.copyToImage(), frameRect);
+            newAnimationData.frames.push_back(std::move(texture));
+        }
+
+        AnimationInfo animInfo;
+        animInfo.animationData = std::move(newAnimationData);
+
+        textures[entityName][animationName] = std::move(animInfo);
+    }
+}
+
+
+
+
 void TextureManager::setAnimationDurations(const std::string& entityName, const std::string& animationType, float minDuration, float maxDuration) {
     textures[entityName][animationType].minFrameDuration = minDuration;
     textures[entityName][animationType].maxFrameDuration = maxDuration;
