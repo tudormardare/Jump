@@ -44,6 +44,7 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 void GamingState::render(sf::RenderWindow &window) {
     //inserire tutti i draw di tutti gli elemenenti
     player.draw(window);
+    fire.draw(window);
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
@@ -112,6 +113,8 @@ void GamingState::handleAnimations(float deltaTime) {
     } else {
         handlePlayerAnimations(deltaTime, "Idle", PLAYER_IDLE_TEXTURES);
     }
+
+    //handleFireAnimations(deltaTime, "Fire", FIRE_TEXTURES);
 }
 
 void GamingState::handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount) {
@@ -140,10 +143,29 @@ void GamingState::handlePlayerAnimations(float deltaTime, const std::string &ani
     }
 }
 
+void GamingState::handleFireAnimations(float deltaTime, const std::string &animationType, int frameCount) {
+    std::pair<float, float> animationLength;
+    animationLength = textureManager.getAnimationDurations("Fire", animationType);
+    float minFrameDuration = animationLength.first;
+    float maxFrameDuration = animationLength.second;
+    float frameDuration = minFrameDuration / (float) frameCount;
+    // Aggiornamento dell'animazione
+    animationTimer += deltaTime;
+
+    std::cout << "frameDuration: " << frameDuration << std::endl;
+    if (animationTimer >= frameDuration) {
+        animationTimer -= frameDuration; // Più preciso che azzerarlo
+        currentFrame = (currentFrame + 1) % frameCount;
+
+        fire.setTexture(textureManager.getTexture("Fire", animationType, currentFrame));
+    }
+}
+
 
 
 void GamingState::loadAllTextures() {
     setTextureForPlayer();
+    setTextureForFire();
     //Aggiungi altre texture
 }
 
@@ -207,6 +229,18 @@ void GamingState::handleCollisions() {
         player.setPosition(player.getPosition().x, 500);
         player.setVerticalVelocity(0.0f);
     }
+}
+
+void GamingState::setTextureForFire() {
+   std::map<std::string, std::pair<std::string, int>> fireAnimations = {
+                {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES}}
+        };
+
+        textureManager.loadEntityTextures("Fire", fireAnimations);
+
+        textureManager.setAnimationDurations("Fire", "Fire", FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION);
+        fire.setTexture(textureManager.getTexture("Fire", "Fire", 0));
+        fire.setPosition(sf::Vector2f(100, 100));
 }
 
 

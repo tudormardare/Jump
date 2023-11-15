@@ -12,6 +12,7 @@
 #include "../GUI/Player.h"
 #include "../Utilities/PhysicsSystem.h"
 #include "../Utilities/TextureManager.h"
+#include "../GUI/Fire.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 
@@ -60,6 +61,10 @@ private:
 
     void handleAnimations(float deltaTime);
 
+    void handleFireAnimations(float deltaTime, const std::string &animationType, int frameCount);
+
+    void setTextureForFire();
+
     void handleCollisions();
 
     void setTextureForPlayer();
@@ -71,6 +76,7 @@ private:
     //attributi relativi al gioco
     TextureManager textureManager;
     Player player;
+    Fire fire;
     CollisionManager collisionManager;
     float animationTimer = 0.f;
     int currentFrame = 0;
