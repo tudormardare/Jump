@@ -107,60 +107,15 @@ void GamingState::handleAnimations(float deltaTime) {
 
 
     if (isKeyPressedW) {
-        handlePlayerAnimations(deltaTime, "Jumping", PLAYER_JUMPING_TEXTURES);
+        textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
     } else if (isKeyPressedA || isKeyPressedD) {
-        handlePlayerAnimations(deltaTime, "Running", PLAYER_RUNNING_TEXTURES);
+        textureManager.updateAnimation("Player", "Running", deltaTime, player);
     } else {
-        handlePlayerAnimations(deltaTime, "Idle", PLAYER_IDLE_TEXTURES);
+        textureManager.updateAnimation("Player", "Idle", deltaTime, player);
     }
 
-    //handleFireAnimations(deltaTime, "Fire", FIRE_TEXTURES);
+    textureManager.updateAnimation("Fire", "Fire", deltaTime, fire);
 }
-
-void GamingState::handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount) {
-    std::pair<float, float> animationLength;
-    animationLength = textureManager.getAnimationDurations("Player", animationType);
-    float minFrameDuration = animationLength.first;
-    float maxFrameDuration = animationLength.second;
-    float frameDuration = minFrameDuration / (float) frameCount;
-    float playerVelocity = player.getVelocity().x;
-    if(playerVelocity < 0) {
-        playerVelocity = -playerVelocity;
-    }
-
-    frameDuration = (minFrameDuration - ( playerVelocity/ PLAYER_MAX_SPEED) * (minFrameDuration - maxFrameDuration)) / (float) frameCount;
-    if(frameDuration < maxFrameDuration / (float) frameCount) {
-        frameDuration = maxFrameDuration / (float) frameCount ;
-    }
-
-    // Aggiornamento dell'animazione
-    animationTimer += deltaTime;
-
-    if (animationTimer >= frameDuration) {
-        animationTimer -= frameDuration; // Più preciso che azzerarlo
-        currentFrame = (currentFrame + 1) % frameCount;
-        player.setTexture(textureManager.getTexture("Player", animationType, currentFrame));
-    }
-}
-
-void GamingState::handleFireAnimations(float deltaTime, const std::string &animationType, int frameCount) {
-    std::pair<float, float> animationLength;
-    animationLength = textureManager.getAnimationDurations("Fire", animationType);
-    float minFrameDuration = animationLength.first;
-    float maxFrameDuration = animationLength.second;
-    float frameDuration = minFrameDuration / (float) frameCount;
-    // Aggiornamento dell'animazione
-    animationTimer += deltaTime;
-
-    std::cout << "frameDuration: " << frameDuration << std::endl;
-    if (animationTimer >= frameDuration) {
-        animationTimer -= frameDuration; // Più preciso che azzerarlo
-        currentFrame = (currentFrame + 1) % frameCount;
-
-        fire.setTexture(textureManager.getTexture("Fire", animationType, currentFrame));
-    }
-}
-
 
 
 void GamingState::loadAllTextures() {
@@ -171,20 +126,14 @@ void GamingState::loadAllTextures() {
 
 void GamingState::setTextureForPlayer() {
 
-    std::map<std::string, std::pair<std::string, int>> playerAnimations = {
-            {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES}},
-            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES}},
-            {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES}},
-            {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES}}
-    };
+    std::map<std::string, AnimationConfig> playerAnimations = {
+            {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
+            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_JUMPING_MIN_FRAME_DURATION, PLAYER_JUMPING_MAX_FRAME_DURATION, false}},
+            {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES,    PLAYER_IDLE_MIN_FRAME_DURATION,    PLAYER_IDLE_MAX_FRAME_DURATION,    false}},
+            {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES, PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION, false}}};
+
 
     textureManager.loadEntityTextures("Player", playerAnimations);
-
-// Imposta le durate per ciascuna animazione
-    textureManager.setAnimationDurations("Player", "Running", PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION);
-    textureManager.setAnimationDurations("Player", "Jumping", PLAYER_JUMPING_MIN_FRAME_DURATION, PLAYER_JUMPING_MAX_FRAME_DURATION);
-    textureManager.setAnimationDurations("Player", "Idle",    PLAYER_IDLE_MIN_FRAME_DURATION,    PLAYER_IDLE_MAX_FRAME_DURATION);
-    textureManager.setAnimationDurations("Player", "Falling", PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION);
 
 // Imposta la texture iniziale e la posizione del player
     player.setTexture(textureManager.getTexture("Player", "Idle", 0));
@@ -232,13 +181,11 @@ void GamingState::handleCollisions() {
 }
 
 void GamingState::setTextureForFire() {
-   std::map<std::string, std::pair<std::string, int>> fireAnimations = {
-                {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES}}
-        };
-
+   std::map<std::string, AnimationConfig> fireAnimations = {
+            {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES, FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION, false}}
+   };
         textureManager.loadEntityTextures("Fire", fireAnimations);
 
-        textureManager.setAnimationDurations("Fire", "Fire", FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION);
         fire.setTexture(textureManager.getTexture("Fire", "Fire", 0));
         fire.setPosition(sf::Vector2f(100, 100));
 }

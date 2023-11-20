@@ -47,6 +47,10 @@ sf::Vector2f Entity::getAcceleration() const {
     return acceleration;
 }
 
+sf::Vector2f Entity::getMaxSpeed() const {
+    return maxSpeed;
+}
+
 
 
 

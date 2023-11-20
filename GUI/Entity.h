@@ -15,6 +15,7 @@ protected:
     sf::Texture currentTexture;
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
+    sf::Vector2f maxSpeed;
 
 
 public:
@@ -44,6 +45,8 @@ public:
     float getVerticalVelocity() const;
 
     void setVerticalVelocity(float d);
+
+    sf::Vector2f getMaxSpeed() const;
 
     sf::Vector2f getAcceleration() const;
 };

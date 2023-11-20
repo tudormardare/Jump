@@ -8,6 +8,7 @@ Player::Player() {
 void Player::initSprite() {
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
+    maxSpeed = sf::Vector2f(PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
     setVelocity(sf::Vector2f(0, 0));
     setAcceleration(sf::Vector2f(0, 0));
 }

@@ -7,22 +7,27 @@
 
 TextureManager::TextureManager() = default;
 
-void TextureManager::loadEntityTextures(const std::string& entityName, const std::map<std::string, std::pair<std::string, int>>& animations) {
-    for (const auto& [animationName, animationData] : animations) {
-        const auto& [path, count] = animationData;
-        AnimationData newAnimationData;
-
-        for (int i = 0; i < count; i++) {
+void TextureManager::loadEntityTextures(const std::string& entityName, const std::map<std::string, AnimationConfig>& animations) {
+    for (const auto& [animationType, config] : animations) {
+        AnimationData data;
+        for (int i = 0; i < config.frameCount; ++i) {
             sf::Texture texture;
-            std::string fullPath = path + std::to_string(i) + ".png";
+            std::string fullPath = config.texturePath + std::to_string(i) + ".png";
             if (!texture.loadFromFile(fullPath)) {
                 std::cerr << "Error loading texture from file: " << fullPath << std::endl;
-            } else {
-                newAnimationData.frames.push_back(std::move(texture));
+                continue;
             }
+            data.frames.push_back(std::move(texture));
         }
 
-        textures[entityName][animationName].animationData = std::move(newAnimationData);
+        AnimationInfo info;
+        info.animationData = std::move(data);
+        info.minFrameDuration = config.minFrameDuration;
+        info.maxFrameDuration = config.maxFrameDuration;
+        info.dynamicFrameCount = config.isDynamic;
+        // currentFrame e animationTimer sono già inizializzati a 0
+
+        textures[entityName][animationType] = std::move(info);
     }
 }
 
@@ -77,19 +82,33 @@ void TextureManager::loadTexturesFromSpriteSheetRegular(const std::string& entit
     }
 }
 
-
-
-
-void TextureManager::setAnimationDurations(const std::string& entityName, const std::string& animationType, float minDuration, float maxDuration) {
-    textures[entityName][animationType].minFrameDuration = minDuration;
-    textures[entityName][animationType].maxFrameDuration = maxDuration;
-}
-
 const sf::Texture& TextureManager::getTexture(const std::string& entity, const std::string& animationType, int frameIndex) const {
     return textures.at(entity).at(animationType).animationData.frames.at(frameIndex);
 }
 
-std::pair<float, float> TextureManager::getAnimationDurations(const std::string& entity, const std::string& animationType) const {
-    const auto& animationInfo = textures.at(entity).at(animationType);
-    return {animationInfo.minFrameDuration, animationInfo.maxFrameDuration};
+void TextureManager::updateAnimation(const std::string &entityName, const std::string &animationType, float deltaTime, Entity &entity) {
+    AnimationInfo& animInfo = textures[entityName][animationType];
+    animInfo.animationTimer += deltaTime;
+    auto frameCount = (float) animInfo.animationData.frames.size();
+    float frameDuration = animInfo.minFrameDuration /  frameCount;
+    float entitySpeed = entity.getVelocity().x;
+
+    // Calcola la durata del frame in base alla velocità
+    if(animInfo.dynamicFrameCount) {
+        if( entitySpeed < 0) {
+            entitySpeed = -entitySpeed;
+        }
+        frameDuration = (animInfo.minFrameDuration - ( entitySpeed / entity.getMaxSpeed().x) * (animInfo.minFrameDuration - animInfo.maxFrameDuration)) /frameCount;
+        if(frameDuration < animInfo.maxFrameDuration / (float) frameCount) {
+            frameDuration = animInfo.maxFrameDuration / (float) frameCount ;
+        }
+    }
+
+    if (animInfo.animationTimer >= frameDuration) {
+        animInfo.animationTimer -= frameDuration;
+        animInfo.currentFrame = ++animInfo.currentFrame % (int) frameCount;
+        entity.setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
+    }
 }
+
+
