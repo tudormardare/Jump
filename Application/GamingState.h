@@ -57,11 +57,9 @@ private:
 
     static void clampPlayerVelocity(sf::Vector2f &velocity);
 
-    void handlePlayerAnimations(float deltaTime, const std::string &animationType, int frameCount);
-
     void handleAnimations(float deltaTime);
 
-    void handleFireAnimations(float deltaTime, const std::string &animationType, int frameCount);
+    void handleFireBallsAnimations(float deltaTime);
 
     void setTextureForFire();
 

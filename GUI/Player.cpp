@@ -10,7 +10,7 @@ void Player::initSprite() {
     sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
     maxSpeed = sf::Vector2f(PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
     setVelocity(sf::Vector2f(0, 0));
-    setAcceleration(sf::Vector2f(0, 0));
+    setAcceleration(sf::Vector2f(0, PLAYER_ACCELERATION_RATE));
 }
 
 void Player::move(float dirX, float dirY) {
@@ -27,6 +27,9 @@ void Player::draw(sf::RenderWindow &window) {
 
 void Player::setAccelerationX(float newAccelerationX) {
     acceleration.x = newAccelerationX;
+}
+void Player::setAccelerationY(float newAccelerationY) {
+    acceleration.y = newAccelerationY;
 }
 
 

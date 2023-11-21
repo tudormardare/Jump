@@ -50,6 +50,8 @@ public:
 
     void setAccelerationX(float newAccelerationX);
 
+    void setAccelerationY(float newAccelerationY);
+
     void jump(float initialVelocity);
 
     sf::Vector2f getOrigin() const;

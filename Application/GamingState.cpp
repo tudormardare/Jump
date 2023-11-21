@@ -48,15 +48,24 @@ void GamingState::render(sf::RenderWindow &window) {
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
+    //Aggiorna la posizione degli Sprite
     handleMovements(deltaTime);
+    //Verifica le collisioni
+    handleCollisions();
+    //Aggiorna animazione degli sprite
     handleAnimations(deltaTime);
+
+    //Aggiorna gli sprite
+    player.update(deltaTime);
+    fire.update(deltaTime);
 }
 
 
 
 void GamingState::handleMovements(float deltaTime) {
+    //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
+    PhysicsSystem::applyGravity(player, deltaTime);
     handlePlayerMovements(deltaTime);
-    //Aggiungi altri movimenti
 }
 
 void GamingState::handlePlayerMovements(float deltaTime) {
@@ -66,17 +75,17 @@ void GamingState::handlePlayerMovements(float deltaTime) {
 
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
 
+
     if (isKeyPressedW && !player.isJumping()) {
         player.jump(player.getVelocity().x);
     }
 
     // Applica la gravità al giocatore
-    PhysicsSystem::applyGravity(player, deltaTime);
 
-    // Aggiorna la posizione del giocatore
-    player.update(deltaTime);
-
-    handleCollisions();
+    if (player.getPosition().y > 500) {
+        player.setPosition(player.getPosition().x, 500);
+        player.setAccelerationY(0.0f);
+    }
 
 }
 
@@ -114,7 +123,7 @@ void GamingState::handleAnimations(float deltaTime) {
         textureManager.updateAnimation("Player", "Idle", deltaTime, player);
     }
 
-    textureManager.updateAnimation("Fire", "Fire", deltaTime, fire);
+    handleFireBallsAnimations(deltaTime);
 }
 
 
@@ -174,10 +183,7 @@ void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
 
 
 void GamingState::handleCollisions() {
-    if (player.getPosition().y > 500) {
-        player.setPosition(player.getPosition().x, 500);
-        player.setVerticalVelocity(0.0f);
-    }
+
 }
 
 void GamingState::setTextureForFire() {
@@ -188,6 +194,10 @@ void GamingState::setTextureForFire() {
 
         fire.setTexture(textureManager.getTexture("Fire", "Fire", 0));
         fire.setPosition(sf::Vector2f(100, 100));
+}
+
+void GamingState::handleFireBallsAnimations(float deltaTime) {
+    textureManager.updateAnimation("Fire", "Fire", deltaTime, fire);
 }
 
 
