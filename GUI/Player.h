@@ -1,51 +1,56 @@
-//
-// Created by Denis Jaupi on 22/06/23.
-//
-
 #ifndef JUMP_PLAYER_H
 #define JUMP_PLAYER_H
 
-#define PLAYER_TEXTURE "PNG/Player/Player.png"
-#define PLAYER_SPEED 0.5f
-#define PLAYER_HEALTH 3
-#define PLAYER_VELOCITY 1.5f
-#define PLAYER_RUNNING_TEXTURES 6
-#define PLAYER_RUNNING_PATH "PNG/Player/RunningTextures/adventurer-run-0"
-#define PLAYER_RUNNING_PATH_END ".png"
-#define PLAYER_SCALE 2.f
-
 #include "SFML/Graphics.hpp"
-
 #include "Entity.h"
+#include <memory>
+
+#define PLAYER_TEXTURE "PNG/Player/Player.png"
+#define PLAYER_HEALTH 3
+#define PLAYER_RUNNING_TEXTURES 6
+#define PLAYER_JUMPING_TEXTURES 4
+#define PLAYER_FALLING_TEXTURES 2
+#define PLAYER_IDLE_TEXTURES 2
+#define PLAYER_FALLING_PATH "PNG/Player/FallingTextures/adventurer-fall-0"
+#define PLAYER_RUNNING_PATH "PNG/Player/RunningTextures/adventurer-run-0"
+#define PLAYER_JUMPING_PATH "PNG/Player/JumpingTextures/adventurer-jump-0"
+#define PLAYER_IDLE_PATH "PNG/Player/IdleTextures/adventurer-idle-0"
+#define PLAYER_SCALE 2.f
+#define PLAYER_ACCELERATION_RATE 250.f
+#define PLAYER_MAX_SPEED 250.f
+#define PLAYER_DECELERATION_RATE 800.f
+#define PLAYER_RUNNING_MIN_FRAME_DURATION 1.f
+#define PLAYER_RUNNING_MAX_FRAME_DURATION 0.6f
+#define PLAYER_JUMPING_MIN_FRAME_DURATION 0.1f
+#define PLAYER_JUMPING_MAX_FRAME_DURATION 0.2f
+#define PLAYER_IDLE_MIN_FRAME_DURATION 0.5f
+#define PLAYER_IDLE_MAX_FRAME_DURATION 1.f
+#define PLAYER_FALLING_MIN_FRAME_DURATION 0.5f
+#define PLAYER_FALLING_MAX_FRAME_DURATION 1.f
 
 class Player : public Entity {
-
 private:
-    std::unique_ptr<sf::Texture> runningTextures[PLAYER_RUNNING_TEXTURES];
-    sf::Texture standardTexture;
-    sf::Vector2f position;
+
     int health = PLAYER_HEALTH;
     bool inverseX = false;
-
-    //Private functions
-    void initTexture();
+    bool jumping = false;
 
     void initSprite();
-
-
 
 public:
     Player();
 
-    void move(float dirX, float dirY);
+    bool isJumping() const;
 
-    void update(sf::RenderWindow &window)  override;
+    void move(float dirX, float dirY) override;
+
+    void update(float deltaTime) override;
 
     void draw(sf::RenderWindow &window) override;
 
-    float getSpeed() const;
+    void setAccelerationX(float newAccelerationX);
 
-    void changeRunningTexture(int textureNumber);
+    void jump(float initialVelocity);
 
     sf::Vector2f getOrigin() const;
 
@@ -53,32 +58,13 @@ public:
 
     int getHealth() const;
 
-    void setDefaultTexture();
-
-    static int getRunningTexturesNumber() ;
+    void setTexture(const sf::Texture &texture) override;
 
     void inverse();
 
     bool getInverse() const;
+
+    sf::Sprite getSprite() const;
 };
-
-
-
-
-/*
-class Player : public Entity
-{
-
-public:
-        Player();
-
-        void draw(sf::RenderWindow& window) override;
-        void update(float deltaTime) override;
-        void move(float offsetX, float offsetY);
-
-
-
-};
-*/
 
 #endif //JUMP_PLAYER_H

@@ -32,7 +32,7 @@ void Ghost::draw(sf::RenderWindow &window){
 
 void Ghost::spawnRandomly() {
     // Genera una posizione casuale all'esterno dello schermo
-    int side = std::rand() % 4; // 0 = top, 1 = right, 2 = bottom, 3 = left
+    int side = std::rand() % 4; // 0 = top, 1 = right, Fire = bottom, 3 = left
     sf::Vector2u windowSize = sf::Vector2u(800, 600);
     switch (side) {
         case 0: // top

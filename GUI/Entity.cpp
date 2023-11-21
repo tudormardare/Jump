@@ -4,12 +4,11 @@
 #include "Entity.h"
 
 //Functions
-void Entity::setPosition(sf::Vector2f newPosition)
-{
+void Entity::setPosition(sf::Vector2f newPosition) {
     sprite.setPosition(newPosition);
 }
 
-sf::Vector2f Entity::getPosition() const{
+sf::Vector2f Entity::getPosition() const {
     return sprite.getPosition();
 }
 
@@ -17,9 +16,6 @@ void Entity::setVelocity(sf::Vector2f newVelocity) {
     this->velocity = newVelocity;
 }
 
-void Entity::setSpeed(float newSpeed) {
-    this->speed = newSpeed;
-}
 
 sf::Vector2f Entity::getVelocity() const {
     return velocity;
@@ -29,6 +25,35 @@ void Entity::setVelocity(float newVelocityX, float newVelocityY) {
     this->velocity.x = newVelocityX;
     this->velocity.y = newVelocityY;
 }
+
+void Entity::setAcceleration(sf::Vector2f newAcceleration) {
+    this->acceleration = newAcceleration;
+}
+
+
+void Entity::setPosition(float x, float y) {
+    sprite.setPosition(x, y);
+}
+
+float Entity::getVerticalVelocity() const {
+    return velocity.y;
+}
+
+void Entity::setVerticalVelocity(float velocityY) {
+    velocity.y = velocityY;
+}
+
+sf::Vector2f Entity::getAcceleration() const {
+    return acceleration;
+}
+
+sf::Vector2f Entity::getMaxSpeed() const {
+    return maxSpeed;
+}
+
+
+
+
 
 
 

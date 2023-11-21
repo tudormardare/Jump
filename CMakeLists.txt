@@ -17,7 +17,10 @@ set(SOURCE_FILES
         Controllers/CollisionManager.cpp
         GUI/Player.cpp
         GUI/Entity.cpp
-        )
+        GUI/Map.cpp
+        Utilities/PhysicsSystem.cpp
+        Utilities/TextureManager.cpp
+        GUI/Ball.cpp GUI/Ball.h GUI/Fire.cpp GUI/Fire.h)
 
 
 
