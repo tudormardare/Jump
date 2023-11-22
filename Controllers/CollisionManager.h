@@ -32,8 +32,8 @@ public:
         sf::Vector2f pos1 = sprite1.getPosition();
         sf::Vector2f pos2 = sprite2.getPosition();
 
-        float radius1 = std::max(sprite1.getNonTransparentBounds().width, sprite1.getNonTransparentBounds().height) / 2.0f;
-        float radius2 = std::max(sprite2.getNonTransparentBounds().width, sprite2.getNonTransparentBounds().height) / 2.0f;
+        float radius1 = std::max(sprite1.getGlobalBounds().width , sprite1.getGlobalBounds().height) / 3.0f;
+        float radius2 = std::max(sprite2.getGlobalBounds().width , sprite2.getGlobalBounds().height) / 3.0f;
 
         float distance = std::sqrt(std::pow(pos2.x - pos1.x, 2) + std::pow(pos2.y - pos1.y, 2));
         return distance < (radius1 + radius2);
@@ -67,7 +67,7 @@ public:
         for (auto &enemy : enemies) {
             sf::IntRect enemyLocalBounds = enemy->getNonTransparentBounds();
             sf::FloatRect enemyGlobalBounds = getTransformedBounds(enemy->getSprite(), enemyLocalBounds);
-            
+
             if (playerGlobalBounds.intersects(enemyGlobalBounds)) {
                 return enemy;
             }

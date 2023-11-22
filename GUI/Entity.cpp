@@ -63,11 +63,8 @@ sf::Sprite Entity::getSprite() const {
     return sprite;
 }
 
-sf::IntRect Entity::getNonTransparentBounds() const {
-    return nonTransparentBounds;
-}
 
-sf::IntRect Entity::setNonTransparentBounds() const {
+/*sf::IntRect Entity::setNonTransparentBounds() const {
     sf::Image image = sprite.getTexture()->copyToImage();
     int left = image.getSize().x, top = image.getSize().y, right = 0, bottom = 0;
 
@@ -94,7 +91,7 @@ sf::IntRect Entity::setNonTransparentBounds() const {
     sf::FloatRect globalBounds = sprite.getTransform().transformRect(sf::FloatRect(localBounds));
     return sf::IntRect(static_cast<int>(globalBounds.left), static_cast<int>(globalBounds.top),
                        static_cast<int>(globalBounds.width), static_cast<int>(globalBounds.height));
-}
+}*/
 
 sf::Vector2f Entity::getScale() const {
     return sprite.getScale();

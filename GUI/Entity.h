@@ -18,15 +18,11 @@ protected:
     sf::Vector2f maxSpeed;
 
 
-    sf::IntRect nonTransparentBounds;
-
-    sf::IntRect calculateNonTransparentBounds(const sf::Sprite& sprite);
-
-    sf::Vector2f getScale() const;
-
 public:
     //Functions
     virtual void setTexture(const sf::Texture &texture) = 0;
+
+    sf::Vector2f getScale() const;
 
      void setAcceleration(sf::Vector2f newAcceleration);
 
@@ -53,8 +49,6 @@ public:
     void setVerticalVelocity(float d);
 
     sf::Rect<float> getGlobalBounds() const;
-
-    sf::IntRect setNonTransparentBounds() const;
 
     sf::IntRect getNonTransparentBounds() const;
 

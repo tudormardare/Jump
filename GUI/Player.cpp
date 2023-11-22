@@ -75,12 +75,6 @@ void Player::jump(float initialVelocity) {
 void Player::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
-    nonTransparentBounds = setNonTransparentBounds();
-    std::cout << "Player GlobalBounds:"<<sprite.getGlobalBounds().width << std::endl;
-    if(inverseX){
-        nonTransparentBounds.width = -nonTransparentBounds.width;
-    }
-    std::cout << "Player NoPng:"<<nonTransparentBounds.width << std::endl;
 }
 
 

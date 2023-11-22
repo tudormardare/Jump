@@ -187,7 +187,7 @@ void GamingState::handleCollisions() {
     //Prova collisioni con i nemici
     std::vector<Entity*> colliders;
     colliders.push_back(&pumpkin);
-    Entity* collider = CollisionManager::handleEnemyCollisionsCustom(player, colliders);
+    Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
     if (collider != nullptr) {
         std::cout << "Collisione " ;
     }
