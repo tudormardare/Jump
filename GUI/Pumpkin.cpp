@@ -2,10 +2,14 @@
 // Created by tudor on 22/11/2023.
 //
 
+#include <iostream>
 #include "Pumpkin.h"
 
 void Pumpkin::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
+    nonTransparentBounds = setNonTransparentBounds();
+    std::cout << "Pumpkin GlobalBounds:"<<sprite.getGlobalBounds().width << std::endl;
+    std::cout << "Pumpkin NoPng:"<<nonTransparentBounds.width << std::endl;
 }
 
 void Pumpkin::draw(sf::RenderWindow &window) {

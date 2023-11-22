@@ -18,6 +18,12 @@ protected:
     sf::Vector2f maxSpeed;
 
 
+    sf::IntRect nonTransparentBounds;
+
+    sf::IntRect calculateNonTransparentBounds(const sf::Sprite& sprite);
+
+    sf::Vector2f getScale() const;
+
 public:
     //Functions
     virtual void setTexture(const sf::Texture &texture) = 0;
@@ -48,9 +54,18 @@ public:
 
     sf::Rect<float> getGlobalBounds() const;
 
+    sf::IntRect setNonTransparentBounds() const;
+
+    sf::IntRect getNonTransparentBounds() const;
+
+    sf::Rect<float> getLocalBounds() const;
+
     sf::Vector2f getMaxSpeed() const;
 
     sf::Vector2f getAcceleration() const;
+
+    sf::Sprite getSprite() const;
+
 };
 
 #endif //JUMP_ENTITY_H

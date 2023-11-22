@@ -55,6 +55,50 @@ sf::Rect<float> Entity::getGlobalBounds() const {
     return sprite.getGlobalBounds();
 }
 
+sf::Rect<float> Entity::getLocalBounds() const {
+    return sprite.getLocalBounds();
+}
+
+sf::Sprite Entity::getSprite() const {
+    return sprite;
+}
+
+sf::IntRect Entity::getNonTransparentBounds() const {
+    return nonTransparentBounds;
+}
+
+sf::IntRect Entity::setNonTransparentBounds() const {
+    sf::Image image = sprite.getTexture()->copyToImage();
+    int left = image.getSize().x, top = image.getSize().y, right = 0, bottom = 0;
+
+    for (unsigned int x = 0; x < image.getSize().x; x++) {
+        for (unsigned int y = 0; y < image.getSize().y; y++) {
+            if (image.getPixel(x, y).a != 0) { // Pixel non trasparente
+                if (x < left) left = x;
+                if (x > right) right = x;
+                if (y < top) top = y;
+                if (y > bottom) bottom = y;
+            }
+        }
+    }
+
+    if (left > right || top > bottom) {
+        return sf::IntRect(); // Nessun pixel non trasparente trovato
+    }
+
+    sf::Vector2f position = sprite.getPosition();
+    sf::Vector2f scale = sprite.getScale();
+    sf::IntRect localBounds(left, top, right - left + 1, bottom - top + 1);
+
+    // Trasforma le coordinate locali in globali
+    sf::FloatRect globalBounds = sprite.getTransform().transformRect(sf::FloatRect(localBounds));
+    return sf::IntRect(static_cast<int>(globalBounds.left), static_cast<int>(globalBounds.top),
+                       static_cast<int>(globalBounds.width), static_cast<int>(globalBounds.height));
+}
+
+sf::Vector2f Entity::getScale() const {
+    return sprite.getScale();
+}
 
 
 

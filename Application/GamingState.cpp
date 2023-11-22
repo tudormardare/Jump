@@ -43,13 +43,14 @@ void GamingState::render(sf::RenderWindow &window) {
     player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
+
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
-    //Aggiorna la posizione degli Sprite
-    handleMovements(deltaTime);
     //Verifica le collisioni
     handleCollisions();
+    //Aggiorna la posizione degli Sprite
+    handleMovements(deltaTime);
     //Aggiorna animazione degli sprite
     handleAnimations(deltaTime);
 
@@ -186,10 +187,9 @@ void GamingState::handleCollisions() {
     //Prova collisioni con i nemici
     std::vector<Entity*> colliders;
     colliders.push_back(&pumpkin);
-    Entity* collider = CollisionManager::handleEnemyCollisions(player, colliders);
+    Entity* collider = CollisionManager::handleEnemyCollisionsCustom(player, colliders);
     if (collider != nullptr) {
-        std::cout << "Modifico posizione" << std::endl;
-        player.setPosition(sf::Vector2f(100, 500));
+        std::cout << "Collisione " ;
     }
 }
 
