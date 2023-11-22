@@ -63,7 +63,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 
 void GamingState::handleMovements(float deltaTime) {
     //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
-    PhysicsSystem::applyGravity(player, deltaTime);
+    //PhysicsSystem::applyGravity(player, deltaTime);
     handlePlayerMovements(deltaTime);
     handleFireBallsMovements(deltaTime);
 }
@@ -82,8 +82,8 @@ void GamingState::handlePlayerMovements(float deltaTime) {
 
     // Applica la gravità al giocatore
 
-    if (player.getPosition().y > 500) {
-        player.setPosition(player.getPosition().x, 500);
+    if (player.getPosition().y > 700) {
+        player.setPosition(player.getPosition().x, 190);
         player.setAccelerationY(0.0f);
     }
 
@@ -146,7 +146,7 @@ void GamingState::setTextureForPlayer() {
 
 // Imposta la texture iniziale e la posizione del player
     player.setTexture(textureManager.getTexture("Player", "Idle", 0));
-    player.setPosition(sf::Vector2f(100, 100));
+    player.setPosition(sf::Vector2f(100, 190));
 
 }
 
@@ -183,7 +183,14 @@ void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
 
 
 void GamingState::handleCollisions() {
-
+    //Prova collisioni con i nemici
+    std::vector<Entity*> colliders;
+    colliders.push_back(&pumpkin);
+    Entity* collider = CollisionManager::handleEnemyCollisions(player, colliders);
+    if (collider != nullptr) {
+        std::cout << "Modifico posizione" << std::endl;
+        player.setPosition(sf::Vector2f(100, 500));
+    }
 }
 
 void GamingState::setTextureForFire() {
@@ -199,11 +206,12 @@ void GamingState::setTextureForFire() {
 
         fire.setTexture(textureManager.getTexture("Fire", "Fire", 0));
         fire.setPosition(sf::Vector2f(- 200, 100));
-        fire.setVelocity(sf::Vector2f(500, 0)   );
+        fire.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0)   );
 
+        //Aggiungi funzione per centrare l'immagine TODO(Settare il global bounds per centrare l'immagine)
         pumpkin.setTexture(textureManager.getTexture("Pumpkin", "Pumpkin", 0));
         pumpkin.setPosition(sf::Vector2f(- 85, 190));
-        pumpkin.setVelocity(sf::Vector2f(500, 0)   );
+        pumpkin.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0)   );
 }
 
 void GamingState::handleFireBallsAnimations(float deltaTime) {

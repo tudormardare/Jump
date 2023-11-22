@@ -51,6 +51,10 @@ sf::Vector2f Entity::getMaxSpeed() const {
     return maxSpeed;
 }
 
+sf::Rect<float> Entity::getGlobalBounds() const {
+    return sprite.getGlobalBounds();
+}
+
 
 
 

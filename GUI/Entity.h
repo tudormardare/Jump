@@ -46,6 +46,8 @@ public:
 
     void setVerticalVelocity(float d);
 
+    sf::Rect<float> getGlobalBounds() const;
+
     sf::Vector2f getMaxSpeed() const;
 
     sf::Vector2f getAcceleration() const;

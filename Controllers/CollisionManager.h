@@ -6,6 +6,8 @@
 #define JUMP_COLLISIONMANAGER_H
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include "../GUI/Entity.h"
 
 
 class CollisionManager {
@@ -15,13 +17,16 @@ public:
         return rect1.intersects(rect2);
     }
 
-    static void handleEnemyCollisions(sf::Sprite &player, std::vector<sf::Sprite> &enemies) {
+    static Entity* handleEnemyCollisions(Entity &player, std::vector<Entity*> &enemies) {
         for (auto &enemy: enemies) {
-            if (checkCollision(player.getGlobalBounds(), enemy.getGlobalBounds())) {
+            if (checkCollision(player.getGlobalBounds(), enemy->getGlobalBounds())) {
                 //Devo ritornare chi viene colpito se si tratta di un fantasma
                 //La palla invece è indistruttibile quindi, il personaggio perde lo scudo o la vita
+                std::cout << "Collisione con un nemico" << std::endl;
+                return enemy;
             }
         }
+        return nullptr;
     }
 
     static void handlePlatformCollisions(sf::Sprite &player, std::vector<sf::Sprite> &platforms) {
