@@ -20,7 +20,7 @@ set(SOURCE_FILES
         GUI/Map.cpp
         Utilities/PhysicsSystem.cpp
         Utilities/TextureManager.cpp
-        GUI/Ball.cpp GUI/Ball.h GUI/Fire.cpp GUI/Fire.h)
+        GUI/Ball.cpp GUI/Ball.h GUI/Fire.cpp GUI/Fire.h GUI/Pumpkin.cpp GUI/Pumpkin.h)
 
 
 

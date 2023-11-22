@@ -22,13 +22,13 @@ public:
     //Functions
     virtual void setTexture(const sf::Texture &texture) = 0;
 
-    virtual void setAcceleration(sf::Vector2f newAcceleration);
+     void setAcceleration(sf::Vector2f newAcceleration);
 
-    virtual void setPosition(sf::Vector2f newPosition);
+     void setPosition(sf::Vector2f newPosition);
 
     void setPosition(float x, float y);
 
-    virtual void setVelocity(sf::Vector2f newVelocity);
+    void setVelocity(sf::Vector2f newVelocity);
 
     virtual sf::Vector2f getPosition() const;
 

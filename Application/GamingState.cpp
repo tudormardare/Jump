@@ -3,9 +3,6 @@
 //
 
 #define FRAME_DURATION 0.016f
-
-#include <valarray>
-#include <iostream>
 #include "GamingState.h"
 
 GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
@@ -45,6 +42,7 @@ void GamingState::render(sf::RenderWindow &window) {
     //inserire tutti i draw di tutti gli elemenenti
     player.draw(window);
     fire.draw(window);
+    pumpkin.draw(window);
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
@@ -58,6 +56,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
     //Aggiorna gli sprite
     player.update(deltaTime);
     fire.update(deltaTime);
+    pumpkin.update(deltaTime);
 }
 
 
@@ -66,6 +65,7 @@ void GamingState::handleMovements(float deltaTime) {
     //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
     PhysicsSystem::applyGravity(player, deltaTime);
     handlePlayerMovements(deltaTime);
+    handleFireBallsMovements(deltaTime);
 }
 
 void GamingState::handlePlayerMovements(float deltaTime) {
@@ -190,14 +190,36 @@ void GamingState::setTextureForFire() {
    std::map<std::string, AnimationConfig> fireAnimations = {
             {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES, FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION, false}}
    };
+
+   std::map<std::string, AnimationConfig> pumpkinAnimation = {
+           {"Pumpkin", {PUMPKIN_TEXTURE_PATH, PUMPKIN_TEXTURES, PUMPKIN_MIN_FRAME_DURATION, PUMPKIN_MAX_FRAME_DURATION, false}}
+   };
         textureManager.loadEntityTextures("Fire", fireAnimations);
+        textureManager.loadEntityTextures("Pumpkin", pumpkinAnimation);
 
         fire.setTexture(textureManager.getTexture("Fire", "Fire", 0));
-        fire.setPosition(sf::Vector2f(100, 100));
+        fire.setPosition(sf::Vector2f(- 200, 100));
+        fire.setVelocity(sf::Vector2f(500, 0)   );
+
+        pumpkin.setTexture(textureManager.getTexture("Pumpkin", "Pumpkin", 0));
+        pumpkin.setPosition(sf::Vector2f(- 85, 190));
+        pumpkin.setVelocity(sf::Vector2f(500, 0)   );
 }
 
 void GamingState::handleFireBallsAnimations(float deltaTime) {
     textureManager.updateAnimation("Fire", "Fire", deltaTime, fire);
+}
+
+void GamingState::handleFireBallsMovements(float deltaTime) {
+    //Verficare se il fuoco è uscito dallo schermo
+    if (fire.getPosition().x > WINDOW_WIDTH) {
+        fire.setPosition(sf::Vector2f(- 200, 100));
+    }
+
+    if (pumpkin.getPosition().x > WINDOW_WIDTH + 115) {
+        pumpkin.setPosition(sf::Vector2f(- 85, 190));
+    }
+    //Aggiorna la velocità in base al tempo passato dall'inzio del gioco
 }
 
 

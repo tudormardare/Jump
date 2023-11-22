@@ -7,14 +7,19 @@
 
 
 #include <SFML/Graphics/Texture.hpp>
+#include <valarray>
+#include <iostream>
 #include "GameState.h"
 #include "../Controllers/CollisionManager.h"
 #include "../GUI/Player.h"
 #include "../Utilities/PhysicsSystem.h"
 #include "../Utilities/TextureManager.h"
 #include "../GUI/Fire.h"
+#include "../GUI/Pumpkin.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
+#define WINDOW_WIDTH 1080
+#define WINDOW_HEIGHT 675
 
 class GamingState : public GameState {
 
@@ -51,6 +56,8 @@ private:
 
     void handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime);
 
+    void handleFireBallsMovements(float deltaTime);
+
     void adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime);
 
     bool deceleratePlayer(float deltaTime);
@@ -75,6 +82,7 @@ private:
     TextureManager textureManager;
     Player player;
     Fire fire;
+    Pumpkin pumpkin;
     CollisionManager collisionManager;
     float animationTimer = 0.f;
     int currentFrame = 0;
