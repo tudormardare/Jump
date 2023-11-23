@@ -25,7 +25,7 @@ private:
     sf::Sprite sprite;
     sf::Vector2u size;
     std::vector<sf::FloatRect> platformBounds;
-    const sf::Color PLATFORM_COLOR = sf::Color(1, 27, 35);
+
 
 public:
 
@@ -38,7 +38,6 @@ public:
 
     void drawSprite(sf::RenderWindow& window);
 
-    void createPlatformBounds();
 
 
     void render(sf::RenderWindow& window);
