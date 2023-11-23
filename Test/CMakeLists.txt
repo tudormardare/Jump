@@ -3,6 +3,8 @@ set(TEST_SOURCE_FILES
         runAllTests.cpp
         CollisionTest.cpp
         PlayerTest.cpp
+        MapTest.cpp
+        ../GUI/Map.cpp
         ../GUI/Player.cpp
         ../GUI/Entity.cpp
         ../Controllers/CollisionManager.cpp

@@ -40,6 +40,8 @@ public:
 
     void initBitMask();
 
+    std::vector<bool> getBitMask();
+
     void render(sf::RenderWindow& window);
 
 };

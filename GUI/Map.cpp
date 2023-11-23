@@ -5,6 +5,7 @@ Map::Map() {
     loadTexture(GAME_FOREGROUND_PATH);
     sprite.setTexture(texture);
     size = texture.getSize();
+    initBitMask();
 
 }
 
@@ -42,7 +43,10 @@ void Map::initBitMask() {
             mask[x + y * image.getSize().x] = image.getPixel(x, y).a != 0;
         }
     }
-
     bitMask = mask;
+}
 
+std::vector<bool> Map::getBitMask() {
+
+    return bitMask;
 }
