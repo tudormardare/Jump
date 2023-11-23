@@ -24,7 +24,7 @@ private:
     sf::Texture texture;
     sf::Sprite sprite;
     sf::Vector2u size;
-    std::vector<sf::FloatRect> platformBounds;
+    std::vector<bool> bitMask;
 
 
 public:
@@ -38,7 +38,7 @@ public:
 
     void drawSprite(sf::RenderWindow& window);
 
-
+    void initBitMask();
 
     void render(sf::RenderWindow& window);
 
