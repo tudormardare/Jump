@@ -16,6 +16,8 @@ public:
 
     void Update();
     void ShakeCamera(float duration);
+    float GetShakeDuration() const;
+    sf::Vector2f GetOriginalCameraCenter() const;
 
 private:
     sf::View& mainCamera;

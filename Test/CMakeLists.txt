@@ -2,12 +2,14 @@
 set(TEST_SOURCE_FILES
         runAllTests.cpp
         CollisionTest.cpp
+        CameraTest.cpp
         PlayerTest.cpp
         MapTest.cpp
         ../GUI/Map.cpp
         ../GUI/Player.cpp
         ../GUI/Entity.cpp
         ../Controllers/CollisionManager.cpp
+        ../Controllers/CameraManager.cpp
         # Aggiungi altri file sorgente dei test qui
         )
 

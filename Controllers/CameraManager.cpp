@@ -4,6 +4,7 @@
 
 #include "CameraManager.h"
 
+
 CameraManager::CameraManager(sf::View& camera) :
 mainCamera(camera),
 shakeDuration(0.0f),
@@ -11,6 +12,7 @@ shakeMagnitude(0.7f),
 dampingSpeed(1.0f),
 deltaTime(sf::seconds(0.1f)) {
 }
+
 
 void CameraManager::Update() {
     if (shakeDuration > 0) {
@@ -31,3 +33,12 @@ void CameraManager::ShakeCamera(float duration) {
     shakeDuration = duration;
 }
 
+
+float CameraManager::GetShakeDuration() const {
+    return shakeDuration;
+}
+
+
+sf::Vector2f CameraManager::GetOriginalCameraCenter() const {
+    return originalCameraCenter;
+}
