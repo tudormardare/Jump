@@ -18,7 +18,9 @@ set(SOURCE_FILES
         GUI/Player.cpp
         GUI/Entity.cpp
         GUI/Map.cpp
-        )
+        Controllers/CameraManager.cpp
+        Controllers/CameraManager.h
+)
 
 
 
