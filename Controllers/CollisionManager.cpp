@@ -26,8 +26,7 @@ void CollisionManager::handleWindowBoundsCollisions(sf::Sprite &player, const sf
 
 
 
-void CollisionManager::handleEnemyCollisions(sf::Sprite &player, std::vector<sf::Sprite> &enemies) {
-    CameraManager:
+void CollisionManager::handleEnemyCollisions(sf::Sprite &player, std::vector<sf::Sprite> &enemies, CameraManager& cameraManager) {
 
     for (auto &enemy : enemies) {
 

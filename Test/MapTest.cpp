@@ -6,12 +6,9 @@
 #include "../GUI/Map.h"
 
 TEST(Map, getBitMask){
+Map map;
+map.initBitMask();
+std::vector<bool> bitmask = map.getBitMask();
 
-    Map map;
-
-    map.initBitMask();
-
-    std::vector<bool> bitmask = map.getBitMask();
-
-    EXPECT_EQ(bitmask.size(), 358400);
+EXPECT_EQ(bitmask.size(), 358400);
 }
