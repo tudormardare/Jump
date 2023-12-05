@@ -185,10 +185,10 @@ void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
 
 void GamingState::handleCollisions() {
     //Prova collisioni con i nemici
-    std::vector<Entity*> colliders;
-    colliders.push_back(&pumpkin);
-    Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
-    if (collider != nullptr) {
+    //std::vector<Entity*> colliders;
+    //colliders.push_back(&pumpkin);
+    //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
+    if (CollisionManager::checkCollision(player.getGlobalBoundsCustom(), pumpkin.getGlobalBoundsCustom())) {
         std::cout << "Collisione " ;
     }
 }

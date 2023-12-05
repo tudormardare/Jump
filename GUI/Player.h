@@ -36,6 +36,26 @@ private:
     bool jumping = false;
 
     void initSprite();
+    sf::IntRect getCustomCollisionRect() const {
+        sf::Image image = sprite.getTexture()->copyToImage();
+        int left = image.getSize().x, top = image.getSize().y, right = 0, bottom = 0;
+
+        for (unsigned int x = 0; x < image.getSize().x; ++x) {
+            for (unsigned int y = 0; y < image.getSize().y; ++y) {
+                if (image.getPixel(x, y).a != 0) { // Pixel non trasparente
+                    left = std::min(left, static_cast<int>(x));
+                    top = std::min(top, static_cast<int>(y));
+                    right = std::max(right, static_cast<int>(x));
+                    bottom = std::max(bottom, static_cast<int>(y));
+                }
+            }
+        }
+
+        if (left > right || top > bottom) {
+            return sf::IntRect(); // Nessuna area non trasparente trovata.
+        }
+        return sf::IntRect(left, top, right - left + 1, bottom - top + 1);
+    }
 
 public:
     Player();
@@ -65,6 +85,12 @@ public:
     void inverse();
 
     bool getInverse() const;
+
+    sf::FloatRect getGlobalBoundsCustom() const {
+        sf::IntRect localBounds = getCustomCollisionRect();
+        sf::Transform transform = sprite.getTransform();
+        return transform.transformRect(static_cast<sf::FloatRect>(localBounds));
+    }
 
 };
 

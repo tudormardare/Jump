@@ -97,6 +97,21 @@ public:
     }
 
 
+    static bool checkMapCollision(const sf::Sprite& entity, const std::vector<bool>& mapBitMask, const sf::Vector2u& mapSize) {
+        sf::FloatRect bounds = entity.getGlobalBounds();
+
+        for (int x = std::max(0, static_cast<int>(bounds.left)); x < std::min(static_cast<int>(mapSize.x), static_cast<int>(bounds.left + bounds.width)); x++) {
+            for (int y = std::max(0, static_cast<int>(bounds.top)); y < std::min(static_cast<int>(mapSize.y), static_cast<int>(bounds.top + bounds.height)); y++) {
+                if (mapBitMask[x + y * mapSize.x]) {
+                    return true; // Collisione con la mappa
+                }
+            }
+        }
+        return false;
+    }
+
+
+
 };
 
 
