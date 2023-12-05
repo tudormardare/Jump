@@ -7,10 +7,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "../GUI/Player.h"
+#include "CameraManager.h"
 
 class CollisionManager {
 private:
-
+    static CameraManager cameraManager;
 
 public:
 
@@ -19,6 +20,7 @@ public:
     static void handleEnemyCollisions(sf::Sprite &player, std::vector<sf::Sprite> &enemies);
     static void handlePlatformCollisions(sf::Sprite &player, const std::vector<sf::FloatRect>& platformBounds);
     static void handlePowerUpCollisions(sf::Sprite &player, std::vector<sf::Sprite> &powerUps);
+
 };
 
 

@@ -12,13 +12,13 @@ void CollisionManager::handleWindowBoundsCollisions(sf::Sprite &player, const sf
         //Left
         if(player.getGlobalBounds().left <= 0.f)
             player.setPosition(0.f, player.getGlobalBounds().top);
-            //Right
+        //Right
         else if(player.getGlobalBounds().left + player.getGlobalBounds().width >= target->getSize().x)
             player.setPosition(target->getSize().x - player.getGlobalBounds().width, player.getGlobalBounds().top);
         //Top
         if(player.getGlobalBounds().top <= 0.f)
             player.setPosition(player.getGlobalBounds().left, 0.f);
-            //Bottom
+        //Bottom
         else if(player.getGlobalBounds().top + player.getGlobalBounds().height >= target->getSize().y)
             player.setPosition(player.getGlobalBounds().left, target->getSize().y - player.getGlobalBounds().height);
 }
@@ -27,9 +27,13 @@ void CollisionManager::handleWindowBoundsCollisions(sf::Sprite &player, const sf
 
 
 void CollisionManager::handleEnemyCollisions(sf::Sprite &player, std::vector<sf::Sprite> &enemies) {
+    CameraManager:
+
     for (auto &enemy : enemies) {
+
         if (checkCollision(player.getGlobalBounds(), enemy.getGlobalBounds())) {
-            // Implementa la logica di gestione delle collisioni con gli nemici
+            // Implementa la logica di gestione delle collisioni con i nemici
+            cameraManager.ShakeCamera(0.5f);
         }
     }
 }
