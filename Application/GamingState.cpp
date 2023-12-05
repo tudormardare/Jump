@@ -188,7 +188,7 @@ void GamingState::handleCollisions() {
     //std::vector<Entity*> colliders;
     //colliders.push_back(&pumpkin);
     //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
-    if (CollisionManager::checkCollision(player.getGlobalBoundsCustom(), pumpkin.getGlobalBoundsCustom())) {
+    if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
         std::cout << "Collisione " ;
     }
 }

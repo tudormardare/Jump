@@ -9,6 +9,8 @@
 
 
 class Entity {
+private:
+    sf::IntRect hitbox;
 
 protected:
     sf::Sprite sprite;
@@ -16,6 +18,8 @@ protected:
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
     sf::Vector2f maxSpeed;
+
+    void setCollisionRect() ;
 
 
 public:
@@ -50,8 +54,6 @@ public:
 
     sf::Rect<float> getGlobalBounds() const;
 
-    sf::IntRect getNonTransparentBounds() const;
-
     sf::Rect<float> getLocalBounds() const;
 
     sf::Vector2f getMaxSpeed() const;
@@ -60,6 +62,7 @@ public:
 
     sf::Sprite getSprite() const;
 
+    sf::FloatRect getHitbox() ;
 };
 
 #endif //JUMP_ENTITY_H

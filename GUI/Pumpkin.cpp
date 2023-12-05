@@ -7,6 +7,7 @@
 
 void Pumpkin::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
+    setCollisionRect();
 }
 
 void Pumpkin::draw(sf::RenderWindow &window) {

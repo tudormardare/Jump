@@ -58,24 +58,6 @@ public:
         }
     }
 
-
-
-    static Entity* handleEnemyCollisionsCustom(Entity &player, std::vector<Entity*> &enemies) {
-        sf::IntRect playerLocalBounds = player.getNonTransparentBounds(); // Ottieni i local bounds personalizzati
-        sf::FloatRect playerGlobalBounds = getTransformedBounds(player.getSprite(), playerLocalBounds);
-
-        for (auto &enemy : enemies) {
-            sf::IntRect enemyLocalBounds = enemy->getNonTransparentBounds();
-            sf::FloatRect enemyGlobalBounds = getTransformedBounds(enemy->getSprite(), enemyLocalBounds);
-
-            if (playerGlobalBounds.intersects(enemyGlobalBounds)) {
-                return enemy;
-            }
-        }
-        return nullptr;
-    }
-
-
     static void handlePowerUpCollisions(sf::Sprite &player, std::vector<sf::Sprite> &powerUps) {
         for (auto &powerUp: powerUps) {
             if (checkCollision(player.getGlobalBounds(), powerUp.getGlobalBounds())) {

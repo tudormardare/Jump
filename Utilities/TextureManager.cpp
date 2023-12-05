@@ -106,8 +106,17 @@ void TextureManager::updateAnimation(const std::string &entityName, const std::s
 
     if (animInfo.animationTimer >= frameDuration) {
         animInfo.animationTimer -= frameDuration;
-        animInfo.currentFrame = ++animInfo.currentFrame % (int) frameCount;
-        entity.setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
+        int newFrame = (animInfo.currentFrame + 1) % static_cast<int>(frameCount);
+
+        // Imposta la texture solo se il frame è cambiato
+        if (newFrame != animInfo.currentFrame) {
+            animInfo.currentFrame = newFrame;
+            entity.setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
+        }
+
+        //Vecchia implementazione
+        //animInfo.currentFrame = ++animInfo.currentFrame % (int) frameCount;
+        //entity.setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
     }
 }
 

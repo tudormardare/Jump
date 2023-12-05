@@ -75,6 +75,7 @@ void Player::jump(float initialVelocity) {
 void Player::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
+    setCollisionRect();
 }
 
 

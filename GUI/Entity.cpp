@@ -1,6 +1,7 @@
 //
 // Created by Denis Jaupi on 22/06/23.
 //
+#include <iostream>
 #include "Entity.h"
 
 //Functions
@@ -63,39 +64,36 @@ sf::Sprite Entity::getSprite() const {
     return sprite;
 }
 
+sf::Vector2f Entity::getScale() const {
+    return sprite.getScale();
+}
 
-/*sf::IntRect Entity::setNonTransparentBounds() const {
+sf::FloatRect Entity::getHitbox(){
+        sf::FloatRect globalBounds = sprite.getTransform().transformRect(static_cast<sf::FloatRect>(hitbox));
+        return globalBounds;
+}
+
+void Entity::setCollisionRect()  {
     sf::Image image = sprite.getTexture()->copyToImage();
     int left = image.getSize().x, top = image.getSize().y, right = 0, bottom = 0;
 
-    for (unsigned int x = 0; x < image.getSize().x; x++) {
-        for (unsigned int y = 0; y < image.getSize().y; y++) {
+    for (unsigned int x = 0; x < image.getSize().x; ++x) {
+        for (unsigned int y = 0; y < image.getSize().y; ++y) {
             if (image.getPixel(x, y).a != 0) { // Pixel non trasparente
-                if (x < left) left = x;
-                if (x > right) right = x;
-                if (y < top) top = y;
-                if (y > bottom) bottom = y;
+                left = std::min(left, static_cast<int>(x));
+                top = std::min(top, static_cast<int>(y));
+                right = std::max(right, static_cast<int>(x));
+                bottom = std::max(bottom, static_cast<int>(y));
             }
         }
     }
 
     if (left > right || top > bottom) {
-        return sf::IntRect(); // Nessun pixel non trasparente trovato
+        std::cout << "ERRORE: " << sprite.getTexture()->copyToImage().getSize().x << " " << sprite.getTexture()->copyToImage().getSize().y << std::endl;
     }
-
-    sf::Vector2f position = sprite.getPosition();
-    sf::Vector2f scale = sprite.getScale();
-    sf::IntRect localBounds(left, top, right - left + 1, bottom - top + 1);
-
-    // Trasforma le coordinate locali in globali
-    sf::FloatRect globalBounds = sprite.getTransform().transformRect(sf::FloatRect(localBounds));
-    return sf::IntRect(static_cast<int>(globalBounds.left), static_cast<int>(globalBounds.top),
-                       static_cast<int>(globalBounds.width), static_cast<int>(globalBounds.height));
-}*/
-
-sf::Vector2f Entity::getScale() const {
-    return sprite.getScale();
+   hitbox = sf::IntRect(left, top, right - left + 1, bottom - top + 1);
 }
+
 
 
 
