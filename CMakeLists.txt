@@ -20,6 +20,8 @@ set(SOURCE_FILES
         GUI/Map.cpp
         Controllers/CameraManager.cpp
         Controllers/CameraManager.h
+        GUI/Timer.cpp
+        GUI/Timer.h
 )
 
 
