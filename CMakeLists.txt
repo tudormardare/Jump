@@ -17,10 +17,21 @@ set(SOURCE_FILES
         Controllers/CollisionManager.cpp
         GUI/Player.cpp
         GUI/Entity.cpp
+        GUI/Fire.h
+        GUI/Fire.cpp
+        GUI/Ghost.cpp
+        GUI/Ghost.h
+        GUI/Pumpkin.cpp
+        GUI/Pumpkin.h
         GUI/Map.cpp
-        Utilities/PhysicsSystem.cpp
         Utilities/TextureManager.cpp
-        GUI/Ball.cpp GUI/Ball.h GUI/Fire.cpp GUI/Fire.h GUI/Pumpkin.cpp GUI/Pumpkin.h)
+        Utilities/PhysicsSystem.cpp
+        Controllers/CameraManager.cpp
+        Controllers/CameraManager.h
+        GUI/Timer.cpp
+        GUI/Timer.h
+
+)
 
 
 

@@ -40,6 +40,7 @@ void MenuState::render(sf::RenderWindow &window) {
     for (auto &button: buttons) {
         button->draw(window);
     }
+    gameTimer.displayBestTime(window);
 }
 
 GameState *MenuState::changeState(sf::RenderWindow &window) {

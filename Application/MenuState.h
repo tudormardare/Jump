@@ -21,6 +21,7 @@
 #include "SettingsState.h"
 #include "SFML/Graphics.hpp"
 #include "../GUI/MenuButton.h"
+#include "../GUI/Timer.h"
 #include "iostream"
 
 class MenuState : public GameState {
@@ -52,6 +53,7 @@ private:
     bool changeStateToNext = false;
     sf::Texture buttonTexture;
     std::unique_ptr<MenuButton> buttons[MENU_BUTTONS_NUMBER];
+    Timer gameTimer;
 
 };
 

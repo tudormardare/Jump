@@ -3,6 +3,9 @@
 //
 
 #define FRAME_DURATION 0.016f
+
+#include <valarray>
+#include <iostream>
 #include "GamingState.h"
 
 GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
@@ -13,6 +16,8 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 void GamingState::initState() {
     //inizializzazione di tutti gli elementi dello stato
     loadAllTextures();
+// Avvia il timer
+    gameTimer.start();
     //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
     //setTextureForPlayer();
 }
@@ -29,6 +34,11 @@ GameState *GamingState::changeState(sf::RenderWindow &window) {
 
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+
+        // Ferma e salva il tempo quando esce dal gioco
+        gameTimer.stop();
+        gameTimer.saveBestTime();
+
         window.close();
     }
     if (event.type == sf::Event::KeyReleased) {
@@ -43,10 +53,15 @@ void GamingState::render(sf::RenderWindow &window) {
     player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
+	gameMap.render(window);
+    player.draw(window);
+
+    gameTimer.displayElapsedTime(window);
 
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
+	gameTimer.update();
     //Verifica le collisioni
     handleCollisions();
     //Aggiorna la posizione degli Sprite

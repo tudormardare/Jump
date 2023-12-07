@@ -16,6 +16,8 @@
 #include "../Utilities/TextureManager.h"
 #include "../GUI/Fire.h"
 #include "../GUI/Pumpkin.h"
+#include "../GUI/Map.h"
+#include "../GUI/Timer.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define WINDOW_WIDTH 1080
@@ -83,9 +85,11 @@ private:
     Player player;
     Fire fire;
     Pumpkin pumpkin;
+	Map gameMap;
     CollisionManager collisionManager;
     float animationTimer = 0.f;
     int currentFrame = 0;
+    Timer gameTimer;
 
 };
 
