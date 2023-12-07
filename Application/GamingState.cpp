@@ -15,6 +15,11 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+
+        // Ferma e salva il tempo quando esce dal gioco
+        gameTimer.stop();
+        gameTimer.saveBestTime();
+
         window.close();
     }
     if(event.type == sf::Event::KeyReleased) {
@@ -25,9 +30,11 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
+    // Aggiorna il timer
+    gameTimer.update();
 
 
-      // Aumentato per una decelerazione più rapida
+    // Aumentato per una decelerazione più rapida
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 
@@ -73,6 +80,8 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 void GamingState::render(sf::RenderWindow &window) {
     gameMap.render(window);
     player.draw(window);
+
+    gameTimer.displayElapsedTime(window);
 }
 
 GameState *GamingState::changeState(sf::RenderWindow &window) {
@@ -86,6 +95,9 @@ std::string GamingState::getBackgroundPath() const {
 
 void GamingState::initState() {
     player.setPosition(sf::Vector2f(100, 100));
+
+    // Avvia il timer
+    gameTimer.start();
 }
 
 void GamingState::runningAnimation(float deltaTime) {

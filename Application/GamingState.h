@@ -11,6 +11,7 @@
 #include "../Controllers/CollisionManager.h"
 #include "../GUI/Player.h"
 #include "../GUI/Map.h"
+#include "../GUI/Timer.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define RUNNING_FRAMES 6
@@ -40,20 +41,22 @@ private:
         initState();
     };
 
-    // attributi relativo allo stato
+    // Metodi relativo allo stato
     void initState();
-    const std::string backgroundPath = GAME_BACKGROUND_PATH;
     bool changeStateToNext = false;
 
+    // Metodi relativo all'animazione
     void runningAnimation(float deltaTime);
-
     void stopAnimation();
-    //attributi relativi al gioco
+
+    // Attributi relativi al gioco
+    const std::string backgroundPath = GAME_BACKGROUND_PATH;
     Map gameMap;
     Player  player;
     CollisionManager collisionManager;
     float animationTimer = 0.f;
     int currentFrame = 0;
+    Timer gameTimer;
 
 };
 

@@ -19,6 +19,12 @@ Timer::Timer() : elapsedTime(sf::Time::Zero), bestTime(sf::Time::Zero), isRunnin
     bestTimeText.setFillColor(sf::Color::White);
     bestTimeText.setPosition(10, 10);
 
+    // Imposta le proprietà del testo
+    elapsedTimeText.setFont(font);
+    elapsedTimeText.setCharacterSize(20);
+    elapsedTimeText.setFillColor(sf::Color::White);
+    elapsedTimeText.setPosition(10, 10);
+
     // Carica il bestTime da file
     loadBestTime();
 }
@@ -55,7 +61,7 @@ void Timer::saveBestTime() {
 
         std::ofstream file(bestTimeFilePath);
         if (file.is_open()) {
-            file << bestTime.asSeconds();
+            file << static_cast<float>(bestTime.asSeconds()) / 2;
             file.close();
         } else {
             std::cerr << "Impossibile aprire il file per salvare il miglior tempo.\n";
@@ -81,3 +87,20 @@ void Timer::displayBestTime(sf::RenderWindow& window) {
     bestTimeText.setString(timeString);
     window.draw(bestTimeText);
 }
+
+
+void Timer::displayElapsedTime(sf::RenderWindow& window) {
+    sf::Time elapsedTime = getElapsedTime();
+
+    // Converti il tempo in una stringa con precisione a due decimali
+    std::ostringstream stream;
+    stream << std::fixed << std::setprecision(1) << elapsedTime.asSeconds();
+    std::string elapsedTimeString = "TIME: " + stream.str() + " s ";
+
+    elapsedTimeText.setString(elapsedTimeString);
+
+    // Disegna il testo sulla finestra
+    window.draw(elapsedTimeText);
+
+}
+

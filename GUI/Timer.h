@@ -10,8 +10,11 @@
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Text.hpp>
 
-class Timer {
+
+class Timer{
 public:
     Timer();
 
@@ -26,16 +29,20 @@ public:
     void loadBestTime();
 
     void displayBestTime(sf::RenderWindow& window);
+    void displayElapsedTime(sf::RenderWindow& window);
+
 
 private:
+
     sf::Clock clock;
     sf::Time elapsedTime;
     sf::Time bestTime;
     bool isRunning;
 
-    // Aggiungi variabili relative al font
+    // Variabili relative al font
     sf::Font font;
     sf::Text bestTimeText;
+    sf::Text elapsedTimeText;
 
     std::string bestTimeFilePath;
 };
