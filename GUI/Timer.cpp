@@ -6,10 +6,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 Timer::Timer() : elapsedTime(sf::Time::Zero), bestTime(sf::Time::Zero), isRunning(false), bestTimeFilePath("best_time.txt") {
     // Carica il font
-    if (!font.loadFromFile("/Users/denis/Projects/Jump/PNG/TimerFont/TimerFont.TTF")) {
+    if (!font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
         std::cerr << "Impossibile caricare il font.\n";
     }
 
