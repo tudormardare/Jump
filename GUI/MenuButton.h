@@ -7,27 +7,24 @@
 
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Color.hpp>
 
 class MenuButton {
-private:
-    sf::Sprite button;
-
 public:
-    MenuButton(sf::Vector2f size, sf::Vector2f position, sf::Texture &texture);
+    MenuButton(sf::Vector2f size, sf::Vector2f position, const sf::Texture &texture);
 
     bool isClicked(sf::RenderWindow &window);
-
+    void setTexture(const sf::Texture &texture);
     void draw(sf::RenderWindow &window);
-
     bool isMouseOver(sf::Vector2<int> mousePosition);
-
     void update(sf::RenderWindow &window);
-
     void setPosition(sf::Vector2f position);
-
     sf::FloatRect getGlobalBounds();
+
+private:
+    sf::Sprite button;
+    std::shared_ptr<sf::Texture> buttonTexture;
 };
+
 
 
 #endif //JUMP_MENUBUTTON_H

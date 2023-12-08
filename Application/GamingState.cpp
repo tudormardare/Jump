@@ -49,11 +49,13 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 }
 
 void GamingState::render(sf::RenderWindow &window) {
+
     //inserire tutti i draw di tutti gli elemenenti
+    gameMap.render(window);
     player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
-	gameMap.render(window);
+
     player.draw(window);
 
     gameTimer.displayElapsedTime(window);
