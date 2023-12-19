@@ -16,7 +16,7 @@
 #define MENU_BUTTONS_NUMBER 3
 
 // Percorsi delle texture dei pulsanti del menu
-#define MENU_SETTINGS_BUTTON_PATH "PNG/MenuButton/SettingsButton.png"
+#define MENU_SETTINGS_BUTTON_PATH "PNG/MenuButton/GuideButton.png"
 #define MENU_PLAY_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
 #define MENU_EXIT_BUTTON_PATH "PNG/MenuButton/ExitButton.png"
 

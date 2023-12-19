@@ -46,7 +46,7 @@ GameState *MenuState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         changeStateToNext = false;
         if (buttons[0]->isClicked(window)) {
-            return &PauseState::GetInstance(window);
+            return &SettingsState::GetInstance(window);
         } else if (buttons[1]->isClicked(window)) {
             return &GamingState::GetInstance(window);
         } else if (buttons[2]->isClicked(window)) {
