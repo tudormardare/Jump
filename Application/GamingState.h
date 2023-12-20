@@ -96,6 +96,8 @@ private:
     void handlePlayerJump(bool isKeyPressedW, float deltaTime);
 
     void clampPlayerYVelocity(sf::Vector2f &velocity);
+
+    void handleCollisionMap(CollisionManager::CollisionDirection direction);
 };
 
 

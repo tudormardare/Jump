@@ -94,6 +94,12 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
     handlePlayerJump(isKeyPressedW, deltaTime);
 
+    CollisionManager::CollisionResult collision = collisionManager.checkMapCollision(player, gameMap.getMapHitboxes());
+    if (collision.hasCollision) {
+        // Gestisci la collisione in base alla direzione
+        handleCollisionMap(collision.direction);
+    }
+
 
     // Applica la gravità al giocatore
 
@@ -147,15 +153,6 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     if (isKeyPressedW && !player.isJumping()) {
         player.jump(player.getVelocity().x);
     }
-
-    // Applica la gravità al giocatore
-    PhysicsSystem::applyGravity(player, deltaTime);
-
-    if (player.getPosition().y > 700) {
-        player.setPosition(player.getPosition().x, 190);
-        player.setAccelerationY(0.0f);
-    }
-
 }
 
 
@@ -178,6 +175,28 @@ void GamingState::handleAnimations(float deltaTime) {
 }
 
 
+void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction) {
+    switch (direction) {
+        case CollisionManager::CollisionDirection::Top:
+            std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
+            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            break;
+        case CollisionManager::CollisionDirection::Bottom:
+            std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
+            break;
+        case CollisionManager::CollisionDirection::Left:
+            std::cout << "Collisione sul lato sinistro" << std::endl;
+            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            break;
+        case CollisionManager::CollisionDirection::Right:
+            player.setVelocity(sf::Vector2f(0, 0));
+            break;
+        case CollisionManager::CollisionDirection::None:
+            break;
+    }
+}
+
+
 void GamingState::loadAllTextures() {
     setTextureForPlayer();
     setTextureForFire();
@@ -197,7 +216,7 @@ void GamingState::setTextureForPlayer() {
 
 // Imposta la texture iniziale e la posizione del player
     player.setTexture(textureManager.getTexture("Player", "Idle", 0));
-    player.setPosition(sf::Vector2f(100, 190));
+    player.setPosition(sf::Vector2f(100, 200));
 
 }
 
@@ -246,10 +265,10 @@ void GamingState::handleCollisions() {
         std::cout << "Collisione " ;
     }
 
-    if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
+   /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
         std::cout << "Collisione con la mappa";
         player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-    }
+    }*/
 }
 
 void GamingState::setTextureForFire() {

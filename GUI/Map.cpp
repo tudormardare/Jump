@@ -88,8 +88,6 @@ void Map::loadHitboxesFromFile() {
         float y = (float) hitbox["y"] * scaleY;
         float width =  (float)hitbox["width"] * scaleX;
         float height = (float) hitbox["height"] * scaleY;
-        std::cout << x << " " << y << std::endl;
-        std::cout << width << " " << height << std::endl;
         mapHitboxes.push_back(sf::FloatRect(x, y, width, height));
     }
 }

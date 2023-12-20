@@ -13,6 +13,18 @@
 
 class CollisionManager {
 public:
+    enum class CollisionDirection {
+        None,
+        Top,
+        Bottom,
+        Left,
+        Right
+    };
+
+    struct CollisionResult {
+        bool hasCollision;
+        CollisionDirection direction;
+    };
 
     static bool checkCollision(const sf::FloatRect &rect1, const sf::FloatRect &rect2) {
         return rect1.intersects(rect2);
@@ -79,18 +91,45 @@ public:
     }
 
 
-    static bool checkMapCollision(Entity& entity, std::vector<sf::FloatRect> mapHitboxes) {
-
+    CollisionResult checkMapCollision(Entity& entity, const std::vector<sf::FloatRect>& mapHitboxes) {
         sf::FloatRect entityBounds = entity.getHitbox();
-        std::cout << entityBounds.left << " " << entityBounds.top << " " << entityBounds.width << " " << entityBounds.height << std::endl;
+        sf::Vector2f entityCenter = entity.getCenter(); // Dovrai implementare questo metodo nella classe Entity.
+
+        CollisionResult result{false, CollisionDirection::None};
+
         for (const auto& hitbox : mapHitboxes) {
-            std::cout << "DIMENSIONUIIIIII" <<std::endl;
-            std::cout << hitbox.left << " " << hitbox.top << " " << hitbox.width << " " << hitbox.height << std::endl;
             if (entityBounds.intersects(hitbox)) {
-                return true; // Collisione rilevata
+                // Collisione rilevata, ora determiniamo la direzione
+                result.hasCollision = true;
+
+                // Calcola il punto centrale della hitbox della mappa
+                sf::Vector2f hitboxCenter(hitbox.left + hitbox.width / 2.0f, hitbox.top + hitbox.height / 2.0f);
+
+                // Distanze tra i centri
+                float deltaX = entityCenter.x - hitboxCenter.x;
+                float deltaY = entityCenter.y - hitboxCenter.y;
+
+                // Assumiamo che il player non possa passare attraverso le piattaforme, quindi verifichiamo solo da sopra o da sotto
+                // Verifica quale lato ha una maggiore sovrapposizione
+                if (std::abs(deltaX) > std::abs(deltaY)) {
+                    if (deltaX > 0) {
+                        result.direction = CollisionDirection::Right;
+                    } else {
+                        result.direction = CollisionDirection::Left;
+                    }
+                } else {
+                    if (deltaY > 0) {
+                        result.direction = CollisionDirection::Bottom;
+                    } else {
+                        result.direction = CollisionDirection::Top;
+                    }
+                }
+
+                // Una volta rilevata la collisione, puoi uscire dal ciclo se non hai bisogno di ulteriori informazioni
+                break;
             }
         }
-        return false; // Nessuna collisione
+        return result;
     }
 
 

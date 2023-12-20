@@ -26,6 +26,8 @@ public:
     //Functions
     virtual void setTexture(const sf::Texture &texture) = 0;
 
+    sf::Vector2f getCenter() const;
+
     sf::Vector2f getScale() const;
 
      void setAcceleration(sf::Vector2f newAcceleration);
@@ -62,7 +64,7 @@ public:
 
     sf::Sprite getSprite() const;
 
-    sf::FloatRect getHitbox() ;
+    sf::FloatRect getHitbox() const;
 };
 
 #endif //JUMP_ENTITY_H
