@@ -9,5 +9,7 @@ public:
     static const float GRAVITY;
 
     static void applyGravity(Entity& entity, float deltaTime);
+
+    static void standOn(Entity &entity, float deltaTime);
 };
 

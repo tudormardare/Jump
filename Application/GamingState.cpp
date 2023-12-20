@@ -89,19 +89,14 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
     bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 
+    PhysicsSystem::applyGravity(player, deltaTime);
+
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
+    handlePlayerJump(isKeyPressedW, deltaTime);
 
-
-    if (isKeyPressedW && !player.isJumping()) {
-        player.jump(player.getVelocity().x);
-    }
 
     // Applica la gravità al giocatore
 
-    if (player.getPosition().y > 700) {
-        player.setPosition(player.getPosition().x, 190);
-        player.setAccelerationY(0.0f);
-    }
 
 }
 
@@ -121,6 +116,35 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
     currentVelocity.x += player.getAcceleration().x * deltaTime;
     clampPlayerVelocity(currentVelocity);
     player.setVelocity(currentVelocity);
+}
+
+void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
+    if (isKeyPressedW && !player.isJumping()) {
+        // Inizia il salto
+        sf::Vector2f velocity = player.getVelocity();
+        player.setAccelerationY(-JUMP_FORCE * deltaTime); // Imposta la velocità iniziale verso l'alto
+        player.setJumping(true);
+    }
+
+    sf::Vector2f position = player.getPosition();
+    if (position.y <= player.getHitbox().height || CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
+        position.y = std::max(position.y, 0.0f); // Assicura che il giocatore non vada sotto la mappa
+        player.setPosition(position);
+        player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+        player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
+        player.setJumping(false);
+        PhysicsSystem::standOn(player, deltaTime);
+        std::cout<<"Collisione con la mappa";
+    }else{
+        position.y += player.getVelocity().y * deltaTime;
+        player.setPosition(position);
+    }
+
+    sf::Vector2f currentVelocity = player.getVelocity();
+    currentVelocity.y += player.getAcceleration().y * deltaTime;
+    clampPlayerYVelocity(currentVelocity);
+    player.setVerticalVelocity(currentVelocity.y);
+
 }
 
 
@@ -153,7 +177,7 @@ void GamingState::setTextureForPlayer() {
 
     std::map<std::string, AnimationConfig> playerAnimations = {
             {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
-            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_JUMPING_MIN_FRAME_DURATION, PLAYER_JUMPING_MAX_FRAME_DURATION, false}},
+            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
             {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES,    PLAYER_IDLE_MIN_FRAME_DURATION,    PLAYER_IDLE_MAX_FRAME_DURATION,    false}},
             {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES, PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION, false}}};
 
@@ -195,6 +219,10 @@ bool GamingState::deceleratePlayer(float deltaTime) {
 
 void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
     velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
+}
+
+void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
+    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
 }
 
 

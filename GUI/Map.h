@@ -26,6 +26,10 @@ private:
     sf::Vector2u size;
     std::vector<bool> bitMask;
 
+    std::vector<sf::FloatRect> mapHitboxes;
+public:
+    std::vector<sf::FloatRect> getMapHitboxes() const;
+
 
 public:
 
@@ -34,6 +38,8 @@ public:
 
     void loadTexture(const std::string& filePath);
 
+    void loadHitboxesFromFile();
+
     void applyScale();
 
     void drawSprite(sf::RenderWindow& window);
@@ -41,6 +47,9 @@ public:
     void initBitMask();
 
     std::vector<bool> getBitMask();
+
+
+    sf::Vector2u getSize() const;
 
     void render(sf::RenderWindow& window);
 

@@ -67,9 +67,13 @@ bool Player::isJumping() const {
 
 void Player::jump(float initialVelocity) {
     if (!jumping) { // Controlla se il giocatore non sta già saltando
-        velocity.y = -initialVelocity; // Velocità negativa per muoversi verso l'alto
+        velocity.y = -initialVelocity;
         jumping = true;
     }
+}
+
+void Player::setJumping(bool newJumping) {
+    jumping = newJumping;
 }
 
 void Player::setTexture(const sf::Texture &texture) {

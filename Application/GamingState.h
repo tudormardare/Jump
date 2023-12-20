@@ -27,6 +27,8 @@ class GamingState : public GameState {
 
 
 public:
+    const float JUMP_FORCE = 1500.f;
+
     static GamingState &GetInstance(sf::RenderWindow &window);
 
     void handleEvents(sf::RenderWindow &window, const sf::Event &event) override;
@@ -91,6 +93,9 @@ private:
     int currentFrame = 0;
     Timer gameTimer;
 
+    void handlePlayerJump(bool isKeyPressedW, float deltaTime);
+
+    void clampPlayerYVelocity(sf::Vector2f &velocity);
 };
 
 

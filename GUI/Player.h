@@ -65,6 +65,8 @@ public:
     void inverse();
 
     bool getInverse() const;
+
+    void setJumping(bool newJumping);
 };
 
 #endif //JUMP_PLAYER_H

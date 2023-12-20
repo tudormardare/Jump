@@ -1,4 +1,7 @@
 #include "Map.h"
+#include <fstream>
+
+#include "../Utilities/json.hpp"
 
 Map::Map() {
 
@@ -6,6 +9,7 @@ Map::Map() {
     sprite.setTexture(texture);
     size = texture.getSize();
     initBitMask();
+    loadHitboxesFromFile();
 
 }
 
@@ -47,6 +51,49 @@ void Map::initBitMask() {
 }
 
 std::vector<bool> Map::getBitMask() {
+    std::ofstream file("filename.txt");
+    if (!file.is_open()) {
+        std::cerr << "Errore nell'apertura del file " << "filename.txt" << std::endl;
+        return std::vector<bool>();
+    }
+
+    unsigned int width = size.x; // Assumiamo che size sia un sf::Vector2u con le dimensioni della mappa
+    unsigned int height = size.y;
+
+    for (unsigned int y = 0; y < height; ++y) {
+        for (unsigned int x = 0; x < width; ++x) {
+            file << (bitMask[x + y * width] ? "1" : "0");
+        }
+        file << '\n'; // Vai a capo alla fine di ogni riga
+    }
+
+    file.close(); // Chiudi il file dopo aver finito
 
     return bitMask;
+}
+
+sf::Vector2u Map::getSize() const {
+    return size;
+}
+
+void Map::loadHitboxesFromFile() {
+    std::ifstream file("hitbox/MapHitboxes.json");
+    nlohmann::json hitboxData;
+    file >> hitboxData;
+    float scaleX = static_cast<float>(WINDOW_WIDTH) / static_cast<float>(texture.getSize().x);
+    float scaleY = static_cast<float>(WINDOW_HEIGHT) / static_cast<float>(texture.getSize().y);
+
+    for (const auto& hitbox : hitboxData["hitboxes"]) {
+        float x = (float) hitbox["x"]  * scaleX;
+        float y = (float) hitbox["y"] * scaleY;
+        float width =  (float)hitbox["width"] * scaleX;
+        float height = (float) hitbox["height"] * scaleY;
+        std::cout << x << " " << y << std::endl;
+        std::cout << width << " " << height << std::endl;
+        mapHitboxes.push_back(sf::FloatRect(x, y, width, height));
+    }
+}
+
+std::vector<sf::FloatRect> Map::getMapHitboxes() const {
+    return mapHitboxes;
 }

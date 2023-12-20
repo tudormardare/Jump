@@ -79,17 +79,17 @@ public:
     }
 
 
-    static bool checkMapCollision(const sf::Sprite& entity, const std::vector<bool>& mapBitMask, const sf::Vector2u& mapSize) {
-        sf::FloatRect bounds = entity.getGlobalBounds();
+    static bool checkMapCollision(Entity& entity, std::vector<sf::FloatRect> mapHitboxes) {
 
-        for (int x = std::max(0, static_cast<int>(bounds.left)); x < std::min(static_cast<int>(mapSize.x), static_cast<int>(bounds.left + bounds.width)); x++) {
-            for (int y = std::max(0, static_cast<int>(bounds.top)); y < std::min(static_cast<int>(mapSize.y), static_cast<int>(bounds.top + bounds.height)); y++) {
-                if (mapBitMask[x + y * mapSize.x]) {
-                    return true; // Collisione con la mappa
-                }
+        sf::FloatRect entityBounds = entity.getHitbox();
+        std::cout << entityBounds.left << " " << entityBounds.top << " " << entityBounds.width << " " << entityBounds.height << std::endl;
+        for (const auto& hitbox : mapHitboxes) {
+            if (entityBounds.intersects(hitbox)) {
+                std::cout << "Collisione rilevata" << std::endl;
+                return true; // Collisione rilevata
             }
         }
-        return false;
+        return false; // Nessuna collisione
     }
 
 
