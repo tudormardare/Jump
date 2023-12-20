@@ -62,12 +62,12 @@ void GamingState::render(sf::RenderWindow &window) {
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 	gameTimer.update();
-    //Verifica le collisioni
-    handleCollisions();
     //Aggiorna la posizione degli Sprite
     handleMovements(deltaTime);
     //Aggiorna animazione degli sprite
     handleAnimations(deltaTime);
+    //Verifica le collisioni
+    handleCollisions();
 
     //Aggiorna gli sprite
     player.update(deltaTime);
@@ -126,7 +126,7 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
         player.setJumping(true);
     }
 
-    sf::Vector2f position = player.getPosition();
+   /* sf::Vector2f position = player.getPosition();
     if (position.y <= player.getHitbox().height || CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
         position.y = std::max(position.y, 0.0f); // Assicura che il giocatore non vada sotto la mappa
         player.setPosition(position);
@@ -143,7 +143,18 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     sf::Vector2f currentVelocity = player.getVelocity();
     currentVelocity.y += player.getAcceleration().y * deltaTime;
     clampPlayerYVelocity(currentVelocity);
-    player.setVerticalVelocity(currentVelocity.y);
+    player.setVerticalVelocity(currentVelocity.y);*/
+    if (isKeyPressedW && !player.isJumping()) {
+        player.jump(player.getVelocity().x);
+    }
+
+    // Applica la gravità al giocatore
+    PhysicsSystem::applyGravity(player, deltaTime);
+
+    if (player.getPosition().y > 700) {
+        player.setPosition(player.getPosition().x, 190);
+        player.setAccelerationY(0.0f);
+    }
 
 }
 
@@ -233,6 +244,11 @@ void GamingState::handleCollisions() {
     //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
     if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
         std::cout << "Collisione " ;
+    }
+
+    if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
+        std::cout << "Collisione con la mappa";
+        player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
     }
 }
 

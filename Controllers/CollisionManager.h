@@ -84,8 +84,9 @@ public:
         sf::FloatRect entityBounds = entity.getHitbox();
         std::cout << entityBounds.left << " " << entityBounds.top << " " << entityBounds.width << " " << entityBounds.height << std::endl;
         for (const auto& hitbox : mapHitboxes) {
+            std::cout << "DIMENSIONUIIIIII" <<std::endl;
+            std::cout << hitbox.left << " " << hitbox.top << " " << hitbox.width << " " << hitbox.height << std::endl;
             if (entityBounds.intersects(hitbox)) {
-                std::cout << "Collisione rilevata" << std::endl;
                 return true; // Collisione rilevata
             }
         }
