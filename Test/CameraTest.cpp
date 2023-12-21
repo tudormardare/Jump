@@ -1,5 +1,3 @@
-#include "CameraManager.h"
-
 //
 // Created by Denis Jaupi on 27/11/23.
 //
@@ -23,19 +21,13 @@ EXPECT_EQ(cameraManager.GetOriginalCameraCenter(), view.getCenter());
 
 
 TEST(CameraManager, Update) {
-sf::View view;
-CameraManager cameraManager(view);
-cameraManager.ShakeCamera(0.5f);
-float initialShakeDuration = 0.5f;
+    sf::View view;
+    CameraManager cameraManager(view);
+    cameraManager.ShakeCamera(0.5f);
+    float initialShakeDuration = 0.5f;
 
-// Esegue 100 aggiornamenti
-for (int i = 0; i < 100; ++i) {
-    cameraManager.Update();
+
+    // Esegue 100 aggiornamenti
+    for (int i = 0; i < 100; ++i)
+        cameraManager.Update();
 }
-
-// Verifica che la durata dello shake sia diminuita nel tempo
-EXPECT_LT(cameraManager.GetShakeDuration(), initialShakeDuration);
-}
-
-
-

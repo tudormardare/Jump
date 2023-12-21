@@ -26,7 +26,6 @@ std::string GamingState::getBackgroundPath() const {
     return GAME_BACKGROUND_PATH;
 }
 
-
 GameState *GamingState::changeState(sf::RenderWindow &window) {
     //inserire il cambio di stato quando finisce il gioco o quando viene premuto esc
     return nullptr;
@@ -49,12 +48,15 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 }
 
 void GamingState::render(sf::RenderWindow &window) {
+
     //inserire tutti i draw di tutti gli elemenenti
+    gameMap.render(window);
     player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
-	gameMap.render(window);
+
     player.draw(window);
+    player.renderHealth(window);
 
     gameTimer.displayElapsedTime(window);
 
@@ -71,11 +73,13 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 
     //Aggiorna gli sprite
     player.update(deltaTime);
-    fire.update(deltaTime);
-    pumpkin.update(deltaTime);
+
+    //Aggiorna il pumpkin solo se non è stato colpito
+    if (!pumpkin.isHit()) {
+        fire.update(deltaTime);
+        pumpkin.update(deltaTime);
+    }
 }
-
-
 
 void GamingState::handleMovements(float deltaTime) {
     //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
@@ -229,7 +233,6 @@ void GamingState::setTextureForPlayer() {
 
 }
 
-
 void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime) {
     float direction = (accelerationRate > 0) ? 1.0f : -1.0f;
     if (direction * player.getVelocity().x < 0) { // Cambio di direzione
@@ -271,7 +274,10 @@ void GamingState::handleCollisions() {
     //colliders.push_back(&pumpkin);
     //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
     if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
-        std::cout << "Collisione " ;
+        std::cout << "Collisione ";
+        pumpkin.setHit(true);
+        pumpkin.setPosition(sf::Vector2f(-1000, -1000));
+        fire.setPosition(sf::Vector2f(-1000, -1000));
     }
 
    /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
@@ -316,6 +322,35 @@ void GamingState::handleFireBallsMovements(float deltaTime) {
     }
     //Aggiorna la velocità in base al tempo passato dall'inzio del gioco
 }
+
+void GamingState::spawnPumpkin() {
+    // Da quale lato spawna
+    int side = rand() % 2;
+
+    Pumpkin newPumpkin;
+
+    // Imposta la posizione in base al lato scelto
+    if (side == 0) {
+        newPumpkin.setPosition(sf::Vector2f(-85, 190));
+        newPumpkin.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0));
+    } else {
+        newPumpkin.setPosition(sf::Vector2f(WINDOW_WIDTH + 85, 190));
+        newPumpkin.setVelocity(sf::Vector2f(-FIRE_DEFAULT_SPEED, 0));
+    }
+
+    // Aggiungi la nuova zucca alla tua collezione di zucche (o gestiscila come preferisci)
+    // pumpkinCollection.push_back(newPumpkin);
+
+    // Controlla se c'è una collisione con il player e gestisci la scomparsa del pumpkin
+    if (CollisionManager::checkCollision(player.getHitbox(), newPumpkin.getHitbox())) {
+        std::cout << "Collisione con nuova zucca!\n";
+        newPumpkin.setHit(true);
+        newPumpkin.setPosition(sf::Vector2f(-1000, -1000));
+        fire.setPosition(sf::Vector2f(-1000, -1000));
+    }
+
+}
+
 
 
 

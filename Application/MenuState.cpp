@@ -18,7 +18,7 @@ void MenuState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
         window.close();
     } else if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
-            for (auto &button: buttons) {
+            for (auto &button : buttons) {
                 if (button->isClicked(window)) {
                     button->update(window);
                     changeStateToNext = true; // Imposta il flag per il cambio di stato
@@ -29,15 +29,14 @@ void MenuState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
     }
 }
 
-
 void MenuState::update(sf::RenderWindow &window, float deltaTime) {
-    for (auto &button: buttons) {
+    for (auto &button : buttons) {
         button->update(window);
     }
 }
 
 void MenuState::render(sf::RenderWindow &window) {
-    for (auto &button: buttons) {
+    for (auto &button : buttons) {
         button->draw(window);
     }
     gameTimer.displayBestTime(window);
@@ -47,7 +46,7 @@ GameState *MenuState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         changeStateToNext = false;
         if (buttons[0]->isClicked(window)) {
-            return &PauseState::GetInstance(window);
+            return &SettingsState::GetInstance(window);
         } else if (buttons[1]->isClicked(window)) {
             return &GamingState::GetInstance(window);
         } else if (buttons[2]->isClicked(window)) {
@@ -58,27 +57,35 @@ GameState *MenuState::changeState(sf::RenderWindow &window) {
 }
 
 void MenuState::initState() {
+    // Texture per i pulsanti
+    sf::Texture settingsButtonTexture, playButtonTexture, exitButtonTexture;
 
-    if (!buttonTexture.loadFromFile(MENU_BUTTONS_PATH)) {
-        std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
+    if (!settingsButtonTexture.loadFromFile(MENU_SETTINGS_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante SETTINGS." << std::endl;
     }
+    if (!playButtonTexture.loadFromFile(MENU_PLAY_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante PLAY." << std::endl;
+    }
+    if (!exitButtonTexture.loadFromFile(MENU_EXIT_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante EXIT." << std::endl;
+    }
+
     sf::Vector2f size(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT);
     float totalHeight = (MENU_BUTTONS_NUMBER * MENU_BUTTON_HEIGHT) + (MENU_BUTTON_DISTANCE * (MENU_BUTTONS_NUMBER - 1));
     sf::Vector2f startingPosition((WINDOW_WIDTH) / (float) 2, (WINDOW_HEIGHT - totalHeight) / (float) 2);
 
-    float i = 0;
-    //Inizializzazione dei bottoni
-    for (auto &button: buttons) {
-        button = std::make_unique<MenuButton>(size, startingPosition +
-                                                    sf::Vector2f(0, MENU_BUTTON_HEIGHT + MENU_BUTTON_DISTANCE * i),
-                                              buttonTexture);
-        i++;
-    }
-
+    // Inizializzazione dei bottoni con texture diverse
+    buttons[0] = std::make_unique<MenuButton>(size, startingPosition, settingsButtonTexture);
+    buttons[1] = std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, MENU_BUTTON_HEIGHT + MENU_BUTTON_DISTANCE), playButtonTexture);
+    buttons[2] = std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, 2 * (MENU_BUTTON_HEIGHT + MENU_BUTTON_DISTANCE)), exitButtonTexture);
 }
 
 std::string MenuState::getBackgroundPath() const {
     return backgroundPath;
+}
+
+MenuState::MenuState(sf::RenderWindow &window) {
+    initState();
 }
 
 

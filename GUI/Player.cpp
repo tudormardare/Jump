@@ -38,11 +38,17 @@ sf::Vector2f Player::getOrigin() const {
 }
 
 void Player::setHealth(int newHealth) {
-    health = newHealth;
+    hp = newHealth;
+    if (hp < 0) {
+        hp = 0;
+    }
+    if (hp > hpMax) {
+        hp = hpMax;
+    }
 }
 
 int Player::getHealth() const {
-    return health;
+    return hp;
 }
 
 
@@ -80,6 +86,35 @@ void Player::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     setCollisionRect();
+}
+
+void Player::takeDamage(const int damage) {
+    hp -= damage;
+    if (hp < 0) {
+        hp = 0;
+    }
+    if (hp > hpMax) {
+        hp = hpMax;
+    }
+}
+
+
+void Player::renderHealth(sf::RenderWindow &window) {
+    sf::Font font;
+    if (font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
+        sf::Text healthText;
+        healthText.setFont(font);
+        healthText.setCharacterSize(20);
+        healthText.setFillColor(sf::Color::White);
+
+        // Ottiene la salute del giocatore e la mostra
+        healthText.setString("Health: " + std::to_string(hp) + "/" + std::to_string(hpMax));
+        healthText.setPosition(10, 40);
+
+        window.draw(healthText);
+    } else {
+        std::cerr << "Impossibile caricare il font per la salute del giocatore.\n";
+    }
 }
 
 
