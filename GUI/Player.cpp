@@ -1,85 +1,59 @@
-//
-// Created by Denis Jaupi on 22/06/23.
-//
-
 #include <iostream>
 #include "Player.h"
 
-
-
 Player::Player() {
-    initTexture();
     initSprite();
 }
 
-//Private functions
-void Player::initTexture() {
-    std::string beginningPath(PLAYER_RUNNING_PATH);
-    //Load a currentTexture from file
-    standardTexture.loadFromFile(PLAYER_TEXTURE);
-    for(int i = 0; i < PLAYER_RUNNING_TEXTURES; i++){
-        std::string path = beginningPath + std::to_string(i) + PLAYER_RUNNING_PATH_END;
-        runningTextures[i] = std::make_unique<sf::Texture>();
-        if(!runningTextures[i]->loadFromFile(path)){
-            std::cout << "Error loading texture from file: " << path << std::endl;
-        }
-    }
-    currentTexture = standardTexture;
-}
-
 void Player::initSprite() {
-    //Set the currentTexture to the sprite
-    sprite.setTexture(currentTexture);
-    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+    sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
-    //Resize the sprite
-    setVelocity(sf::Vector2f (PLAYER_VELOCITY, PLAYER_VELOCITY));
-    setSpeed(PLAYER_SPEED);
-}
-
-
-float Player::getSpeed() const {
-    return speed;
-}
-
-
-void Player::setHealth(int newHealth) {
-    health = newHealth;
-}
-
-int Player::getHealth() const {
-    return health;
+    maxSpeed = sf::Vector2f(PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
+    setVelocity(sf::Vector2f(0, 0));
+    setAcceleration(sf::Vector2f(0, PLAYER_ACCELERATION_RATE));
 }
 
 void Player::move(float dirX, float dirY) {
-    sprite.move(speed * dirX, speed * dirY);
+    sprite.move(dirX, dirY);
 }
 
-void Player::update(sf::RenderWindow &window) {
+void Player::update(float deltaTime) {
+    move(velocity.x * deltaTime , velocity.y * deltaTime);
 }
 
 void Player::draw(sf::RenderWindow &window) {
     window.draw(sprite);
 }
 
-int Player::getRunningTexturesNumber() {
-    return PLAYER_RUNNING_TEXTURES;
+void Player::setAccelerationX(float newAccelerationX) {
+    acceleration.x = newAccelerationX;
 }
+void Player::setAccelerationY(float newAccelerationY) {
+    acceleration.y = newAccelerationY;
+}
+
 
 sf::Vector2f Player::getOrigin() const {
     return sprite.getOrigin();
 }
 
-void Player::changeRunningTexture(int textureNumber) {
-    currentTexture = *runningTextures[textureNumber];
+void Player::setHealth(int newHealth) {
+    hp = newHealth;
+    if (hp < 0) {
+        hp = 0;
+    }
+    if (hp > hpMax) {
+        hp = hpMax;
+    }
 }
 
-void Player::setDefaultTexture() {
-    currentTexture = standardTexture;
+int Player::getHealth() const {
+    return hp;
 }
+
 
 void Player::inverse() {
-    if(sprite.getScale().x > 0){
+    if (sprite.getScale().x > 0) {
         sprite.setScale(-PLAYER_SCALE, PLAYER_SCALE);
         inverseX = true;
     } else {
@@ -93,24 +67,55 @@ bool Player::getInverse() const {
 }
 
 
-
-
-
-
-/*
-Player::Player() {
-    currentTexture.loadFromFile(PLAYER_TEXTURE);
+bool Player::isJumping() const {
+    return jumping;
 }
 
-void Player::draw(sf::RenderWindow &window) {
-    Entity::draw(window);
+void Player::jump(float initialVelocity) {
+    if (!jumping) { // Controlla se il giocatore non sta già saltando
+        velocity.y = -initialVelocity;
+        jumping = true;
+    }
 }
 
-void Player::update(float deltaTime) {
-
+void Player::setJumping(bool newJumping) {
+    jumping = newJumping;
 }
 
-void Player::move(const float offsetX, const float offsetY) {
-    sprite.setPosition(sprite.getPosition().x + offsetX, sprite.getPosition().y + offsetY);
+void Player::setTexture(const sf::Texture &texture) {
+    sprite.setTexture(texture);
+    sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
+    setCollisionRect();
 }
-*/
+
+void Player::takeDamage(const int damage) {
+    hp -= damage;
+    if (hp < 0) {
+        hp = 0;
+    }
+    if (hp > hpMax) {
+        hp = hpMax;
+    }
+}
+
+
+void Player::renderHealth(sf::RenderWindow &window) {
+    sf::Font font;
+    if (font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
+        sf::Text healthText;
+        healthText.setFont(font);
+        healthText.setCharacterSize(20);
+        healthText.setFillColor(sf::Color::White);
+
+        // Ottiene la salute del giocatore e la mostra
+        healthText.setString("Health: " + std::to_string(hp) + "/" + std::to_string(hpMax));
+        healthText.setPosition(10, 40);
+
+        window.draw(healthText);
+    } else {
+        std::cerr << "Impossibile caricare il font per la salute del giocatore.\n";
+    }
+}
+
+
+

@@ -41,7 +41,7 @@ public:
      */
 
 
-    void update(sf::RenderWindow& window) override;
+    void update(sf::RenderWindow& window) ;
     void draw(sf::RenderWindow& window) override;
 
 

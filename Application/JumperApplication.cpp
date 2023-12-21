@@ -15,7 +15,7 @@ JumperApplication::JumperApplication() {
 void JumperApplication::run() {
 
     sf::Clock clock;
-    float deltaTime = 0.016f;
+    float deltaTime;
 
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();

@@ -28,12 +28,19 @@ void SettingsState::handleEvents(sf::RenderWindow &window, const sf::Event &even
 }
 
 void SettingsState::update(sf::RenderWindow &window, float deltaTime) {
+    backgroundSprite.setTexture(backgroundTexture);
+
+    backgroundSprite.setScale(static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x,
+                              static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y);
+
     for (auto &button: buttons) {
         button->update(window);
     }
 }
 
 void SettingsState::render(sf::RenderWindow &window) {
+    window.draw(backgroundSprite);
+
     for (auto &button: buttons) {
         button->draw(window);
     }
@@ -43,12 +50,7 @@ GameState *SettingsState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         changeStateToNext = false;
         if (buttons[0]->isClicked(window)) {
-            return &PauseState::GetInstance(window);
-        } else if (buttons[1]->isClicked(window)) {
-            return &MenuState::GetInstance(window);
-        } else if (buttons[3]->isClicked(window)) {
-            window.close();
-        }
+            return &MenuState::GetInstance(window);}
     }
     return nullptr;
 }
@@ -58,8 +60,13 @@ std::string SettingsState::getBackgroundPath() const {
 }
 
 void SettingsState::initState() {
+
     if (!buttonTexture.loadFromFile(PLAYING_BUTTON_PATH)) {
         std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
+    }
+
+    if (!backgroundTexture.loadFromFile(backgroundPath)) {
+        std::cout << "Errore durante il caricamento della backgroundTexture." << std::endl;
     }
     sf::Vector2f size(PLAYING_BUTTON_WIDTH, PLAYING_BUTTON_HEIGHT);
     float totalHeight =

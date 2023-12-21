@@ -7,52 +7,103 @@
 
 
 #include <SFML/Graphics/Texture.hpp>
+#include <valarray>
+#include <iostream>
 #include "GameState.h"
 #include "../Controllers/CollisionManager.h"
 #include "../GUI/Player.h"
+#include "../Utilities/PhysicsSystem.h"
+#include "../Utilities/TextureManager.h"
+#include "../GUI/Fire.h"
+#include "../GUI/Pumpkin.h"
+#include "../GUI/Map.h"
+#include "../GUI/Timer.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
-#define RUNNING_FRAMES 6
+#define WINDOW_WIDTH 1080
+#define WINDOW_HEIGHT 675
 
-class GamingState: public GameState{
+class GamingState : public GameState {
 
 
 public:
-        static GamingState &GetInstance(sf::RenderWindow &window);
+    const float JUMP_FORCE = 5000.f;
 
-        void handleEvents(sf::RenderWindow &window, const sf::Event &event) override;
+    static GamingState &GetInstance(sf::RenderWindow &window);
 
-        void update(sf::RenderWindow &window, float deltaTime) override;
+    void handleEvents(sf::RenderWindow &window, const sf::Event &event) override;
 
-        void render(sf::RenderWindow &window) override;
+    void update(sf::RenderWindow &window, float deltaTime) override;
 
-        GameState *changeState(sf::RenderWindow &window) override;
+    void render(sf::RenderWindow &window) override;
 
-        GamingState(const GamingState &) = delete;
+    GameState *changeState(sf::RenderWindow &window) override;
 
-        void operator=(GamingState const &) = delete;
+    GamingState(const GamingState &) = delete;
 
-        std::string getBackgroundPath() const override;
+    void operator=(GamingState const &) = delete;
+
+    std::string getBackgroundPath() const override;
 
 private:
-    explicit GamingState(sf::RenderWindow &window){
+    explicit GamingState(sf::RenderWindow &window) {
         initState();
     };
 
     // attributi relativo allo stato
     void initState();
+
     const std::string backgroundPath = GAME_BACKGROUND_PATH;
     bool changeStateToNext = false;
 
-    void runningAnimation(float deltaTime);
+    void handlePlayerMovements(float deltaTime);
 
-    void stopAnimation();
+    void handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime);
+
+    void handleFireBallsMovements(float deltaTime);
+
+    void spawnPumpkin();
+
+    void adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime);
+
+    bool deceleratePlayer(float deltaTime);
+
+    static void clampPlayerVelocity(sf::Vector2f &velocity);
+
+    void handleAnimations(float deltaTime);
+
+    void handleFireBallsAnimations(float deltaTime);
+
+    void setTextureForFire();
+
+    void handleCollisions();
+
+    void setTextureForPlayer();
+
+    void loadAllTextures();
+
+    void handleMovements(float deltaTime);
+
     //attributi relativi al gioco
-    Player  player;
+    TextureManager textureManager;
+    Player player;
+    Fire fire;
+    Pumpkin pumpkin;
+	Map gameMap;
     CollisionManager collisionManager;
     float animationTimer = 0.f;
     int currentFrame = 0;
+    Timer gameTimer;
+    float elapsedTimeOnDeath;
 
+    float pumpkinSpawnTimer;
+    float pumpkinSpawnFrequency;
+
+    void handlePlayerJump(bool isKeyPressedW, float deltaTime);
+
+    void clampPlayerYVelocity(sf::Vector2f &velocity);
+
+    void handleCollisionMap(CollisionManager::CollisionDirection direction);
 };
 
 
