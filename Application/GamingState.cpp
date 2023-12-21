@@ -133,8 +133,8 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
         player.setJumping(true);
     }
 
-   /* sf::Vector2f position = player.getPosition();
-    if (position.y <= player.getHitbox().height || CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
+   /*sf::Vector2f position = player.getPosition();
+    if (position.y <= player.getHitbox().height) {
         position.y = std::max(position.y, 0.0f); // Assicura che il giocatore non vada sotto la mappa
         player.setPosition(position);
         player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
@@ -145,15 +145,12 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     }else{
         position.y += player.getVelocity().y * deltaTime;
         player.setPosition(position);
-    }
+    }*/
 
     sf::Vector2f currentVelocity = player.getVelocity();
     currentVelocity.y += player.getAcceleration().y * deltaTime;
     clampPlayerYVelocity(currentVelocity);
-    player.setVerticalVelocity(currentVelocity.y);*/
-    if (isKeyPressedW && !player.isJumping()) {
-        player.jump(player.getVelocity().x);
-    }
+    player.setVerticalVelocity(currentVelocity.y);
 }
 
 
