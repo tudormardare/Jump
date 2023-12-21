@@ -69,7 +69,7 @@ sf::Vector2f Entity::getScale() const {
 }
 
 sf::Vector2f Entity::getCenter() const {
-    const sf::FloatRect bounds = sprite.getGlobalBounds(); // Assicurati che questo metodo restituisca i GlobalBounds dell'entità
+    const sf::FloatRect bounds = getHitbox(); // Assicurati che questo metodo restituisca i GlobalBounds dell'entità
     return sf::Vector2f(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
 }
 sf::FloatRect Entity::getHitbox() const{

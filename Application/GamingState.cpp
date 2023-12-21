@@ -28,7 +28,7 @@ std::string GamingState::getBackgroundPath() const {
 
 
 GameState *GamingState::changeState(sf::RenderWindow &window) {
-    //inserire il cambio di stato quando finisce il gioco  o quando viene premuto esc
+    //inserire il cambio di stato quando finisce il gioco o quando viene premuto esc
     return nullptr;
 }
 
@@ -94,10 +94,11 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
     handlePlayerJump(isKeyPressedW, deltaTime);
 
-    CollisionManager::CollisionResult collision = collisionManager.checkMapCollision(player, gameMap.getMapHitboxes());
-    if (collision.hasCollision) {
-        // Gestisci la collisione in base alla direzione
-        handleCollisionMap(collision.direction);
+    std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(player, gameMap.getMapHitboxes());
+    for (const auto& collision : collisions) {
+        if (collision.hasCollision) {
+            handleCollisionMap(collision.direction);
+        }
     }
 
 
@@ -186,10 +187,11 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
             break;
         case CollisionManager::CollisionDirection::Left:
             std::cout << "Collisione sul lato sinistro" << std::endl;
-            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             break;
         case CollisionManager::CollisionDirection::Right:
-            player.setVelocity(sf::Vector2f(0, 0));
+            std::cout << "Collisione sul lato destro" << std::endl;
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             break;
         case CollisionManager::CollisionDirection::None:
             break;

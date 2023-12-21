@@ -91,46 +91,39 @@ public:
     }
 
 
-    CollisionResult checkMapCollision(Entity& entity, const std::vector<sf::FloatRect>& mapHitboxes) {
+    std::vector<CollisionResult> checkMapCollision(Entity& entity, const std::vector<sf::FloatRect>& mapHitboxes) {
         sf::FloatRect entityBounds = entity.getHitbox();
-        sf::Vector2f entityCenter = entity.getCenter(); // Dovrai implementare questo metodo nella classe Entity.
-
-        CollisionResult result{false, CollisionDirection::None};
+        std::vector<CollisionResult> results;
 
         for (const auto& hitbox : mapHitboxes) {
             if (entityBounds.intersects(hitbox)) {
-                // Collisione rilevata, ora determiniamo la direzione
+                CollisionResult result;
                 result.hasCollision = true;
-
-                // Calcola il punto centrale della hitbox della mappa
-                sf::Vector2f hitboxCenter(hitbox.left + hitbox.width / 2.0f, hitbox.top + hitbox.height / 2.0f);
-
-                // Distanze tra i centri
-                float deltaX = entityCenter.x - hitboxCenter.x;
-                float deltaY = entityCenter.y - hitboxCenter.y;
-
-                // Assumiamo che il player non possa passare attraverso le piattaforme, quindi verifichiamo solo da sopra o da sotto
-                // Verifica quale lato ha una maggiore sovrapposizione
-                if (std::abs(deltaX) > std::abs(deltaY)) {
-                    if (deltaX > 0) {
-                        result.direction = CollisionDirection::Right;
-                    } else {
-                        result.direction = CollisionDirection::Left;
-                    }
-                } else {
-                    if (deltaY > 0) {
-                        result.direction = CollisionDirection::Bottom;
-                    } else {
-                        result.direction = CollisionDirection::Top;
-                    }
-                }
-
-                // Una volta rilevata la collisione, puoi uscire dal ciclo se non hai bisogno di ulteriori informazioni
-                break;
+                result.direction = determineCollisionDirection(entity, hitbox);
+                results.push_back(result);
             }
         }
-        return result;
+
+        return results;
     }
+
+
+    CollisionDirection determineCollisionDirection(const Entity& entity, const sf::FloatRect& hitbox) {
+        sf::FloatRect overlap;
+        entity.getHitbox().intersects(hitbox, overlap);
+
+        float overlapWidth = overlap.width;
+        float overlapHeight = overlap.height;
+
+        // Assumere che le collisioni verticali abbiano la priorità su quelle orizzontali
+        if (overlapHeight < overlapWidth) {
+            return (entity.getCenter().y < hitbox.top) ? CollisionDirection::Top : CollisionDirection::Bottom;
+        } else {
+            return (entity.getCenter().x < hitbox.left) ? CollisionDirection::Left : CollisionDirection::Right;
+        }
+    }
+
+
 
 
 
