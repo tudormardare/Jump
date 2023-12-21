@@ -162,13 +162,23 @@ void GamingState::handleAnimations(float deltaTime) {
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
     bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+    bool isJumping = isKeyPressedW;
+    bool isMovingHorizontally = isKeyPressedA || isKeyPressedD;
+    bool isFalling = player.getVelocity().y > 0;
+    bool isOnGround = player.getVelocity().y == 0;
+    bool isIdle = player.getVelocity().x == 0 && isOnGround;
 
-
-    if (isKeyPressedW) {
+    if (isJumping) {
+        // Se il player sta saltando, visualizza l'animazione di salto
         textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
-    } else if (isKeyPressedA || isKeyPressedD) {
+    } else if (isFalling) {
+        // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
+        textureManager.updateAnimation("Player", "Falling", deltaTime, player);
+    } else if (isMovingHorizontally && isOnGround) {
+        // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
         textureManager.updateAnimation("Player", "Running", deltaTime, player);
-    } else {
+    } else if (isIdle) {
+        // Se il player non si sta muovendo, visualizza l'animazione d'inattività
         textureManager.updateAnimation("Player", "Idle", deltaTime, player);
     }
 
@@ -210,7 +220,7 @@ void GamingState::setTextureForPlayer() {
     std::map<std::string, AnimationConfig> playerAnimations = {
             {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
             {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
-            {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES,    PLAYER_IDLE_MIN_FRAME_DURATION,    PLAYER_IDLE_MAX_FRAME_DURATION,    false}},
+            {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES,    PLAYER_RUNNING_MIN_FRAME_DURATION,    PLAYER_RUNNING_MIN_FRAME_DURATION,    false}},
             {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES, PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION, false}}};
 
 
