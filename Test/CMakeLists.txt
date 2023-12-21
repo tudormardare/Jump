@@ -7,13 +7,17 @@ set(TEST_SOURCE_FILES
         MapTest.cpp
         ../GUI/Map.cpp
         ../GUI/Player.cpp
+		../GUI/Fire.cpp
+		../GUI/Pumpkin.cpp
         ../GUI/Entity.cpp
         ../Utilities/TextureManager.cpp
         ../Utilities/PhysicsSystem.cpp
+		../GUI/Timer.cpp
         # Aggiungi altri file sorgente dei test qui
         ../Application/GamingState.cpp
 	../Controllers/CollisionManager.cpp
-        ../Controllers/CameraManager.cpp)
+        ../Controllers/CameraManager.cpp GamingTest.cpp
+		)
 
 # Configurazione Google Test
 add_subdirectory(./lib/googletest)
