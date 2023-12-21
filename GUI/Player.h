@@ -31,9 +31,13 @@
 class Player : public Entity {
 private:
 
-    int health = PLAYER_HEALTH;
+    int hp;
+    int hpMax = PLAYER_HEALTH;
+
     bool inverseX = false;
     bool jumping = false;
+
+
 
     void initSprite();
 
@@ -60,11 +64,15 @@ public:
 
     int getHealth() const;
 
+    void takeDamage(const int damage);
+
     void setTexture(const sf::Texture &texture) override;
 
     void inverse();
 
     bool getInverse() const;
+
+    void renderHealth(sf::RenderWindow &window);
 };
 
 #endif //JUMP_PLAYER_H

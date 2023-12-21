@@ -23,6 +23,17 @@ public:
     void update(float deltaTime) override;
     void draw(sf::RenderWindow &window) override;
     void setTexture(const sf::Texture &texture) override;
+
+    bool isHit() const {
+        return hit;
+    }
+
+    void setHit(bool value) {
+        hit = value;
+    }
+
+private:
+    bool hit;
 };
 
 
