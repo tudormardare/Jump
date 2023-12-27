@@ -31,8 +31,10 @@ Timer::Timer() : elapsedTime(sf::Time::Zero), bestTime(sf::Time::Zero), isRunnin
 }
 
 void Timer::start() {
-    clock.restart();
-    isRunning = true;
+    if(!isRunning) {
+        clock.restart();
+        isRunning = true;
+    }
 }
 
 void Timer::stop() {
@@ -44,7 +46,21 @@ void Timer::stop() {
 
 void Timer::update() {
     if (isRunning) {
-        elapsedTime = clock.getElapsedTime();
+        elapsedTime = clock.getElapsedTime() + pausedTime;
+    }
+}
+
+void Timer::pause() {
+    if (isRunning) {
+        pausedTime += clock.getElapsedTime();
+        isRunning = false;
+    }
+}
+
+void Timer::resume() {
+    if (!isRunning) {
+        clock.restart();
+        isRunning = true;
     }
 }
 
@@ -62,7 +78,7 @@ void Timer::saveBestTime() {
 
         std::ofstream file(bestTimeFilePath);
         if (file.is_open()) {
-            file << static_cast<float>(bestTime.asSeconds()) / 2;
+            file << static_cast<float>(bestTime.asSeconds());
             file.close();
         } else {
             std::cerr << "Impossibile aprire il file per salvare il miglior tempo.\n";

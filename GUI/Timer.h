@@ -21,6 +21,8 @@ public:
     void start();
     void stop();
     void update();
+    void pause();
+    void resume();
 
     sf::Time getElapsedTime() const;
     sf::Time getBestTime() const;
@@ -37,6 +39,7 @@ private:
     sf::Clock clock;
     sf::Time elapsedTime;
     sf::Time bestTime;
+    sf::Time pausedTime;
     bool isRunning;
 
     // Variabili relative al font

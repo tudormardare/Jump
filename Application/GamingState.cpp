@@ -16,16 +16,14 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 void GamingState::initState() {
     //inizializzazione di tutti gli elementi dello stato
     loadAllTextures();
-// Avvia il timer
+    // Avvia il timer
     gameTimer.start();
     //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
     //setTextureForPlayer();
 }
 
-std::string GamingState::getBackgroundPath() const {
-    return GAME_BACKGROUND_PATH;
-}
 
+//Game logic functions
 GameState *GamingState::changeState(sf::RenderWindow &window) {
     //inserire il cambio di stato quando finisce il gioco o quando viene premuto esc
     return nullptr;
@@ -40,6 +38,16 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 
         window.close();
     }
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P) {
+        paused = !paused;
+        if (paused) {
+            gameTimer.pause();
+        } else {
+            gameTimer.resume();
+        }
+    }
+
     if (event.type == sf::Event::KeyReleased) {
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D) {
             player.setTexture(textureManager.getTexture("Player", "Idle", 0));
@@ -47,6 +55,89 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
     }
 }
 
+std::string GamingState::getBackgroundPath() const {
+    return GAME_BACKGROUND_PATH;
+}
+
+void GamingState::handleAnimations(float deltaTime) {
+    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+    bool isJumping = isKeyPressedW;
+    bool isMovingHorizontally = isKeyPressedA || isKeyPressedD;
+    bool isFalling = player.getVelocity().y > 0;
+    bool isOnGround = player.getVelocity().y == 0;
+    bool isIdle = player.getVelocity().x == 0 && isOnGround;
+
+    if (isJumping) {
+        // Se il player sta saltando, visualizza l'animazione di salto
+        textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
+    } else if (isFalling) {
+        // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
+        textureManager.updateAnimation("Player", "Falling", deltaTime, player);
+    } else if (isMovingHorizontally && isOnGround) {
+        // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
+        textureManager.updateAnimation("Player", "Running", deltaTime, player);
+    } else if (isIdle) {
+        // Se il player non si sta muovendo, visualizza l'animazione d'inattività
+        textureManager.updateAnimation("Player", "Idle", deltaTime, player);
+    }
+
+    handleFireBallsAnimations(deltaTime);
+}
+
+void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction) {
+    switch (direction) {
+        case CollisionManager::CollisionDirection::Top:
+            std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
+            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            break;
+        case CollisionManager::CollisionDirection::Bottom:
+            std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
+            break;
+        case CollisionManager::CollisionDirection::Left:
+            std::cout << "Collisione sul lato sinistro" << std::endl;
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            break;
+        case CollisionManager::CollisionDirection::Right:
+            std::cout << "Collisione sul lato destro" << std::endl;
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            break;
+        case CollisionManager::CollisionDirection::None:
+            break;
+    }
+}
+
+void GamingState::loadAllTextures() {
+    setTextureForPlayer();
+    setTextureForFire();
+    //Aggiungi altre texture
+}
+
+void GamingState::handleCollisions() {
+    //Prova collisioni con i nemici
+    //std::vector<Entity*> colliders;
+    //colliders.push_back(&pumpkin);
+    //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
+    if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
+        std::cout << "Collisione ";
+        pumpkin.setHit(true);
+        pumpkin.setPosition(sf::Vector2f(-1000, -1000));
+        fire.setPosition(sf::Vector2f(-1000, -1000));
+
+        // Decrementa la vita del giocatore
+        player.takeDamage();
+
+    }
+
+    /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
+         std::cout << "Collisione con la mappa";
+         player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+     }*/
+}
+
+
+//Rendering functions
 void GamingState::render(sf::RenderWindow &window) {
 
     //inserire tutti i draw di tutti gli elemenenti
@@ -60,27 +151,34 @@ void GamingState::render(sf::RenderWindow &window) {
 
     gameTimer.displayElapsedTime(window);
 
+
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
-	gameTimer.update();
-    //Aggiorna la posizione degli Sprite
-    handleMovements(deltaTime);
-    //Aggiorna animazione degli sprite
-    handleAnimations(deltaTime);
-    //Verifica le collisioni
-    handleCollisions();
+    if(!paused)
+    {
+        gameTimer.update();
+        //Aggiorna la posizione degli Sprite
+        handleMovements(deltaTime);
+        //Aggiorna animazione degli sprite
+        handleAnimations(deltaTime);
+        //Verifica le collisioni
+        handleCollisions();
 
-    //Aggiorna gli sprite
-    player.update(deltaTime);
+        //Aggiorna gli sprite
+        player.update(deltaTime);
 
-    //Aggiorna il pumpkin solo se non è stato colpito
-    if (!pumpkin.isHit()) {
-        fire.update(deltaTime);
-        pumpkin.update(deltaTime);
+        //Aggiorna il pumpkin solo se non è stato colpito
+        if (!pumpkin.isHit()) {
+            fire.update(deltaTime);
+            pumpkin.update(deltaTime);
+        }
     }
 }
 
+
+
+// Player functions
 void GamingState::handleMovements(float deltaTime) {
     //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
     //PhysicsSystem::applyGravity(player, deltaTime);
@@ -93,7 +191,7 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
     bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 
-    PhysicsSystem::applyGravity(player, deltaTime);
+   PhysicsSystem::applyGravity(player, deltaTime);
 
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
     handlePlayerJump(isKeyPressedW, deltaTime);
@@ -157,65 +255,6 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     player.setVerticalVelocity(currentVelocity.y);
 }
 
-
-
-void GamingState::handleAnimations(float deltaTime) {
-    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-    bool isJumping = isKeyPressedW;
-    bool isMovingHorizontally = isKeyPressedA || isKeyPressedD;
-    bool isFalling = player.getVelocity().y > 0;
-    bool isOnGround = player.getVelocity().y == 0;
-    bool isIdle = player.getVelocity().x == 0 && isOnGround;
-
-    if (isJumping) {
-        // Se il player sta saltando, visualizza l'animazione di salto
-        textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
-    } else if (isFalling) {
-        // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
-        textureManager.updateAnimation("Player", "Falling", deltaTime, player);
-    } else if (isMovingHorizontally && isOnGround) {
-        // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
-        textureManager.updateAnimation("Player", "Running", deltaTime, player);
-    } else if (isIdle) {
-        // Se il player non si sta muovendo, visualizza l'animazione d'inattività
-        textureManager.updateAnimation("Player", "Idle", deltaTime, player);
-    }
-
-    handleFireBallsAnimations(deltaTime);
-}
-
-
-void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction) {
-    switch (direction) {
-        case CollisionManager::CollisionDirection::Top:
-            std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-            break;
-        case CollisionManager::CollisionDirection::Bottom:
-            std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
-            break;
-        case CollisionManager::CollisionDirection::Left:
-            std::cout << "Collisione sul lato sinistro" << std::endl;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-            break;
-        case CollisionManager::CollisionDirection::Right:
-            std::cout << "Collisione sul lato destro" << std::endl;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-            break;
-        case CollisionManager::CollisionDirection::None:
-            break;
-    }
-}
-
-
-void GamingState::loadAllTextures() {
-    setTextureForPlayer();
-    setTextureForFire();
-    //Aggiungi altre texture
-}
-
 void GamingState::setTextureForPlayer() {
 
     std::map<std::string, AnimationConfig> playerAnimations = {
@@ -268,24 +307,7 @@ void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
 }
 
 
-void GamingState::handleCollisions() {
-    //Prova collisioni con i nemici
-    //std::vector<Entity*> colliders;
-    //colliders.push_back(&pumpkin);
-    //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
-    if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
-        std::cout << "Collisione ";
-        pumpkin.setHit(true);
-        pumpkin.setPosition(sf::Vector2f(-1000, -1000));
-        fire.setPosition(sf::Vector2f(-1000, -1000));
-    }
-
-   /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
-        std::cout << "Collisione con la mappa";
-        player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-    }*/
-}
-
+//Enemy functions
 void GamingState::setTextureForFire() {
    std::map<std::string, AnimationConfig> fireAnimations = {
             {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES, FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION, false}}
@@ -323,33 +345,8 @@ void GamingState::handleFireBallsMovements(float deltaTime) {
     //Aggiorna la velocità in base al tempo passato dall'inzio del gioco
 }
 
-void GamingState::spawnPumpkin() {
-    // Da quale lato spawna
-    int side = rand() % 2;
 
-    Pumpkin newPumpkin;
 
-    // Imposta la posizione in base al lato scelto
-    if (side == 0) {
-        newPumpkin.setPosition(sf::Vector2f(-85, 190));
-        newPumpkin.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0));
-    } else {
-        newPumpkin.setPosition(sf::Vector2f(WINDOW_WIDTH + 85, 190));
-        newPumpkin.setVelocity(sf::Vector2f(-FIRE_DEFAULT_SPEED, 0));
-    }
-
-    // Aggiungi la nuova zucca alla tua collezione di zucche (o gestiscila come preferisci)
-    // pumpkinCollection.push_back(newPumpkin);
-
-    // Controlla se c'è una collisione con il player e gestisci la scomparsa del pumpkin
-    if (CollisionManager::checkCollision(player.getHitbox(), newPumpkin.getHitbox())) {
-        std::cout << "Collisione con nuova zucca!\n";
-        newPumpkin.setHit(true);
-        newPumpkin.setPosition(sf::Vector2f(-1000, -1000));
-        fire.setPosition(sf::Vector2f(-1000, -1000));
-    }
-
-}
 
 
 

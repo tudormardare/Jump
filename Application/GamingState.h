@@ -62,8 +62,6 @@ private:
 
     void handleFireBallsMovements(float deltaTime);
 
-    void spawnPumpkin();
-
     void adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime);
 
     bool deceleratePlayer(float deltaTime);
@@ -85,19 +83,15 @@ private:
     void handleMovements(float deltaTime);
 
     //attributi relativi al gioco
+    bool paused = false;
     TextureManager textureManager;
     Player player;
     Fire fire;
     Pumpkin pumpkin;
 	Map gameMap;
     CollisionManager collisionManager;
-    float animationTimer = 0.f;
-    int currentFrame = 0;
     Timer gameTimer;
-    float elapsedTimeOnDeath;
 
-    float pumpkinSpawnTimer;
-    float pumpkinSpawnFrequency;
 
     void handlePlayerJump(bool isKeyPressedW, float deltaTime);
 
