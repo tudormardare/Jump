@@ -7,8 +7,9 @@
 #include <valarray>
 #include <iostream>
 #include "GamingState.h"
+#include "MenuState.h"
 
-GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
+GamingState &GamingState::GetInstance(sf::RenderWindow &window){
     static GamingState instance(window);
     return instance;
 }
@@ -16,6 +17,7 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 void GamingState::initState() {
     //inizializzazione di tutti gli elementi dello stato
     loadAllTextures();
+    initPauseButtons();
     // Avvia il timer
     gameTimer.start();
     //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
@@ -26,6 +28,12 @@ void GamingState::initState() {
 //Game logic functions
 GameState *GamingState::changeState(sf::RenderWindow &window) {
     //inserire il cambio di stato quando finisce il gioco o quando viene premuto esc
+    if (changeStateToNext) {
+        changeStateToNext = false;
+        if (pauseButtons[1]->isClicked(window)) {
+            return &MenuState::GetInstance(window);
+        }
+    }
     return nullptr;
 }
 
@@ -39,7 +47,7 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
         window.close();
     }
 
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P) {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P){
         paused = !paused;
         if (paused) {
             gameTimer.pause();
@@ -48,11 +56,51 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
         }
     }
 
+    if (event.type == sf::Event::MouseButtonPressed && paused) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+
+            if (pauseButtons[1]->isClicked(window)) {
+                pauseButtons[1]->update(window);
+                changeStateToNext = true;
+                paused = false;
+            }
+            if (pauseButtons[0]->isClicked(window)) {
+                pauseButtons[0]->update(window);
+                gameTimer.resume();
+                paused = false;
+            }
+
+        }
+    }
+
     if (event.type == sf::Event::KeyReleased) {
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D) {
             player.setTexture(textureManager.getTexture("Player", "Idle", 0));
         }
     }
+}
+
+void GamingState::initPauseButtons()
+{
+    // Inizializzazione dei pulsanti di pausa con texture diverse
+    sf::Texture resumeButtonTexture, quitButtonTexture;
+
+    if (!resumeButtonTexture.loadFromFile(PAUSE_RESUME_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante RESUME." << std::endl;
+    }
+    if (!quitButtonTexture.loadFromFile(PAUSE_QUIT_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante QUIT." << std::endl;
+    }
+
+    sf::Vector2f size(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_HEIGHT);
+    float totalHeight = (PAUSE_BUTTONS_NUMBER * PAUSE_BUTTON_HEIGHT) + (PAUSE_BUTTON_DISTANCE * (PAUSE_BUTTONS_NUMBER - 1));
+    sf::Vector2f startingPosition((WINDOW_WIDTH) / (float) 2, (WINDOW_HEIGHT - totalHeight) / (float) 1.5);
+
+    // Inizializzazione dei pulsanti di pausa con texture diverse
+    pauseButtons.emplace_back(std::make_unique<MenuButton>(size, startingPosition, resumeButtonTexture));
+    pauseButtons.emplace_back(std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, PAUSE_BUTTON_HEIGHT + PAUSE_BUTTON_DISTANCE), quitButtonTexture));
+
+
 }
 
 std::string GamingState::getBackgroundPath() const {
@@ -140,17 +188,52 @@ void GamingState::handleCollisions() {
 //Rendering functions
 void GamingState::render(sf::RenderWindow &window) {
 
-    //inserire tutti i draw di tutti gli elemenenti
+    // Inserire tutti i draw di tutti gli elemenenti
     gameMap.render(window);
     player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
-
-    player.draw(window);
+    gameTimer.displayElapsedTime(window);
     player.renderHealth(window);
 
-    gameTimer.displayElapsedTime(window);
 
+    // Renderizza "Press "P" to pause"
+    sf::Font font;
+    if (!font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
+        std::cerr << "Impossibile caricare il font\n";
+        return;
+    }
+    sf::Text pauseText;
+    pauseText.setFont(font);
+    pauseText.setCharacterSize(20);
+    pauseText.setFillColor(sf::Color::White);
+    pauseText.setPosition(window.getSize().x - 300, 10);
+    pauseText.setString("Press \"P\" to pause");
+    window.draw(pauseText);
+
+    if (paused)
+    {
+        // Disegna lo sfondo della pausa semitrasparente
+        sf::Texture pauseTexture;
+        if (!pauseTexture.loadFromFile("PNG/PauseBackground/TransparentBackground.png")) {
+            std::cerr << "Impossibile caricare l'immagine di pausa.\n";
+            return;
+        }
+        sf::Sprite pauseSprite(pauseTexture);
+        float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
+        float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
+        pauseSprite.setScale(scaleX, scaleY);
+        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
+        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
+        pauseSprite.setPosition(posX, posY);
+        window.draw(pauseSprite);
+
+
+        // Disegna i pulsanti di pausa
+        for (auto &button : pauseButtons) {
+            button->draw(window);
+        }
+    }
 
 }
 
@@ -174,8 +257,13 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
             pumpkin.update(deltaTime);
         }
     }
+    else
+    {
+        for (auto &button : pauseButtons) {
+            button->update(window);
+        }
+    }
 }
-
 
 
 // Player functions
@@ -344,6 +432,10 @@ void GamingState::handleFireBallsMovements(float deltaTime) {
     }
     //Aggiorna la velocità in base al tempo passato dall'inzio del gioco
 }
+
+
+
+
 
 
 

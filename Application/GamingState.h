@@ -10,6 +10,7 @@
 #include <valarray>
 #include <iostream>
 #include "GameState.h"
+#include "MenuState.h"
 #include "../Controllers/CollisionManager.h"
 #include "../GUI/Player.h"
 #include "../Utilities/PhysicsSystem.h"
@@ -18,10 +19,22 @@
 #include "../GUI/Pumpkin.h"
 #include "../GUI/Map.h"
 #include "../GUI/Timer.h"
+#include "../GUI/MenuButton.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 675
+
+// Dimensioni e posizioni dei pulsanti del menu
+#define PAUSE_BUTTON_WIDTH 200
+#define PAUSE_BUTTON_HEIGHT 75
+#define PAUSE_BUTTON_DISTANCE 50
+#define PAUSE_BUTTONS_NUMBER 3
+
+// Percorsi delle texture dei pulsanti del menu
+#define PAUSE_RESUME_BUTTON_PATH "PNG/MenuButton/GuideButton.png"
+#define PAUSE_QUIT_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
+
 
 class GamingState : public GameState {
 
@@ -91,6 +104,10 @@ private:
 	Map gameMap;
     CollisionManager collisionManager;
     Timer gameTimer;
+    std::vector<std::unique_ptr<MenuButton>> pauseButtons;
+
+
+    void initPauseButtons();
 
 
     void handlePlayerJump(bool isKeyPressedW, float deltaTime);
