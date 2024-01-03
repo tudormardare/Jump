@@ -33,11 +33,9 @@ GameState *GamingState::changeState(sf::RenderWindow &window) {
 
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-
         // Ferma e salva il tempo quando esce dal gioco
         gameTimer.stop();
         gameTimer.saveBestTime();
-
         window.close();
     }
     if (event.type == sf::Event::KeyReleased) {
@@ -105,10 +103,6 @@ void GamingState::handlePlayerMovements(float deltaTime) {
         }
     }
 
-
-    // Applica la gravità al giocatore
-
-
 }
 
 void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
@@ -131,26 +125,11 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
 
 void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     if (isKeyPressedW && !player.isJumping()) {
-        // Inizia il salto
-        sf::Vector2f velocity = player.getVelocity();
         player.setAccelerationY(-JUMP_FORCE * deltaTime); // Imposta la velocità iniziale verso l'alto
         player.setJumping(true);
+    }else if (player.isJumping()) {
+        player.setAccelerationY(player.getAcceleration().y + PhysicsSystem::GRAVITY * deltaTime); // Applica la gravità
     }
-
-   /*sf::Vector2f position = player.getPosition();
-    if (position.y <= player.getHitbox().height) {
-        position.y = std::max(position.y, 0.0f); // Assicura che il giocatore non vada sotto la mappa
-        player.setPosition(position);
-        player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-        player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
-        player.setJumping(false);
-        PhysicsSystem::standOn(player, deltaTime);
-        std::cout<<"Collisione con la mappa";
-    }else{
-        position.y += player.getVelocity().y * deltaTime;
-        player.setPosition(position);
-    }*/
-
     sf::Vector2f currentVelocity = player.getVelocity();
     currentVelocity.y += player.getAcceleration().y * deltaTime;
     clampPlayerYVelocity(currentVelocity);
@@ -198,11 +177,11 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
             break;
         case CollisionManager::CollisionDirection::Left:
             std::cout << "Collisione sul lato sinistro" << std::endl;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            //player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             break;
         case CollisionManager::CollisionDirection::Right:
             std::cout << "Collisione sul lato destro" << std::endl;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            //player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             break;
         case CollisionManager::CollisionDirection::None:
             break;
