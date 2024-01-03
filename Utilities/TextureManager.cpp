@@ -120,4 +120,20 @@ void TextureManager::updateAnimation(const std::string &entityName, const std::s
     }
 }
 
+void TextureManager::setSpecificFrame(const std::string &entityName, const std::string &animationType, int frameIndex, Entity &entity) {
+    AnimationInfo& animInfo = textures[entityName][animationType];
+    animInfo.currentFrame = frameIndex;
+    entity.setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
+}
+
+int TextureManager::getCurrentIndex(const std::string &entityName){
+    std::cout << "Current index: " << textures.at(entityName).at("Running").currentFrame << std::endl;
+    return textures.at("Player").at("Jumping").currentFrame;
+}
+
+void TextureManager::resetAnimation(const std::string &entityName, const std::string &animationType) {
+    textures[entityName][animationType].currentFrame = 0;
+    textures[entityName][animationType].animationTimer = 0;
+}
+
 

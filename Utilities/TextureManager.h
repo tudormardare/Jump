@@ -43,9 +43,15 @@ public:
     void loadTexturesFromSpriteSheetRegular(const std::string& entityName, const std::string& spriteSheetPath, const std::map<std::string, std::tuple<int, int, int>>& animationDetails, int frameWidth, int frameHeight);
     [[nodiscard]] const sf::Texture& getTexture(const std::string& entity, const std::string& animationType, int frameIndex) const;
     void updateAnimation(const std::string& entityName, const std::string& animationType, float deltaTime, Entity& entity);
+    void setSpecificFrame(const std::string &entityName, const std::string &animationType, int frameIndex, Entity &entity);
+    int getCurrentIndex(const std::string &entityName);
+
+    void resetAnimation(const std::string &entityName, const std::string &animationType);
 
 private:
     std::map<std::string, std::map<std::string, AnimationInfo>> textures;
+
+
 };
 
 #endif // TEXTUREMANAGER_H

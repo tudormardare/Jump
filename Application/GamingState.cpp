@@ -128,12 +128,15 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
         player.setAccelerationY(-JUMP_FORCE * deltaTime); // Imposta la velocità iniziale verso l'alto
         player.setJumping(true);
     }else if (player.isJumping()) {
-        player.setAccelerationY(player.getAcceleration().y + PhysicsSystem::GRAVITY * deltaTime); // Applica la gravità
+        player.setAccelerationY(player.getAcceleration().y + PhysicsSystem::GRAVITY * deltaTime);
+        if(-5 <= player.getVelocity().y && player.getVelocity().y <= 0)// Applica la gravità
+            player.setTexture(textureManager.getTexture("Player", "Jumping", 3 ));
     }
     sf::Vector2f currentVelocity = player.getVelocity();
     currentVelocity.y += player.getAcceleration().y * deltaTime;
     clampPlayerYVelocity(currentVelocity);
     player.setVerticalVelocity(currentVelocity.y);
+
 }
 
 
@@ -141,17 +144,16 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
 void GamingState::handleAnimations(float deltaTime) {
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-    bool isJumping = isKeyPressedW;
     bool isMovingHorizontally = isKeyPressedA || isKeyPressedD;
     bool isFalling = player.getVelocity().y > 0;
     bool isOnGround = player.getVelocity().y == 0;
     bool isIdle = player.getVelocity().x == 0 && isOnGround;
 
-    if (isJumping) {
+    if (player.isJumping() && textureManager.getCurrentIndex("Player") != 2) {
         // Se il player sta saltando, visualizza l'animazione di salto
         textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
-    } else if (isFalling) {
+    }
+    else if (isFalling) {
         // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
         textureManager.updateAnimation("Player", "Falling", deltaTime, player);
     } else if (isMovingHorizontally && isOnGround) {
@@ -170,7 +172,13 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
     switch (direction) {
         case CollisionManager::CollisionDirection::Top:
             std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            if(!player.isJumping())
+                player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            if(player.getVelocity().y > 0) {
+                player.setJumping(false);
+                textureManager.resetAnimation("Player", "Jumping");
+            }
+
             break;
         case CollisionManager::CollisionDirection::Bottom:
             std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
@@ -199,7 +207,7 @@ void GamingState::setTextureForPlayer() {
 
     std::map<std::string, AnimationConfig> playerAnimations = {
             {"Running", {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
-            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
+            {"Jumping", {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_JUMPING_MIN_FRAME_DURATION, PLAYER_JUMPING_MIN_FRAME_DURATION, false}},
             {"Idle",    {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES,    PLAYER_RUNNING_MIN_FRAME_DURATION,    PLAYER_RUNNING_MIN_FRAME_DURATION,    false}},
             {"Falling", {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES, PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION, false}}};
 
