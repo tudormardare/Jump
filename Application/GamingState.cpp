@@ -31,6 +31,10 @@ GameState *GamingState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         changeStateToNext = false;
         if (pauseButtons[1]->isClicked(window)) {
+            gameTimer.stop();
+            gameTimer.saveBestTime();
+            initState();
+
             return &MenuState::GetInstance(window);
         }
     }
@@ -56,7 +60,7 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
         }
     }
 
-    if (event.type == sf::Event::MouseButtonPressed && paused) {
+    if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
 
             if (pauseButtons[1]->isClicked(window)) {

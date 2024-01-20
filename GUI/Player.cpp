@@ -1,8 +1,9 @@
 #include <iostream>
 #include "Player.h"
 
-Player::Player() {
+Player::Player() : hpMax(3), hp(hpMax) {
     initSprite();
+    setHealth(hpMax);
 }
 
 void Player::initSprite() {
@@ -51,7 +52,6 @@ int Player::getHealth() const {
     return hp;
 }
 
-
 void Player::inverse() {
     if (sprite.getScale().x > 0) {
         sprite.setScale(-PLAYER_SCALE, PLAYER_SCALE);
@@ -88,13 +88,10 @@ void Player::setTexture(const sf::Texture &texture) {
     setCollisionRect();
 }
 
-void Player::takeDamage(const int damage) {
-    hp -= damage;
+void Player::takeDamage() {
+    hp--;
     if (hp < 0) {
         hp = 0;
-    }
-    if (hp > hpMax) {
-        hp = hpMax;
     }
 }
 
@@ -108,7 +105,7 @@ void Player::renderHealth(sf::RenderWindow &window) {
         healthText.setFillColor(sf::Color::White);
 
         // Ottiene la salute del giocatore e la mostra
-        healthText.setString("Health: " + std::to_string(hp) + "/" + std::to_string(hpMax));
+        healthText.setString("Health: " + std::to_string(getHealth()) + "/" + std::to_string(hpMax));
         healthText.setPosition(10, 40);
 
         window.draw(healthText);
@@ -116,6 +113,5 @@ void Player::renderHealth(sf::RenderWindow &window) {
         std::cerr << "Impossibile caricare il font per la salute del giocatore.\n";
     }
 }
-
 
 

@@ -64,7 +64,7 @@ public:
 
     int getHealth() const;
 
-    void takeDamage(const int damage);
+    void takeDamage();
 
     void setTexture(const sf::Texture &texture) override;
 
@@ -75,6 +75,7 @@ public:
     void renderHealth(sf::RenderWindow &window);
 
     void setJumping(bool newJumping);
+
 };
 
 #endif //JUMP_PLAYER_H
