@@ -87,7 +87,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
     }
 
 
-    std::cout << player.getVelocity().y << std::endl;
+    //std::cout << player.getVelocity().y << std::endl;
 }
 
 void GamingState::handleMovements(float deltaTime) {
@@ -156,7 +156,7 @@ void GamingState::handleAnimations(float deltaTime) {
 
     if (player.isJumping() && textureManager.getCurrentIndex("Player") != 2) {
         // Se il player sta saltando, visualizza l'animazione di salto
-        std::cout << "Jumping" << std::endl;
+        //std::cout << "Jumping" << std::endl;
         textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
     }
     else if (isFalling) {
@@ -180,6 +180,7 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
             std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
             if(player.getVelocity().y > 0) {
                 player.setJumping(false);
+                player.setTexture(textureManager.getTexture("Player", "Idle", 0));
                 textureManager.resetAnimation("Player", "Jumping");
                 player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
                 player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
@@ -239,12 +240,13 @@ void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, f
 }
 
 bool GamingState::deceleratePlayer(float deltaTime) {
-    const float Threshold = 0.1f; // Velocità sotto la quale il giocatore si ferma
+    const float Threshold = 3.f; // Velocità sotto la quale il giocatore si ferma
     float deceleration = (player.getVelocity().x > 0) ? -PLAYER_DECELERATION_RATE : PLAYER_DECELERATION_RATE;
     player.setAccelerationX(deceleration);
 
     // Se la velocità è minore di un certo valore, il giocatore si ferma
-    if (std::abs(player.getVelocity().x) < Threshold) {
+    if (std::abs(player.getVelocity().x) < Threshold)
+    {
         player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
         player.setAccelerationX(0.f);
         return true; // Il giocatore si è fermato
@@ -257,7 +259,7 @@ void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
 }
 
 void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
-    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED , PLAYER_MAX_SPEED );
+    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED * 2, PLAYER_MAX_SPEED * 2);
 }
 
 

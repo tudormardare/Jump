@@ -5,7 +5,7 @@
 #include <iostream>
 #include "PhysicsSystem.h"
 
-const float PhysicsSystem::GRAVITY = 5.f;
+const float PhysicsSystem::GRAVITY = 3.f;
 
 void PhysicsSystem::applyGravity(Entity& entity, float deltaTime) {
     float verticalAcceleration = entity.getAcceleration().y;

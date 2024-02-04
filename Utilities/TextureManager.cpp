@@ -127,7 +127,6 @@ void TextureManager::setSpecificFrame(const std::string &entityName, const std::
 }
 
 int TextureManager::getCurrentIndex(const std::string &entityName){
-    std::cout << "Current index: " << textures.at(entityName).at("Running").currentFrame << std::endl;
     return textures.at("Player").at("Jumping").currentFrame;
 }
 
