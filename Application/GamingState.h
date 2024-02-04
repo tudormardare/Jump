@@ -27,7 +27,7 @@ class GamingState : public GameState {
 
 
 public:
-    const float JUMP_FORCE = 500000.f;
+    const float JUMP_FORCE = 200.f;
 
     static GamingState &GetInstance(sf::RenderWindow &window);
 
@@ -103,7 +103,7 @@ private:
 
     void clampPlayerYVelocity(sf::Vector2f &velocity);
 
-    void handleCollisionMap(CollisionManager::CollisionDirection direction);
+    void handleCollisionMap(CollisionManager::CollisionDirection direction, float deltaTime);
 };
 
 

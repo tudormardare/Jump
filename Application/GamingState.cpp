@@ -64,10 +64,18 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 	gameTimer.update();
     //Aggiorna la posizione degli Sprite
     handleMovements(deltaTime);
-    //Aggiorna animazione degli sprite
-    handleAnimations(deltaTime);
+
     //Verifica le collisioni
     handleCollisions();
+
+    //Aggiorna animazione degli sprite
+    handleAnimations(deltaTime);
+    sf::Vector2f currentVelocity = player.getVelocity();
+    currentVelocity.y += player.getAcceleration().y;
+    currentVelocity.x += player.getAcceleration().x;
+    clampPlayerYVelocity(currentVelocity);
+    clampPlayerVelocity(currentVelocity);
+    player.setVelocity(currentVelocity);
 
     //Aggiorna gli sprite
     player.update(deltaTime);
@@ -77,6 +85,9 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
         fire.update(deltaTime);
         pumpkin.update(deltaTime);
     }
+
+
+    std::cout << player.getVelocity().y << std::endl;
 }
 
 void GamingState::handleMovements(float deltaTime) {
@@ -91,7 +102,6 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
     bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 
-    PhysicsSystem::applyGravity(player, deltaTime);
 
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
     handlePlayerJump(isKeyPressedW, deltaTime);
@@ -99,10 +109,11 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(player, gameMap.getMapHitboxes());
     for (const auto& collision : collisions) {
         if (collision.hasCollision) {
-            handleCollisionMap(collision.direction);
+            handleCollisionMap(collision.direction, deltaTime);
         }
     }
 
+    PhysicsSystem::applyGravity(player, deltaTime);
 }
 
 void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
@@ -116,26 +127,20 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
     } else {
         deceleratePlayer(deltaTime);
     }
-
-    sf::Vector2f currentVelocity = player.getVelocity();
-    currentVelocity.x += player.getAcceleration().x * deltaTime;
-    clampPlayerVelocity(currentVelocity);
-    player.setVelocity(currentVelocity);
 }
+
+
 
 void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     if (isKeyPressedW && !player.isJumping()) {
-        player.setAccelerationY(-JUMP_FORCE * deltaTime); // Imposta la velocità iniziale verso l'alto
+        player.setAccelerationY(-JUMP_FORCE); // Imposta la velocità iniziale verso l'alto
         player.setJumping(true);
+        player.setTexture(textureManager.getTexture("Player", "Jumping", 0));
     }else if (player.isJumping()) {
-        player.setAccelerationY(player.getAcceleration().y + PhysicsSystem::GRAVITY * deltaTime);
-        if(-5 <= player.getVelocity().y && player.getVelocity().y <= 0)// Applica la gravità
+        if(-1 <= player.getVelocity().y && player.getVelocity().y < 0)// Applica la gravità
             player.setTexture(textureManager.getTexture("Player", "Jumping", 3 ));
     }
-    sf::Vector2f currentVelocity = player.getVelocity();
-    currentVelocity.y += player.getAcceleration().y * deltaTime;
-    clampPlayerYVelocity(currentVelocity);
-    player.setVerticalVelocity(currentVelocity.y);
+
 
 }
 
@@ -151,6 +156,7 @@ void GamingState::handleAnimations(float deltaTime) {
 
     if (player.isJumping() && textureManager.getCurrentIndex("Player") != 2) {
         // Se il player sta saltando, visualizza l'animazione di salto
+        std::cout << "Jumping" << std::endl;
         textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
     }
     else if (isFalling) {
@@ -168,17 +174,17 @@ void GamingState::handleAnimations(float deltaTime) {
 }
 
 
-void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction) {
+void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction, float deltaTime) {
     switch (direction) {
         case CollisionManager::CollisionDirection::Top:
             std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-            if(!player.isJumping())
-                player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
             if(player.getVelocity().y > 0) {
                 player.setJumping(false);
                 textureManager.resetAnimation("Player", "Jumping");
+                player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+                player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
             }
-
+            PhysicsSystem::standOn(player, deltaTime);
             break;
         case CollisionManager::CollisionDirection::Bottom:
             std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
@@ -251,7 +257,7 @@ void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
 }
 
 void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
-    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
+    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED , PLAYER_MAX_SPEED );
 }
 
 
