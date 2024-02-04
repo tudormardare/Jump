@@ -6,7 +6,12 @@
 
 #include <valarray>
 #include <iostream>
+#include <fstream>
 #include "GamingState.h"
+#include "../Utilities/json.hpp"
+
+
+nlohmann::json j;
 
 GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
     static GamingState instance(window);
@@ -20,6 +25,10 @@ void GamingState::initState() {
     gameTimer.start();
     //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
     //setTextureForPlayer();
+
+    std::ifstream i("hitbox/MapHitBoxes.json"); // Sostituisci con il percorso corretto del file
+
+    i >> j;
 }
 
 std::string GamingState::getBackgroundPath() const {
@@ -47,12 +56,20 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 
 void GamingState::render(sf::RenderWindow &window) {
 
+    player.getHitbox();
+    sf::RectangleShape rectangle(sf::Vector2f(player.getHitbox().width, player.getHitbox().height));
+    rectangle.setPosition(player.getHitbox().left, player.getHitbox().top);
+    rectangle.setFillColor(sf::Color::Transparent);
+    rectangle.setOutlineColor(sf::Color::Red);
+    rectangle.setOutlineThickness(1.f);
+    window.draw(rectangle);
+
     //inserire tutti i draw di tutti gli elemenenti
     gameMap.render(window);
     player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
-
+    drawHitboxes(gameMap.getMapHitboxes(), window);
     player.draw(window);
     player.renderHealth(window);
 
@@ -189,14 +206,16 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
             break;
         case CollisionManager::CollisionDirection::Bottom:
             std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
+            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
             break;
         case CollisionManager::CollisionDirection::Left:
             std::cout << "Collisione sul lato sinistro" << std::endl;
-            //player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             break;
         case CollisionManager::CollisionDirection::Right:
             std::cout << "Collisione sul lato destro" << std::endl;
-            //player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             break;
         case CollisionManager::CollisionDirection::None:
             break;
@@ -344,6 +363,20 @@ void GamingState::spawnPumpkin() {
         fire.setPosition(sf::Vector2f(-1000, -1000));
     }
 
+}
+
+
+//TODO: da rimuovere
+void GamingState::drawHitboxes(const std::vector<sf::FloatRect>& hitboxes, sf::RenderWindow& window) {
+    for (const auto& hitbox : hitboxes) {
+        sf::RectangleShape rectangle(sf::Vector2f(hitbox.width, hitbox.height));
+        rectangle.setPosition(hitbox.left, hitbox.top);
+        rectangle.setFillColor(sf::Color::Transparent);
+        rectangle.setOutlineColor(sf::Color::Red);
+        rectangle.setOutlineThickness(1.f);
+
+        window.draw(rectangle);
+    }
 }
 
 

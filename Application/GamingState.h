@@ -104,6 +104,7 @@ private:
     void clampPlayerYVelocity(sf::Vector2f &velocity);
 
     void handleCollisionMap(CollisionManager::CollisionDirection direction, float deltaTime);
+    void drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::RenderWindow &window);
 };
 
 

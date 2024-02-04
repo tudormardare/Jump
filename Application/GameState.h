@@ -13,6 +13,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "../Utilities/json.hpp"
 
 class GameState {
 public:
