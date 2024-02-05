@@ -93,6 +93,8 @@ public:
 
     std::vector<CollisionResult> checkMapCollision(Entity& entity, const std::vector<sf::FloatRect>& mapHitboxes) {
         sf::FloatRect entityBounds = entity.getHitbox();
+        entityBounds.left += entity.getVelocity().x;
+        entityBounds.top += entity.getVelocity().y;
         std::vector<CollisionResult> results;
 
         for (const auto& hitbox : mapHitboxes) {

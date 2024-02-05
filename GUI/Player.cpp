@@ -17,7 +17,7 @@ void Player::move(float dirX, float dirY) {
 }
 
 void Player::update(float deltaTime) {
-    move(velocity.x * deltaTime, velocity.y * deltaTime);
+    move(velocity.x , velocity.y );
 }
 
 void Player::draw(sf::RenderWindow &window) {
@@ -114,6 +114,11 @@ void Player::renderHealth(sf::RenderWindow &window) {
     } else {
         std::cerr << "Impossibile caricare il font per la salute del giocatore.\n";
     }
+}
+
+void Player::moveHitbox(float dirX, float dirY) {
+    hitbox.left += dirX;
+    hitbox.top += dirY;
 }
 
 

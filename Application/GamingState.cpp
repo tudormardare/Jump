@@ -58,19 +58,23 @@ void GamingState::render(sf::RenderWindow &window) {
 
     player.getHitbox();
     sf::RectangleShape rectangle(sf::Vector2f(player.getHitbox().width, player.getHitbox().height));
+    sf::VertexArray points(sf::Points, 1);
+    points[0].position = sf::Vector2f(player.getCenter().x, player.getCenter().y);
+    points[0].color = sf::Color::Red;
     rectangle.setPosition(player.getHitbox().left, player.getHitbox().top);
     rectangle.setFillColor(sf::Color::Transparent);
     rectangle.setOutlineColor(sf::Color::Red);
     rectangle.setOutlineThickness(1.f);
     window.draw(rectangle);
+    window.draw(points);
 
     //inserire tutti i draw di tutti gli elemenenti
     gameMap.render(window);
-    player.draw(window);
+    //player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
     drawHitboxes(gameMap.getMapHitboxes(), window);
-    player.draw(window);
+    //player.draw(window);
     player.renderHealth(window);
 
     gameTimer.displayElapsedTime(window);
@@ -79,20 +83,27 @@ void GamingState::render(sf::RenderWindow &window) {
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 	gameTimer.update();
+
+
+
     //Aggiorna la posizione degli Sprite
     handleMovements(deltaTime);
 
-    //Verifica le collisioni
-    handleCollisions();
-
-    //Aggiorna animazione degli sprite
-    handleAnimations(deltaTime);
     sf::Vector2f currentVelocity = player.getVelocity();
     currentVelocity.y += player.getAcceleration().y;
     currentVelocity.x += player.getAcceleration().x;
     clampPlayerYVelocity(currentVelocity);
     clampPlayerVelocity(currentVelocity);
-    player.setVelocity(currentVelocity);
+    player.setVelocity(currentVelocity * deltaTime);
+
+    //Verifica le collisioni
+    handleCollisions();
+
+
+
+    //Aggiorna animazione degli sprite
+    handleAnimations(deltaTime);
+
 
     //Aggiorna gli sprite
     player.update(deltaTime);
@@ -130,7 +141,7 @@ void GamingState::handlePlayerMovements(float deltaTime) {
         }
     }
 
-    PhysicsSystem::applyGravity(player, deltaTime);
+    //PhysicsSystem::applyGravity(player, deltaTime);
 }
 
 void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
@@ -201,8 +212,9 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
                 textureManager.resetAnimation("Player", "Jumping");
                 player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
                 player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
+                player.moveHitbox(0, -player.getVelocity().y * deltaTime);
             }
-            PhysicsSystem::standOn(player, deltaTime);
+            //PhysicsSystem::standOn(player, deltaTime);
             break;
         case CollisionManager::CollisionDirection::Bottom:
             std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
@@ -212,10 +224,12 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
         case CollisionManager::CollisionDirection::Left:
             std::cout << "Collisione sul lato sinistro" << std::endl;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            player.setAccelerationX(0);
             break;
         case CollisionManager::CollisionDirection::Right:
             std::cout << "Collisione sul lato destro" << std::endl;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            player.setAccelerationX(0);
             break;
         case CollisionManager::CollisionDirection::None:
             break;
@@ -242,7 +256,7 @@ void GamingState::setTextureForPlayer() {
 
 // Imposta la texture iniziale e la posizione del player
     player.setTexture(textureManager.getTexture("Player", "Idle", 0));
-    player.setPosition(sf::Vector2f(100, 200));
+    player.setPosition(sf::Vector2f(100, 500));
 
 }
 
@@ -377,6 +391,12 @@ void GamingState::drawHitboxes(const std::vector<sf::FloatRect>& hitboxes, sf::R
 
         window.draw(rectangle);
     }
+}
+
+void GamingState::updatePlayerProva(Entity& player, float deltaTime) {
+    // Velocità del player in pixel al secondo
+
+
 }
 
 

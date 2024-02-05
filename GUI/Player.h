@@ -75,6 +75,8 @@ public:
     void renderHealth(sf::RenderWindow &window);
 
     void setJumping(bool newJumping);
+
+    void moveHitbox(float dirX, float dirY);
 };
 
 #endif //JUMP_PLAYER_H

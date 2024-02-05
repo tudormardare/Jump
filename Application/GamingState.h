@@ -105,6 +105,8 @@ private:
 
     void handleCollisionMap(CollisionManager::CollisionDirection direction, float deltaTime);
     void drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::RenderWindow &window);
+
+    void updatePlayerProva(Entity &player, float deltaTime);
 };
 
 
