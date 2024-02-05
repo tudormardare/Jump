@@ -116,10 +116,6 @@ void Player::renderHealth(sf::RenderWindow &window) {
     }
 }
 
-void Player::moveHitbox(float dirX, float dirY) {
-    hitbox.left += dirX;
-    hitbox.top += dirY;
-}
 
 
 

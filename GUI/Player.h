@@ -16,7 +16,7 @@
 #define PLAYER_JUMPING_PATH "PNG/Player/JumpingTextures/adventurer-jump-0"
 #define PLAYER_IDLE_PATH "PNG/Player/IdleTextures/adventurer-idle-0"
 #define PLAYER_SCALE 2.f
-#define PLAYER_ACCELERATION_RATE 3.f
+#define PLAYER_ACCELERATION_RATE 200.f
 #define PLAYER_MAX_SPEED 200.f
 #define PLAYER_DECELERATION_RATE 4.f
 #define PLAYER_RUNNING_MIN_FRAME_DURATION 1.f
@@ -76,7 +76,6 @@ public:
 
     void setJumping(bool newJumping);
 
-    void moveHitbox(float dirX, float dirY);
 };
 
 #endif //JUMP_PLAYER_H

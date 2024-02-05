@@ -24,6 +24,8 @@ public:
     struct CollisionResult {
         bool hasCollision;
         CollisionDirection direction;
+        float overlap;
+
     };
 
     static bool checkCollision(const sf::FloatRect &rect1, const sf::FloatRect &rect2) {
@@ -101,16 +103,17 @@ public:
             if (entityBounds.intersects(hitbox)) {
                 CollisionResult result;
                 result.hasCollision = true;
-                result.direction = determineCollisionDirection(entity, hitbox);
+                determineCollisionDirection(entity, hitbox, result);
                 results.push_back(result);
             }
         }
+
 
         return results;
     }
 
 
-    CollisionDirection determineCollisionDirection(const Entity& entity, const sf::FloatRect& hitbox) {
+    void determineCollisionDirection(const Entity& entity, const sf::FloatRect& hitbox, CollisionResult &result) {
         sf::FloatRect overlap;
         entity.getHitbox().intersects(hitbox, overlap);
 
@@ -119,9 +122,11 @@ public:
 
         // Assumere che le collisioni verticali abbiano la priorità su quelle orizzontali
         if (overlapHeight < overlapWidth) {
-            return (entity.getCenter().y < hitbox.top) ? CollisionDirection::Top : CollisionDirection::Bottom;
+            result.direction = (entity.getCenter().y < hitbox.top) ? CollisionDirection::Top : CollisionDirection::Bottom;
+            result.overlap = overlapHeight;
         } else {
-            return (entity.getCenter().x < hitbox.left) ? CollisionDirection::Left : CollisionDirection::Right;
+            result.direction = (entity.getCenter().x < hitbox.left) ? CollisionDirection::Left : CollisionDirection::Right;
+            result.overlap = overlapWidth;
         }
     }
 

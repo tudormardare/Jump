@@ -56,7 +56,8 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 
 void GamingState::render(sf::RenderWindow &window) {
 
-    player.getHitbox();
+    //TODO:Inserire nei test
+    /*player.getHitbox();
     sf::RectangleShape rectangle(sf::Vector2f(player.getHitbox().width, player.getHitbox().height));
     sf::VertexArray points(sf::Points, 1);
     points[0].position = sf::Vector2f(player.getCenter().x, player.getCenter().y);
@@ -67,14 +68,14 @@ void GamingState::render(sf::RenderWindow &window) {
     rectangle.setOutlineThickness(1.f);
     window.draw(rectangle);
     window.draw(points);
+    drawHitboxes(gameMap.getMapHitboxes(), window);
+     */
 
     //inserire tutti i draw di tutti gli elemenenti
     gameMap.render(window);
-    //player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
-    drawHitboxes(gameMap.getMapHitboxes(), window);
-    //player.draw(window);
+    player.draw(window);
     player.renderHealth(window);
 
     gameTimer.displayElapsedTime(window);
@@ -89,26 +90,18 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
     //Aggiorna la posizione degli Sprite
     handleMovements(deltaTime);
 
-    sf::Vector2f currentVelocity = player.getVelocity();
-    currentVelocity.y += player.getAcceleration().y;
-    currentVelocity.x += player.getAcceleration().x;
-    clampPlayerYVelocity(currentVelocity);
-    clampPlayerVelocity(currentVelocity);
-    player.setVelocity(currentVelocity * deltaTime);
+    //Aggiorna animazione degli sprite
+    handleAnimations(deltaTime);
 
     //Verifica le collisioni
     handleCollisions();
 
 
 
-    //Aggiorna animazione degli sprite
-    handleAnimations(deltaTime);
-
-
     //Aggiorna gli sprite
     player.update(deltaTime);
 
-    //Aggiorna il pumpkin solo se non è stato colpito
+    //TODO:GESTIRE COLLISIONI CON I NEMICI
     if (!pumpkin.isHit()) {
         fire.update(deltaTime);
         pumpkin.update(deltaTime);
@@ -134,14 +127,17 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
     handlePlayerJump(isKeyPressedW, deltaTime);
 
-    std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(player, gameMap.getMapHitboxes());
-    for (const auto& collision : collisions) {
-        if (collision.hasCollision) {
-            handleCollisionMap(collision.direction, deltaTime);
-        }
-    }
+    PhysicsSystem::applyGravity(player);
 
-    //PhysicsSystem::applyGravity(player, deltaTime);
+
+    //Applica la velocità al giocatore
+    sf::Vector2f currentVelocity = player.getVelocity();
+    currentVelocity.y += player.getAcceleration().y;
+    currentVelocity.x += player.getAcceleration().x;
+    clampPlayerYVelocity(currentVelocity);
+    clampPlayerVelocity(currentVelocity);
+    player.setVelocity(currentVelocity * deltaTime);
+
 }
 
 void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
@@ -202,8 +198,8 @@ void GamingState::handleAnimations(float deltaTime) {
 }
 
 
-void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction, float deltaTime) {
-    switch (direction) {
+void  GamingState::handleCollisionMap(CollisionManager::CollisionResult collision) {
+    switch (collision.direction) {
         case CollisionManager::CollisionDirection::Top:
             std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
             if(player.getVelocity().y > 0) {
@@ -212,24 +208,26 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direc
                 textureManager.resetAnimation("Player", "Jumping");
                 player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
                 player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
-                player.moveHitbox(0, -player.getVelocity().y * deltaTime);
             }
-            //PhysicsSystem::standOn(player, deltaTime);
+            PhysicsSystem::standOn(player);
             break;
         case CollisionManager::CollisionDirection::Bottom:
             std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
             player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
             player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
+            player.setPosition(player.getPosition().x, player.getPosition().y + collision.overlap);
             break;
         case CollisionManager::CollisionDirection::Left:
             std::cout << "Collisione sul lato sinistro" << std::endl;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             player.setAccelerationX(0);
+            player.setPosition(player.getPosition().x - collision.overlap , player.getPosition().y); //sposta il player indietro TODO: sistemare
             break;
         case CollisionManager::CollisionDirection::Right:
             std::cout << "Collisione sul lato destro" << std::endl;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             player.setAccelerationX(0);
+            player.setPosition(player.getPosition().x + collision.overlap, player.getPosition().y);
             break;
         case CollisionManager::CollisionDirection::None:
             break;
@@ -288,11 +286,11 @@ bool GamingState::deceleratePlayer(float deltaTime) {
 }
 
 void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
-    velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
+    velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED * 2, PLAYER_MAX_SPEED*2);
 }
 
 void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
-    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED * 2, PLAYER_MAX_SPEED * 2);
+    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED * 4, PLAYER_MAX_SPEED * 2);
 }
 
 
@@ -312,6 +310,13 @@ void GamingState::handleCollisions() {
         std::cout << "Collisione con la mappa";
         player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
     }*/
+
+    std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(player, gameMap.getMapHitboxes());
+    for (const auto& collision : collisions) {
+        if (collision.hasCollision) {
+            handleCollisionMap(collision);
+        }
+    }
 }
 
 void GamingState::setTextureForFire() {
@@ -391,12 +396,6 @@ void GamingState::drawHitboxes(const std::vector<sf::FloatRect>& hitboxes, sf::R
 
         window.draw(rectangle);
     }
-}
-
-void GamingState::updatePlayerProva(Entity& player, float deltaTime) {
-    // Velocità del player in pixel al secondo
-
-
 }
 
 
