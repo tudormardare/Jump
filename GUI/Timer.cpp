@@ -39,7 +39,7 @@ void Timer::start() {
 
 void Timer::stop() {
     if (isRunning) {
-        elapsedTime += clock.getElapsedTime();
+        elapsedTime = clock.getElapsedTime();
         isRunning = false;
     }
 }
@@ -80,6 +80,7 @@ void Timer::saveBestTime() {
         if (file.is_open()) {
             file << static_cast<float>(bestTime.asSeconds());
             file.close();
+            std::cout << "Best time saved: " << bestTime.asSeconds() << " seconds\n";
         } else {
             std::cerr << "Impossibile aprire il file per salvare il miglior tempo.\n";
         }
@@ -119,5 +120,12 @@ void Timer::displayElapsedTime(sf::RenderWindow& window) {
     // Disegna il testo sulla finestra
     window.draw(elapsedTimeText);
 
+}
+
+void Timer::reset() {
+    isRunning = false;
+    elapsedTime = sf::Time::Zero;
+    pausedTime = sf::Time::Zero;
+    clock.restart();
 }
 

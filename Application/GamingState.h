@@ -32,8 +32,8 @@
 #define PAUSE_BUTTONS_NUMBER 3
 
 // Percorsi delle texture dei pulsanti del menu
-#define PAUSE_RESUME_BUTTON_PATH "PNG/MenuButton/GuideButton.png"
-#define PAUSE_QUIT_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
+#define PAUSE_RESUME_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
+#define PAUSE_QUIT_BUTTON_PATH "PNG/MenuButton/ExitButton.png"
 
 
 class GamingState : public GameState {
@@ -52,7 +52,7 @@ public:
 
     GameState *changeState(sf::RenderWindow &window) override;
 
-    GamingState(const GamingState &) = delete;
+    GamingState(const GamingState &);
 
     void operator=(GamingState const &) = delete;
 

@@ -23,6 +23,7 @@ public:
     void update();
     void pause();
     void resume();
+    void reset();
 
     sf::Time getElapsedTime() const;
     sf::Time getBestTime() const;

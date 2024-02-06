@@ -11,6 +11,7 @@
 
 GamingState &GamingState::GetInstance(sf::RenderWindow &window){
     static GamingState instance(window);
+    instance.initState();
     return instance;
 }
 
@@ -19,6 +20,7 @@ void GamingState::initState() {
     loadAllTextures();
     initPauseButtons();
     // Avvia il timer
+    gameTimer.reset();
     gameTimer.start();
     //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
     //setTextureForPlayer();
@@ -31,12 +33,10 @@ GameState *GamingState::changeState(sf::RenderWindow &window) {
     if (changeStateToNext) {
         changeStateToNext = false;
         if (pauseButtons[1]->isClicked(window)) {
-            gameTimer.stop();
             gameTimer.saveBestTime();
-            initState();
-
             return &MenuState::GetInstance(window);
         }
+
     }
     return nullptr;
 }
@@ -244,6 +244,7 @@ void GamingState::render(sf::RenderWindow &window) {
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
     if(!paused)
     {
+
         gameTimer.update();
         //Aggiorna la posizione degli Sprite
         handleMovements(deltaTime);
@@ -436,6 +437,8 @@ void GamingState::handleFireBallsMovements(float deltaTime) {
     }
     //Aggiorna la velocità in base al tempo passato dall'inzio del gioco
 }
+
+
 
 
 
