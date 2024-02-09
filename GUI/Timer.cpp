@@ -76,14 +76,16 @@ void Timer::saveBestTime() {
     if (elapsedTime > bestTime) {
         bestTime = elapsedTime;
 
-        std::ofstream file(bestTimeFilePath);
+        std::ofstream file(bestTimeFilePath, std::ios::trunc);  // Apre il file sovrascrivendo il contenuto
         if (file.is_open()) {
             file << static_cast<float>(bestTime.asSeconds());
             file.close();
-            std::cout << "Best time saved: " << bestTime.asSeconds() << " seconds\n";
+            std::cout << "Miglior tempo salvato: " << bestTime.asSeconds() << " secondi\n";
         } else {
             std::cerr << "Impossibile aprire il file per salvare il miglior tempo.\n";
         }
+    } else {
+        std::cout << "Il miglior tempo non è stato superato.\n";
     }
 }
 
