@@ -27,7 +27,7 @@ class GamingState : public GameState {
 
 
 public:
-    const float JUMP_FORCE = 800.f;
+    const float JUMP_FORCE = 600.f;
 
     static GamingState &GetInstance(sf::RenderWindow &window);
 

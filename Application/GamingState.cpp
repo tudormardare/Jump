@@ -57,7 +57,7 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
 void GamingState::render(sf::RenderWindow &window) {
 
     //TODO:Inserire nei test
-    /*player.getHitbox();
+    player.getHitbox();
     sf::RectangleShape rectangle(sf::Vector2f(player.getHitbox().width, player.getHitbox().height));
     sf::VertexArray points(sf::Points, 1);
     points[0].position = sf::Vector2f(player.getCenter().x, player.getCenter().y);
@@ -69,7 +69,7 @@ void GamingState::render(sf::RenderWindow &window) {
     window.draw(rectangle);
     window.draw(points);
     drawHitboxes(gameMap.getMapHitboxes(), window);
-     */
+
 
     //inserire tutti i draw di tutti gli elemenenti
     gameMap.render(window);
@@ -201,30 +201,43 @@ void GamingState::handleAnimations(float deltaTime) {
 void  GamingState::handleCollisionMap(CollisionManager::CollisionResult collision) {
     switch (collision.direction) {
         case CollisionManager::CollisionDirection::Top:
-            std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-            if(player.getVelocity().y > 0) {
+            //std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
+
+
+            if(collision.overlap > 5 && !player.isJumping() && collision.overlap < 15) {//TODO definire una costante
+                player.setPosition(player.getPosition().x, player.getPosition().y - collision.overlap);
+                std::cout << "Il player non sta saltando" << collision.overlap << std::endl;
+            }
+
+            if(player.getVelocity().y > 0 && (player.getHitbox().top + player.getHitbox().height - 5) <= collision.platformPosition.y) {
                 player.setJumping(false);
                 player.setTexture(textureManager.getTexture("Player", "Idle", 0));
                 textureManager.resetAnimation("Player", "Jumping");
                 player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
                 player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
             }
-            PhysicsSystem::standOn(player);
+
+
+
+            if(!player.isJumping())
+                PhysicsSystem::standOn(player);
             break;
         case CollisionManager::CollisionDirection::Bottom:
-            std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
-            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            //std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
+            /*player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
             player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
-            player.setPosition(player.getPosition().x, player.getPosition().y + collision.overlap);
+            player.setPosition(player.getPosition().x, player.getPosition().y + collision.overlap);*/
             break;
         case CollisionManager::CollisionDirection::Left:
-            std::cout << "Collisione sul lato sinistro" << std::endl;
+            //std::cout << "Collisione sul lato sinistro" << std::endl;
+            if(player.isJumping()) return;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             player.setAccelerationX(0);
             player.setPosition(player.getPosition().x - collision.overlap , player.getPosition().y); //sposta il player indietro TODO: sistemare
             break;
         case CollisionManager::CollisionDirection::Right:
-            std::cout << "Collisione sul lato destro" << std::endl;
+            //std::cout << "Collisione sul lato destro" << std::endl;
+            if(player.isJumping()) return;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             player.setAccelerationX(0);
             player.setPosition(player.getPosition().x + collision.overlap, player.getPosition().y);
