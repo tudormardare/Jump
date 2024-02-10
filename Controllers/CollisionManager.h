@@ -24,6 +24,7 @@ public:
     struct CollisionResult {
         bool hasCollision;
         CollisionDirection direction;
+        sf::Vector2f platformPosition;
         float overlap;
 
     };
@@ -104,6 +105,7 @@ public:
                 CollisionResult result;
                 result.hasCollision = true;
                 determineCollisionDirection(entity, hitbox, result);
+                result.platformPosition = sf::Vector2f(hitbox.left, hitbox.top);
                 results.push_back(result);
             }
         }
