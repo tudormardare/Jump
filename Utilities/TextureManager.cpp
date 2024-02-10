@@ -25,7 +25,7 @@ void TextureManager::loadEntityTextures(const std::string& entityName, const std
         info.minFrameDuration = config.minFrameDuration;
         info.maxFrameDuration = config.maxFrameDuration;
         info.dynamicFrameCount = config.isDynamic;
-        // currentFrame e animationTimer sono già inizializzati a 0
+        // currentFrame e animationTimer sono già inizializzati a
 
         textures[entityName][animationType] = std::move(info);
     }
@@ -82,7 +82,9 @@ void TextureManager::loadTexturesFromSpriteSheetRegular(const std::string& entit
     }
 }
 
-const sf::Texture& TextureManager::getTexture(const std::string& entity, const std::string& animationType, int frameIndex) const {
+const sf::Texture &
+TextureManager::getTexture(const std::string& entity, const std::string& animationType, int frameIndex) {
+    resetAnimation(entity, "Jumping");
     return textures.at(entity).at(animationType).animationData.frames.at(frameIndex);
 }
 
@@ -131,8 +133,21 @@ int TextureManager::getCurrentIndex(const std::string &entityName){
 }
 
 void TextureManager::resetAnimation(const std::string &entityName, const std::string &animationType) {
-    textures[entityName][animationType].currentFrame = 0;
-    textures[entityName][animationType].animationTimer = 0;
-}
+        // Verifica se l'entità esiste nella mappa
+        auto entityIt = textures.find(entityName);
+        if (entityIt != textures.end()) {
+            // Itera su tutte le animazioni dell'entità
+            auto& animations = entityIt->second;
+            for (auto& animationPair : animations) {
+                // Resetta l'animazione se currentFrame è diverso da
+                AnimationInfo& animationInfo = animationPair.second;
+                if (animationInfo.currentFrame != 0) {
+                    animationInfo.currentFrame = 0;
+                    animationInfo.animationTimer = 0.0f;
+                }
+            }
+        }
+    }
+
 
 

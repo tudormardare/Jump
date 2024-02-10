@@ -160,11 +160,7 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
         player.setAccelerationY(-JUMP_FORCE); // Imposta la velocità iniziale verso l'alto
         player.setJumping(true);
         player.setTexture(textureManager.getTexture("Player", "Jumping", 0));
-    }else if (player.isJumping()) {
-        if(-1 <= player.getVelocity().y && player.getVelocity().y < 0)// Applica la gravità
-            player.setTexture(textureManager.getTexture("Player", "Jumping", 3 ));
     }
-
 
 }
 
@@ -174,19 +170,22 @@ void GamingState::handleAnimations(float deltaTime) {
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
     bool isMovingHorizontally = isKeyPressedA || isKeyPressedD;
-    bool isFalling = player.getVelocity().y > 0;
-    bool isOnGround = player.getVelocity().y == 0;
+    bool isFalling = player.getVelocity().y > 0 && player.isJumping();
+    bool isOnGround = player.getVelocity().y == 0 && !player.isJumping();
     bool isIdle = player.getVelocity().x == 0 && isOnGround;
 
-    if (player.isJumping() && textureManager.getCurrentIndex("Player") != 2) {
+    if (player.isJumping() && textureManager.getCurrentIndex("Player") < 2) {
         // Se il player sta saltando, visualizza l'animazione di salto
-        //std::cout << "Jumping" << std::endl;
+        std::cout << "Jumping" << std::endl;
         textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
+    }else if(player.isJumping() && player.getVelocity().y >= -3 && player.getVelocity().y <= 0 && textureManager.getCurrentIndex("Player") != 3) {
+            textureManager.setSpecificFrame("Player", "Jumping", 3, player);
+            std::cout << "Cambio texture" << textureManager.getCurrentIndex("Player") << std::endl;
     }
     else if (isFalling) {
         // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
         textureManager.updateAnimation("Player", "Falling", deltaTime, player);
-    } else if (isMovingHorizontally && isOnGround) {
+    } else if (isMovingHorizontally && isOnGround && !isIdle) {
         // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
         textureManager.updateAnimation("Player", "Running", deltaTime, player);
     } else if (isIdle) {
@@ -202,13 +201,6 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionResult collisio
     switch (collision.direction) {
         case CollisionManager::CollisionDirection::Top:
             //std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-
-
-            if(collision.overlap > 5 && !player.isJumping() && collision.overlap < 15) {//TODO definire una costante
-                player.setPosition(player.getPosition().x, player.getPosition().y - collision.overlap);
-                std::cout << "Il player non sta saltando" << collision.overlap << std::endl;
-            }
-
             if(player.getVelocity().y > 0 && (player.getHitbox().top + player.getHitbox().height - 5) <= collision.platformPosition.y) {
                 player.setJumping(false);
                 player.setTexture(textureManager.getTexture("Player", "Idle", 0));
@@ -217,9 +209,13 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionResult collisio
                 player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
             }
 
+            if(collision.overlap > 5 && !player.isJumping() && collision.overlap < 15) {//TODO definire una costante
+                player.setPosition(player.getPosition().x, player.getPosition().y - collision.overlap);
+                std::cout << "Il player non sta saltando" << collision.overlap << std::endl;
+            }
 
 
-            if(!player.isJumping())
+            if(!player.isJumping() && (player.getHitbox().top + player.getHitbox().height - 2) <= collision.platformPosition.y)
                 PhysicsSystem::standOn(player);
             break;
         case CollisionManager::CollisionDirection::Bottom:
@@ -230,14 +226,14 @@ void  GamingState::handleCollisionMap(CollisionManager::CollisionResult collisio
             break;
         case CollisionManager::CollisionDirection::Left:
             //std::cout << "Collisione sul lato sinistro" << std::endl;
-            if(player.isJumping()) return;
+            if(player.isJumping()) break;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             player.setAccelerationX(0);
             player.setPosition(player.getPosition().x - collision.overlap , player.getPosition().y); //sposta il player indietro TODO: sistemare
             break;
         case CollisionManager::CollisionDirection::Right:
             //std::cout << "Collisione sul lato destro" << std::endl;
-            if(player.isJumping()) return;
+            if(player.isJumping()) break;
             player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
             player.setAccelerationX(0);
             player.setPosition(player.getPosition().x + collision.overlap, player.getPosition().y);
