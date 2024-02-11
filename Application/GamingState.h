@@ -18,6 +18,8 @@
 #include "../GUI/Pumpkin.h"
 #include "../GUI/Map.h"
 #include "../GUI/Timer.h"
+#include "../Utilities/TimerClass.h"
+#include "../Utilities/constants.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define WINDOW_WIDTH 1080
@@ -52,6 +54,8 @@ private:
 
     // attributi relativo allo stato
     void initState();
+
+    void initTimer();
 
     const std::string backgroundPath = GAME_BACKGROUND_PATH;
     bool changeStateToNext = false;

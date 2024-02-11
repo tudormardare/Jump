@@ -23,7 +23,7 @@ void GamingState::initState() {
     loadAllTextures();
 // Avvia il timer
     gameTimer.start();
-    //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
+    initTimer(); //TODO(da inserire la gestione dei timers per gli spawn dei nemici)
     //setTextureForPlayer();
 
     std::ifstream i("hitbox/MapHitBoxes.json"); // Sostituisci con il percorso corretto del file
@@ -367,7 +367,7 @@ void GamingState::handleFireBallsMovements(float deltaTime) {
 
 void GamingState::spawnPumpkin() {
     // Da quale lato spawna
-    int side = rand() % 2;
+   /* int side = rand() % 2;
 
     Pumpkin newPumpkin;
 
@@ -389,7 +389,10 @@ void GamingState::spawnPumpkin() {
         newPumpkin.setHit(true);
         newPumpkin.setPosition(sf::Vector2f(-1000, -1000));
         fire.setPosition(sf::Vector2f(-1000, -1000));
-    }
+    }*/
+
+
+   std::cout << "Spawn pumpkin" << std::endl;
 
 }
 
@@ -405,6 +408,12 @@ void GamingState::drawHitboxes(const std::vector<sf::FloatRect>& hitboxes, sf::R
 
         window.draw(rectangle);
     }
+}
+
+void GamingState::initTimer() {
+    Timers.addTimer(eTimer::ePumpkinSpawn, std::chrono::milliseconds(2000), [&]() {
+        spawnPumpkin();
+        },TimerClass::eTimerMode::Cyclic);
 }
 
 

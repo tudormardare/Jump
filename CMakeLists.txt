@@ -30,6 +30,8 @@ set(SOURCE_FILES
         Controllers/CameraManager.h
         GUI/Timer.cpp
         GUI/Timer.h
+        Utilities/TimerClass.cpp
+        Utilities/TimerClass.h
 
 )
 

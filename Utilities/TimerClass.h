@@ -6,7 +6,7 @@
 #include <mutex>
 #include "constants.h"
 
-#define Timer TimerClass::getInstance()
+#define Timers TimerClass::getInstance()
 
 class TimerClass {
 public:
