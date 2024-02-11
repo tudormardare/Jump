@@ -110,6 +110,8 @@ void Entity::setCollisionRect()  {
 
 
 
+
+
 /*
 void Entity::setPosition(const sf::Vector2f &position) {
     sprite.setPosition(position);

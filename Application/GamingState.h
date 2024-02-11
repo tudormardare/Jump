@@ -20,6 +20,7 @@
 #include "../GUI/Map.h"
 #include "../GUI/Timer.h"
 #include "../GUI/MenuButton.h"
+#include "../GUI/Heart.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define WINDOW_WIDTH 1080
@@ -73,7 +74,7 @@ private:
 
     void handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime);
 
-    void handleFireBallsMovements(float deltaTime);
+    void handleEnemyMovements(float deltaTime);
 
     void adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime);
 
@@ -83,9 +84,9 @@ private:
 
     void handleAnimations(float deltaTime);
 
-    void handleFireBallsAnimations(float deltaTime);
+    void handleEnemyAnimations(float deltaTime);
 
-    void setTextureForFire();
+    void setTextureForEnemy();
 
     void handleCollisions();
 
@@ -94,6 +95,18 @@ private:
     void loadAllTextures();
 
     void handleMovements(float deltaTime);
+
+    void setTextureForHeart();
+
+    void handleHeartSpawn(float deltaTime);
+
+    void spawnHeart();
+
+    sf::Time getRandomSpawnInterval();
+
+    void handleHeartCollisions(Heart &heart);
+
+    void updateHearts(float deltaTime);
 
     //attributi relativi al gioco
     bool paused = false;
@@ -105,6 +118,10 @@ private:
     CollisionManager collisionManager;
     Timer gameTimer;
     std::vector<std::unique_ptr<MenuButton>> pauseButtons;
+
+    Heart heart;
+    std::vector<Heart> hearts;
+
 
 
     void initPauseButtons();

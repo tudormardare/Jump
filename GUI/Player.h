@@ -66,6 +66,8 @@ public:
 
     void takeDamage();
 
+    void gainHealth();
+
     void setTexture(const sf::Texture &texture) override;
 
     void inverse();

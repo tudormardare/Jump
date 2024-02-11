@@ -95,6 +95,12 @@ void Player::takeDamage() {
     }
 }
 
+void Player::gainHealth() {
+    hp++;
+    if (hp < 0) {
+        hp = 0;
+    }
+}
 
 void Player::renderHealth(sf::RenderWindow &window) {
     sf::Font font;
