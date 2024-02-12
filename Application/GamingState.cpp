@@ -5,7 +5,10 @@
 #define FRAME_DURATION 0.016f
 
 #include <valarray>
-#include <iostream>
+#include <iomanip>
+#include <string>
+#include <sstream>
+
 #include "GamingState.h"
 #include "MenuState.h"
 
@@ -29,6 +32,7 @@ void GamingState::initState() {
     loadAllTextures();
     initPauseButtons();
     initGameOverButton();
+    initHearts();
 
 
     // Avvia i timer
@@ -189,7 +193,7 @@ void GamingState::drawPause(sf::RenderWindow &window) {
 }
 
 void GamingState::handleGameOver(sf::RenderWindow &window) {
-    if (player.getHealth() <= 2) {
+    if (player.getHealth() <= 0) {
         gameOver = true;
 
         // Ferma e salva il tempo quando finisce il gioco
@@ -233,8 +237,18 @@ void GamingState::handleGameOver(sf::RenderWindow &window) {
         exitText.setCharacterSize(20);
         exitText.setFillColor(sf::Color::Red);
         exitText.setPosition(390, 300);
-        exitText.setString("Press \"ESC\" to exit.");
+        exitText.setString("Press \"ESC\" to exit");
         window.draw(exitText);
+
+        sf::Text bestTimeText;
+        bestTimeText.setFont(font);
+        bestTimeText.setCharacterSize(20);
+        bestTimeText.setFillColor(sf::Color::White);
+        bestTimeText.setPosition(395, 350);
+        std::ostringstream formattedTime;
+        formattedTime << std::fixed << std::setprecision(2) << gameTimer.getElapsedTime().asSeconds();
+        bestTimeText.setString("Time: " + formattedTime.str() + " seconds");
+        window.draw(bestTimeText);
 
         // Button to restart the game
         gameOverButton->draw(window);
@@ -551,6 +565,11 @@ void GamingState::handleEnemyMovements(float deltaTime) {
 
 
 //Heart functions
+void GamingState::initHearts() {
+    setTextureForHeart();
+    currentNumHearts = 0;
+}
+
 void GamingState::setTextureForHeart() {
     std::map<std::string, AnimationConfig> heartAnimations = {
             {"Heart", {HEART_TEXTURE_PATH, HEART_TEXTURES, HEART_MIN_FRAME_DURATION, HEART_MAX_FRAME_DURATION, false}}
@@ -588,8 +607,8 @@ sf::Time GamingState::getRandomSpawnInterval() {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
     // Definisci il limite inferiore e superiore per l'intervallo casuale
-    float minInterval = 10.0f;
-    float maxInterval = 20.0f;
+    float minInterval = 1.0f;
+    float maxInterval = 10.0f;
 
     // Genera un intervallo casuale tra minInterval e maxInterval
     float randomInterval = minInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (maxInterval - minInterval)));

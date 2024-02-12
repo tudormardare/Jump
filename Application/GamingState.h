@@ -96,6 +96,8 @@ private:
 
     void handleMovements(float deltaTime);
 
+    void initHearts();
+
     void setTextureForHeart();
 
     void handleHeartSpawn(float deltaTime);
