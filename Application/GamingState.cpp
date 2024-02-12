@@ -46,9 +46,14 @@ GameState *GamingState::changeState(sf::RenderWindow &window) {
 }
 
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+        window.close();
+    }
+
+
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 
-        // Ferma e salva il tempo quando esce dal gioco
         gameTimer.stop();
         gameTimer.saveBestTime();
 
@@ -56,14 +61,15 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
     }
 
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P){
-        paused = !paused;
-        if (paused) {
-            gameTimer.pause();
-        } else {
-            gameTimer.resume();
+        if (!gameOver) {
+            paused = !paused;
+            if (paused) {
+                gameTimer.pause();
+            } else {
+                gameTimer.resume();
+            }
         }
     }
-
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
 
@@ -109,6 +115,113 @@ void GamingState::initPauseButtons()
     pauseButtons.emplace_back(std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, PAUSE_BUTTON_HEIGHT + PAUSE_BUTTON_DISTANCE), quitButtonTexture));
 
 
+}
+
+void GamingState::drawPause(sf::RenderWindow &window) {
+
+    // Renderizza "Press "P" to pause"
+    sf::Font font;
+    if (!font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
+        std::cerr << "Impossibile caricare il font\n";
+        return;
+    }
+    sf::Text pauseText;
+    pauseText.setFont(font);
+    pauseText.setCharacterSize(20);
+    pauseText.setFillColor(sf::Color::White);
+    pauseText.setPosition(window.getSize().x - 300, 10);
+    pauseText.setString("Press \"P\" to pause");
+    window.draw(pauseText);
+
+    if (paused)
+    {
+        // Disegna lo sfondo della pausa semitrasparente
+        sf::Texture pauseTexture;
+        if (!pauseTexture.loadFromFile("PNG/PauseBackground/TransparentBackground.png")) {
+            std::cerr << "Impossibile caricare l'immagine di pausa.\n";
+            return;
+        }
+        sf::Sprite pauseSprite(pauseTexture);
+        float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
+        float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
+        pauseSprite.setScale(scaleX, scaleY);
+        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
+        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
+        pauseSprite.setPosition(posX, posY);
+        window.draw(pauseSprite);
+
+
+        // Disegna i pulsanti di pausa
+        for (auto &button : pauseButtons) {
+            button->draw(window);
+        }
+    }
+}
+
+void GamingState::handleGameOver(sf::RenderWindow &window) {
+    if (player.getHealth() <= 2) {
+        gameOver = true;
+
+        // Ferma e salva il tempo quando finisce il gioco
+        gameTimer.stop();
+        gameTimer.saveBestTime();
+
+        // Disegna lo sfondo del Game Over semitrasparente
+        sf::Texture pauseTexture;
+        if (!pauseTexture.loadFromFile("PNG/PauseBackground/TransparentBackground.png")) {
+            std::cerr << "Impossibile caricare l'immagine di pausa.\n";
+            return;
+        }
+        sf::Sprite pauseSprite(pauseTexture);
+        float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
+        float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
+        pauseSprite.setScale(scaleX, scaleY);
+        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
+        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
+        pauseSprite.setPosition(posX, posY);
+        window.draw(pauseSprite);
+
+
+        // Mostra un messaggio di game over
+        sf::Font font;
+        if (!font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
+            std::cerr << "Impossibile caricare il font\n";
+            return;
+        }
+        sf::Text gameOverText;
+        gameOverText.setFont(font);
+        gameOverText.setCharacterSize(60);
+        gameOverText.setFillColor(sf::Color::Red);
+        gameOverText.setPosition(290, 200);
+        gameOverText.setString("GAME OVER!");
+        window.draw(gameOverText);
+
+        sf::Text exitText;
+        exitText.setFont(font);
+        exitText.setCharacterSize(20);
+        exitText.setFillColor(sf::Color::Red);
+        exitText.setPosition(390, 300);
+        exitText.setString("Press \"ESC\" to exit.");
+        window.draw(exitText);
+
+        // Button to restart the game
+        if (pauseButtons[0]->isClicked(window)) {
+            pauseButtons[0]->update(window);
+            restartGame();
+        }
+
+    }
+}
+
+void GamingState::restartGame() {
+    // Resetta tutte le variabili necessarie per ricominciare il gioco
+    gameOver = false;
+    paused = false;
+
+    // Avvia i timer
+    heartSpawnTimer.restart();
+    gameTimer.reset();
+    gameTimer.start();
 }
 
 std::string GamingState::getBackgroundPath() const {
@@ -209,50 +322,13 @@ void GamingState::render(sf::RenderWindow &window) {
         heart.draw(window);
     }
 
-
-
-    // Renderizza "Press "P" to pause"
-    sf::Font font;
-    if (!font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
-        std::cerr << "Impossibile caricare il font\n";
-        return;
-    }
-    sf::Text pauseText;
-    pauseText.setFont(font);
-    pauseText.setCharacterSize(20);
-    pauseText.setFillColor(sf::Color::White);
-    pauseText.setPosition(window.getSize().x - 300, 10);
-    pauseText.setString("Press \"P\" to pause");
-    window.draw(pauseText);
-
-    if (paused)
-    {
-        // Disegna lo sfondo della pausa semitrasparente
-        sf::Texture pauseTexture;
-        if (!pauseTexture.loadFromFile("PNG/PauseBackground/TransparentBackground.png")) {
-            std::cerr << "Impossibile caricare l'immagine di pausa.\n";
-            return;
-        }
-        sf::Sprite pauseSprite(pauseTexture);
-        float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
-        float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
-        pauseSprite.setScale(scaleX, scaleY);
-        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
-        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
-        pauseSprite.setPosition(posX, posY);
-        window.draw(pauseSprite);
-
-
-        // Disegna i pulsanti di pausa
-        for (auto &button : pauseButtons) {
-            button->draw(window);
-        }
-    }
+    drawPause(window);
+    handleGameOver(window);
 
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
-    if(!paused)
+    if(!paused && !gameOver)
     {
 
         gameTimer.update();
@@ -262,6 +338,8 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
         handleAnimations(deltaTime);
         //Verifica le collisioni
         handleCollisions();
+        //Game over
+        handleGameOver(window);
 
         //Aggiorna gli sprite
         player.update(deltaTime);
@@ -273,11 +351,15 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
             pumpkin.update(deltaTime);
         }
     }
-    else
+    else if (paused)
     {
         for (auto &button : pauseButtons) {
             button->update(window);
         }
+    }
+    else if (gameOver)
+    {
+        pauseButtons[0]->update(window);
     }
 }
 
@@ -529,5 +611,9 @@ void GamingState::updateHearts(float deltaTime) {
         return heart.isCollected();
     }), hearts.end());
 }
+
+
+
+
 
 
