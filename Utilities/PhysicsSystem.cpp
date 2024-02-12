@@ -13,7 +13,5 @@ void PhysicsSystem::applyGravity(Entity& entity) {
 }
 
 void PhysicsSystem::standOn(Entity& entity) {
-    float verticalAcceleration = entity.getAcceleration().y;
-    verticalAcceleration -= GRAVITY;
-    entity.setAcceleration(sf::Vector2f(entity.getAcceleration().x, verticalAcceleration));
+    entity.setAcceleration(sf::Vector2f(entity.getAcceleration().x, 0.f));
 }
