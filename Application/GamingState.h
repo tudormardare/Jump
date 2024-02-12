@@ -124,11 +124,13 @@ private:
     int currentNumHearts= 0;
     sf::Clock heartSpawnTimer;
 
+    std::unique_ptr<MenuButton> gameOverButton;
+
     bool gameOver = false;
 
     void handleGameOver(sf::RenderWindow &window);
 
-    void restartGame();
+    void initGameOverButton();
 
     void initPauseButtons();
 

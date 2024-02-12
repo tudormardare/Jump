@@ -84,9 +84,8 @@ void Timer::saveBestTime() {
         } else {
             std::cerr << "Impossibile aprire il file per salvare il miglior tempo.\n";
         }
-    } else {
-        std::cout << "Il miglior tempo non è stato superato.\n";
     }
+
 }
 
 void Timer::loadBestTime() {
@@ -107,7 +106,6 @@ void Timer::displayBestTime(sf::RenderWindow& window) {
     bestTimeText.setString(timeString);
     window.draw(bestTimeText);
 }
-
 
 void Timer::displayElapsedTime(sf::RenderWindow& window) {
     sf::Time elapsedTime = getElapsedTime();

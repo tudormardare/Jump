@@ -62,6 +62,11 @@ public:
 
     void setHealth(int newHealth);
 
+    void resetHealth() {
+        hp = hpMax;  // Supponendo che maxHealth sia un attributo che rappresenta il massimo delle vite
+    }
+
+
     int getHealth() const;
 
     void takeDamage();

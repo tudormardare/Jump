@@ -16,13 +16,20 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window){
 }
 
 void GamingState::initState() {
+    gameOver = false;
+    paused = false;
+    changeStateToNext = false;
+
     // Clear degli elementi
     hearts.clear();
     pauseButtons.clear();
+    player.resetHealth();
 
     // Inizializzazione di tutti gli elementi dello stato
     loadAllTextures();
     initPauseButtons();
+    initGameOverButton();
+
 
     // Avvia i timer
     heartSpawnTimer.restart();
@@ -51,7 +58,6 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
         window.close();
     }
 
-
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 
         gameTimer.stop();
@@ -70,18 +76,26 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
             }
         }
     }
+
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
-
-            if (pauseButtons[1]->isClicked(window)) {
-                pauseButtons[1]->update(window);
-                changeStateToNext = true;
-                paused = false;
+            if(paused) {
+                if (pauseButtons[1]->isClicked(window)) {
+                    pauseButtons[1]->update(window);
+                    changeStateToNext = true;
+                    paused = false;
+                }
+                if (pauseButtons[0]->isClicked(window)) {
+                    pauseButtons[0]->update(window);
+                    gameTimer.resume();
+                    paused = false;
+                }
             }
-            if (pauseButtons[0]->isClicked(window)) {
-                pauseButtons[0]->update(window);
-                gameTimer.resume();
-                paused = false;
+            else if (gameOver) {
+                if (gameOverButton->isClicked(window)) {
+                    gameOverButton->update(window);
+                    initState();
+                }
             }
 
         }
@@ -115,6 +129,22 @@ void GamingState::initPauseButtons()
     pauseButtons.emplace_back(std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, PAUSE_BUTTON_HEIGHT + PAUSE_BUTTON_DISTANCE), quitButtonTexture));
 
 
+}
+
+void GamingState::initGameOverButton()
+{
+    // Inizializzazione del pulsante di gioco terminato con texture diversa
+    sf::Texture gameOverButtonTexture;
+
+    if (!gameOverButtonTexture.loadFromFile(PAUSE_RESUME_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante GAME OVER." << std::endl;
+    }
+
+    sf::Vector2f size(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_HEIGHT);
+    sf::Vector2f position((WINDOW_WIDTH) / 2.0f, (WINDOW_HEIGHT) / 1.2f);
+
+    // Inizializzazione del pulsante di gioco terminato con texture diversa
+    gameOverButton = std::make_unique<MenuButton>(size, position, gameOverButtonTexture);
 }
 
 void GamingState::drawPause(sf::RenderWindow &window) {
@@ -166,6 +196,8 @@ void GamingState::handleGameOver(sf::RenderWindow &window) {
         gameTimer.stop();
         gameTimer.saveBestTime();
 
+
+
         // Disegna lo sfondo del Game Over semitrasparente
         sf::Texture pauseTexture;
         if (!pauseTexture.loadFromFile("PNG/PauseBackground/TransparentBackground.png")) {
@@ -205,23 +237,8 @@ void GamingState::handleGameOver(sf::RenderWindow &window) {
         window.draw(exitText);
 
         // Button to restart the game
-        if (pauseButtons[0]->isClicked(window)) {
-            pauseButtons[0]->update(window);
-            restartGame();
-        }
-
+        gameOverButton->draw(window);
     }
-}
-
-void GamingState::restartGame() {
-    // Resetta tutte le variabili necessarie per ricominciare il gioco
-    gameOver = false;
-    paused = false;
-
-    // Avvia i timer
-    heartSpawnTimer.restart();
-    gameTimer.reset();
-    gameTimer.start();
 }
 
 std::string GamingState::getBackgroundPath() const {
@@ -359,7 +376,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
     }
     else if (gameOver)
     {
-        pauseButtons[0]->update(window);
+        gameOverButton->update(window);
     }
 }
 
