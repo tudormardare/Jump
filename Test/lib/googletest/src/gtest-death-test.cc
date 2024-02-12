@@ -234,7 +234,7 @@ namespace testing {
     }
 # endif  // !GTEST_OS_WINDOWS
 
-    // Flag characters for reporting a death test that did not die.
+    // Flag characters for reporting a death test that did not DieTextures.
     static const char kDeathTestLived = 'L';
     static const char kDeathTestReturned = 'R';
     static const char kDeathTestThrew = 'T';
@@ -547,7 +547,7 @@ namespace testing {
       buffer << "Death test: " << statement() << "\n";
       switch (outcome()) {
         case LIVED:
-          buffer << "    Result: failed to die.\n"
+          buffer << "    Result: failed to DieTextures.\n"
                  << " Error msg:\n" << FormatDeathTestOutput(error_message);
           break;
         case THREW:

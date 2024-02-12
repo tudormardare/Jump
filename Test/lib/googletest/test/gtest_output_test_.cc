@@ -550,7 +550,7 @@ ADD_FAILURE_AT("foo.cc", 42) << "Expected failure in foo.cc";
 
 #if GTEST_IS_THREADSAFE
 
-// A unary function that may die.
+// A unary function that may DieTextures.
 void DieIf(bool should_die) {
   GTEST_CHECK_(!should_die) << " - death inside DieIf().";
 }

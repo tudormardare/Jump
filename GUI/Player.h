@@ -11,9 +11,13 @@
 #define PLAYER_JUMPING_TEXTURES 4
 #define PLAYER_FALLING_TEXTURES 2
 #define PLAYER_IDLE_TEXTURES 2
+#define PLAYER_CRUNCH_TEXTURES 4
+#define PLAYER_DEAD_TEXTURES 7
 #define PLAYER_FALLING_PATH "PNG/Player/FallingTextures/adventurer-fall-0"
 #define PLAYER_RUNNING_PATH "PNG/Player/RunningTextures/adventurer-run-0"
 #define PLAYER_JUMPING_PATH "PNG/Player/JumpingTextures/adventurer-jump-0"
+#define PLAYER_CRUNCH_PATH "PNG/Player/CrunchTextures/adventurer-crouch-0"
+#define PLAYER_DEAD_PATH "PNG/Player/DieTextures/adventurer-die-0"
 #define PLAYER_IDLE_PATH "PNG/Player/IdleTextures/adventurer-idle-0"
 #define PLAYER_SCALE 2.f
 #define PLAYER_ACCELERATION_RATE 200.f
