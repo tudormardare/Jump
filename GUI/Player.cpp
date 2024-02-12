@@ -97,8 +97,8 @@ void Player::takeDamage() {
 
 void Player::gainHealth() {
     hp++;
-    if (hp < 0) {
-        hp = 0;
+    if (hp > 3) {
+        hp = 3;
     }
 }
 

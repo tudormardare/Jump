@@ -119,8 +119,10 @@ private:
     Timer gameTimer;
     std::vector<std::unique_ptr<MenuButton>> pauseButtons;
 
-    Heart heart;
+    //Heart heart;
     std::vector<Heart> hearts;
+    int currentNumHearts= 0;
+    sf::Clock heartSpawnTimer;
 
 
 

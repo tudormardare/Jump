@@ -16,14 +16,18 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window){
 }
 
 void GamingState::initState() {
-    //inizializzazione di tutti gli elementi dello stato
+    // Clear degli elementi
+    hearts.clear();
+    pauseButtons.clear();
+
+    // Inizializzazione di tutti gli elementi dello stato
     loadAllTextures();
     initPauseButtons();
-    // Avvia il timer
+
+    // Avvia i timer
+    heartSpawnTimer.restart();
     gameTimer.reset();
     gameTimer.start();
-    //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
-    //setTextureForPlayer();
 }
 
 
@@ -456,15 +460,12 @@ void GamingState::setTextureForHeart() {
 }
 
 void GamingState::handleHeartSpawn(float deltaTime) {
-    // Incrementa il timer per il controllo dello spawn del cuore
-    gameTimer.update();
 
-    // Controlla se è passato il tempo per generare un nuovo cuore
-    if (gameTimer.getElapsedTime() > getRandomSpawnInterval()) {
+    sf::Time spawnInterval = getRandomSpawnInterval();
+    if (heartSpawnTimer.getElapsedTime() > spawnInterval && currentNumHearts < 2) {
         spawnHeart();
-        // Resetta il timer solo dopo aver spawnato il cuore
-        gameTimer.reset();
-        gameTimer.start();
+        currentNumHearts++;
+        heartSpawnTimer.restart();
     }
 }
 
@@ -488,8 +489,8 @@ sf::Time GamingState::getRandomSpawnInterval() {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
     // Definisci il limite inferiore e superiore per l'intervallo casuale
-    float minInterval = 3.0f;
-    float maxInterval = 6.0f;
+    float minInterval = 10.0f;
+    float maxInterval = 20.0f;
 
     // Genera un intervallo casuale tra minInterval e maxInterval
     float randomInterval = minInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (maxInterval - minInterval)));
@@ -502,6 +503,8 @@ void GamingState::handleHeartCollisions(Heart &heart) {
         heart.setCollected(true);
         player.gainHealth();
         heart.setPosition(sf::Vector2f(-1000, -1000));
+
+        currentNumHearts--;
     }
 
     std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(heart, gameMap.getMapHitboxes());
