@@ -296,6 +296,19 @@ void GamingState::render(sf::RenderWindow &window) {
 
     for (auto &heart: hearts) {
         heart.draw(window);
+
+        heart.getHitbox();
+        sf::RectangleShape rectangle(sf::Vector2f(heart.getHitbox().width, heart.getHitbox().height));
+        sf::VertexArray points(sf::Points, 1);
+        points[0].position = sf::Vector2f(heart.getCenter().x, heart.getCenter().y);
+        points[0].color = sf::Color::Red;
+        rectangle.setPosition(heart.getHitbox().left, heart.getHitbox().top);
+        rectangle.setFillColor(sf::Color::Transparent);
+        rectangle.setOutlineColor(sf::Color::Red);
+        rectangle.setOutlineThickness(1.f);
+        window.draw(rectangle);
+        window.draw(points);
+
     }
 
     drawPause(window);

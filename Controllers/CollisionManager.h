@@ -22,10 +22,10 @@ public:
     };
 
     struct CollisionResult {
-        bool hasCollision;
+        bool hasCollision{};
         CollisionDirection direction;
         sf::Vector2f platformPosition;
-        float overlap;
+        float overlap{};
 
     };
 
@@ -50,7 +50,7 @@ public:
         float radius1 = std::max(sprite1.getGlobalBounds().width , sprite1.getGlobalBounds().height) / 3.0f;
         float radius2 = std::max(sprite2.getGlobalBounds().width , sprite2.getGlobalBounds().height) / 3.0f;
 
-        float distance = std::sqrt(std::pow(pos2.x - pos1.x, 2) + std::pow(pos2.y - pos1.y, 2));
+        auto distance = (float) std::sqrt(std::pow(pos2.x - pos1.x, 2) + std::pow(pos2.y - pos1.y, 2));
         return distance < (radius1 + radius2);
     }
 
@@ -90,14 +90,15 @@ public:
         sf::Vector2f topLeft = transform.transformPoint(static_cast<float>(localBounds.left), static_cast<float>(localBounds.top));
         sf::Vector2f bottomRight = transform.transformPoint(static_cast<float>(localBounds.left + localBounds.width), static_cast<float>(localBounds.top + localBounds.height));
 
-        return sf::FloatRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+        return {topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y};
     }
 
 
-    std::vector<CollisionResult> checkMapCollision(Entity& entity, const std::vector<sf::FloatRect>& mapHitboxes) {
+    static std::vector<CollisionResult> checkMapCollision(Entity& entity, const std::vector<sf::FloatRect>& mapHitboxes) {
         sf::FloatRect entityBounds = entity.getHitbox();
-        entityBounds.left += entity.getVelocity().x;
-        entityBounds.top += entity.getVelocity().y;
+        //TODO(da verificare se rimuovere)
+        //entityBounds.left += entity.getVelocity().x;
+        //entityBounds.top += entity.getVelocity().y;
         std::vector<CollisionResult> results;
 
         for (const auto& hitbox : mapHitboxes) {
@@ -115,7 +116,7 @@ public:
     }
 
 
-    void determineCollisionDirection(const Entity& entity, const sf::FloatRect& hitbox, CollisionResult &result) {
+    static void determineCollisionDirection(const Entity& entity, const sf::FloatRect& hitbox, CollisionResult &result) {
         sf::FloatRect overlap;
         entity.getHitbox().intersects(hitbox, overlap);
 
