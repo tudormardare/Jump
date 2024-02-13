@@ -1502,7 +1502,7 @@ namespace testing {
 // how do you know the pointer is really of type SubclassOfFoo?  It
 // could be a bare Foo, or of type DifferentSubclassOfFoo.  Thus,
 // when you downcast, you should use this macro.  In debug mode, we
-// use dynamic_cast<> to double-check the downcast is legal (we die
+// use dynamic_cast<> to double-check the downcast is legal (we DieTextures
 // if it's not).  In normal mode, we do the efficient static_cast<>
 // instead.  Thus, it's important to test in debug mode to make sure
 // the cast is legal!
@@ -1996,7 +1996,7 @@ namespace testing {
         // ThreadLocal instance are not guaranteed to be destroyed on all platforms.
         //
         // Google Test only uses global ThreadLocal objects.  That means they
-        // will die after main() has returned.  Therefore, no per-thread
+        // will DieTextures after main() has returned.  Therefore, no per-thread
         // object managed by Google Test will be leaked as long as all threads
         // using Google Test have exited when main() returns.
         template <typename T>

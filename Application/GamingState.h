@@ -19,7 +19,8 @@
 #include "../GUI/Pumpkin.h"
 #include "../GUI/Map.h"
 #include "../GUI/Timer.h"
-#include "../GUI/MenuButton.h"
+#include "../Utilities/TimerClass.h"
+#include "../Utilities/constants.h"
 #include "../GUI/Heart.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
@@ -41,7 +42,7 @@ class GamingState : public GameState {
 
 
 public:
-    const float JUMP_FORCE = 5000.f;
+    const float JUMP_FORCE = 600.f;
 
     static GamingState &GetInstance(sf::RenderWindow &window);
 
@@ -53,7 +54,7 @@ public:
 
     GameState *changeState(sf::RenderWindow &window) override;
 
-    GamingState(const GamingState &);
+    GamingState(const GamingState &) = delete;
 
     void operator=(GamingState const &) = delete;
 
@@ -66,6 +67,8 @@ private:
 
     // attributi relativo allo stato
     void initState();
+
+    void initTimer();
 
     const std::string backgroundPath = GAME_BACKGROUND_PATH;
     bool changeStateToNext = false;
@@ -143,8 +146,12 @@ private:
 
     void clampPlayerYVelocity(sf::Vector2f &velocity);
 
-    void handleCollisionMap(CollisionManager::CollisionDirection direction);
+    void handleCollisionMap(CollisionManager::CollisionResult collision);
+
+    void drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::RenderWindow &window);
+
 };
+
 
 
 #endif //JUMPER_SETTINGSMENU_H

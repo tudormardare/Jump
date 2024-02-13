@@ -9,8 +9,6 @@
 
 
 class Entity {
-private:
-    sf::IntRect hitbox;
 
 protected:
     sf::Sprite sprite;
@@ -22,6 +20,7 @@ protected:
     void setCollisionRect() ;
 
 
+    sf::IntRect hitbox;
 public:
     //Functions
     virtual void setTexture(const sf::Texture &texture) = 0;

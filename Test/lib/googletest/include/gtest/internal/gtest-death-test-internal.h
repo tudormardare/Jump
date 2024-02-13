@@ -119,7 +119,7 @@ namespace testing {
           // be combined.
           virtual bool Passed(bool exit_status_ok) = 0;
 
-          // Signals that the death test did not die as expected.
+          // Signals that the death test did not DieTextures as expected.
           virtual void Abort(AbortReason reason) = 0;
 
           // Returns a human-readable outcome message regarding the outcome of

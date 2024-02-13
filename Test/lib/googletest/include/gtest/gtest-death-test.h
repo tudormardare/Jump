@@ -86,7 +86,7 @@ namespace testing {
     //   for (int i = 0; i < 5; i++) {
     //     EXPECT_DEATH(server.ProcessRequest(i),
     //                  "Invalid request .* in ProcessRequest()")
-    //                  << "Failed to die on request " << i;
+    //                  << "Failed to DieTextures on request " << i;
     //   }
     //
     //   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), "Exiting");
@@ -210,7 +210,7 @@ namespace testing {
     };
 # endif  // !GTEST_OS_WINDOWS
 
-    // EXPECT_DEBUG_DEATH asserts that the given statements die in debug mode.
+    // EXPECT_DEBUG_DEATH asserts that the given statements DieTextures in debug mode.
     // The death testing framework causes this to have interesting semantics,
     // since the sideeffects of the call are only visible in opt mode, and not
     // in debug mode.

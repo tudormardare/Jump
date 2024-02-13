@@ -4,16 +4,14 @@
 
 #include "PhysicsSystem.h"
 
-const float PhysicsSystem::GRAVITY = -613.f;
+const float PhysicsSystem::GRAVITY = 5.f;
 
-void PhysicsSystem::applyGravity(Entity& entity, float deltaTime) {
+void PhysicsSystem::applyGravity(Entity& entity) {
     float verticalAcceleration = entity.getAcceleration().y;
-    verticalAcceleration -= GRAVITY * deltaTime;
-    entity.setVerticalVelocity(verticalAcceleration);
+    verticalAcceleration += GRAVITY ;
+    entity.setAcceleration(sf::Vector2f(entity.getAcceleration().x, verticalAcceleration));
 }
 
-void PhysicsSystem::standOn(Entity& entity, float deltaTime) {
-    float verticalAcceleration = entity.getAcceleration().y;
-    verticalAcceleration += GRAVITY * deltaTime;
-    entity.setVerticalVelocity(verticalAcceleration);
+void PhysicsSystem::standOn(Entity& entity) {
+    entity.setAcceleration(sf::Vector2f(entity.getAcceleration().x, 0.f));
 }

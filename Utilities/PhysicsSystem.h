@@ -3,13 +3,14 @@
 //
 
 #include "../GUI/Entity.h"
+#include <iostream>
 
 class PhysicsSystem {
 public:
     static const float GRAVITY;
 
-    static void applyGravity(Entity& entity, float deltaTime);
+    static void applyGravity(Entity& entity);
 
-    static void standOn(Entity &entity, float deltaTime);
+    static void standOn(Entity &entity);
 };
 

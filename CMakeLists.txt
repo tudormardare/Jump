@@ -32,6 +32,8 @@ set(SOURCE_FILES
         GUI/Timer.h
         GUI/Heart.cpp
         GUI/Heart.h
+	Utilities/TimerClass.cpp
+        Utilities/TimerClass.h
 
 )
 

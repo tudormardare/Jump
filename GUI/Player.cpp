@@ -9,9 +9,8 @@ Player::Player() : hpMax(3), hp(hpMax) {
 void Player::initSprite() {
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
-    maxSpeed = sf::Vector2f(PLAYER_MAX_SPEED, PLAYER_MAX_SPEED);
+    maxSpeed = sf::Vector2f(PLAYER_MAX_SPEED , PLAYER_MAX_SPEED );
     setVelocity(sf::Vector2f(0, 0));
-    setAcceleration(sf::Vector2f(0, PLAYER_ACCELERATION_RATE));
 }
 
 void Player::move(float dirX, float dirY) {
@@ -19,7 +18,7 @@ void Player::move(float dirX, float dirY) {
 }
 
 void Player::update(float deltaTime) {
-    move(velocity.x * deltaTime , velocity.y * deltaTime);
+    move(velocity.x , velocity.y );
 }
 
 void Player::draw(sf::RenderWindow &window) {

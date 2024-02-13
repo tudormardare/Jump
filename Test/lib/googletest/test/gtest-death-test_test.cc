@@ -128,52 +128,52 @@ class TestForDeathTest : public testing::Test {
     posix::ChDir(original_dir_.c_str());
   }
 
-  // A static member function that's expected to die.
+  // A static member function that's expected to DieTextures.
   static void StaticMemberFunction() { DieInside("StaticMemberFunction"); }
 
-  // A method of the test fixture that may die.
+  // A method of the test fixture that may DieTextures.
   void MemberFunction() {
     if (should_die_)
       DieInside("MemberFunction");
   }
 
-  // True iff MemberFunction() should die.
+  // True iff MemberFunction() should DieTextures.
   bool should_die_;
   const FilePath original_dir_;
 };
 
-// A class with a member function that may die.
+// A class with a member function that may DieTextures.
 class MayDie {
  public:
   explicit MayDie(bool should_die) : should_die_(should_die) {}
 
-  // A member function that may die.
+  // A member function that may DieTextures.
   void MemberFunction() const {
     if (should_die_)
       DieInside("MayDie::MemberFunction");
   }
 
  private:
-  // True iff MemberFunction() should die.
+  // True iff MemberFunction() should DieTextures.
   bool should_die_;
 };
 
-// A global function that's expected to die.
+// A global function that's expected to DieTextures.
 void GlobalFunction() { DieInside("GlobalFunction"); }
 
-// A non-void function that's expected to die.
+// A non-void function that's expected to DieTextures.
 int NonVoidFunction() {
   DieInside("NonVoidFunction");
   return 1;
 }
 
-// A unary function that may die.
+// A unary function that may DieTextures.
 void DieIf(bool should_die) {
   if (should_die)
     DieInside("DieIf");
 }
 
-// A binary function that may die.
+// A binary function that may DieTextures.
 bool DieIfLessThan(int x, int y) {
   if (x < y) {
     DieInside("DieIfLessThan");
@@ -229,7 +229,7 @@ static int NormalExitStatus(int exit_code) {
 }
 
 // Returns the exit status of a process that raises a given signal.
-// If the signal does not cause the process to die, then it returns
+// If the signal does not cause the process to DieTextures, then it returns
 // instead the exit status of a process that exits normally with exit
 // code 1.  This is a helper function for the ExitStatusPredicateTest
 // test suite.
@@ -290,7 +290,7 @@ TEST_F(TestForDeathTest, SingleStatement) {
     ;
 
   if (AlwaysFalse())
-    ASSERT_DEATH(return, "") << "did not die";
+    ASSERT_DEATH(return, "") << "did not DieTextures";
 
   if (AlwaysFalse())
     ;
@@ -543,10 +543,10 @@ TEST_F(TestForDeathTest, CompoundStatement) {
   "DieIfLessThan");
 }
 
-// Tests that code that doesn't die causes a death test to fail.
+// Tests that code that doesn't DieTextures causes a death test to fail.
 TEST_F(TestForDeathTest, DoesNotDie) {
   EXPECT_NONFATAL_FAILURE(EXPECT_DEATH(DieIf(false), "DieIf"),
-                          "failed to die");
+                          "failed to DieTextures");
 }
 
 // Tests that a death test fails when the error message isn't expected.
@@ -568,7 +568,7 @@ void ExpectDeathTestHelper(bool* aborted) {
 TEST_F(TestForDeathTest, EXPECT_DEATH) {
   bool aborted = true;
   EXPECT_NONFATAL_FAILURE(ExpectDeathTestHelper(&aborted),
-                          "failed to die");
+                          "failed to DieTextures");
   EXPECT_FALSE(aborted);
 }
 
@@ -579,7 +579,7 @@ TEST_F(TestForDeathTest, ASSERT_DEATH) {
     aborted = true;
     ASSERT_DEATH(DieIf(false), "DieIf");  // This assertion should fail.
     aborted = false;
-  }, "failed to die");
+  }, "failed to DieTextures");
   EXPECT_TRUE(aborted);
 }
 
@@ -597,7 +597,7 @@ TEST_F(TestForDeathTest, SingleEvaluation) {
 // Tests that run-away death tests are reported as failures.
 TEST_F(TestForDeathTest, RunawayIsFailure) {
   EXPECT_NONFATAL_FAILURE(EXPECT_DEATH(static_cast<void>(0), "Foo"),
-                          "failed to die.");
+                          "failed to DieTextures.");
 }
 
 // Tests that death tests report executing 'return' in the statement as
@@ -1104,7 +1104,7 @@ TEST_F(MacroLogicDeathTest, ChildPerformsReturn) {
 }
 
 // Tests that the (simulated) child process is aborted with the
-// correct AbortReason if it does not die.
+// correct AbortReason if it does not DieTextures.
 TEST_F(MacroLogicDeathTest, ChildDoesNotDie) {
   bool flag = false;
   factory_->SetParameters(true, DeathTest::EXECUTE_TEST, 0, true);
@@ -1114,8 +1114,8 @@ TEST_F(MacroLogicDeathTest, ChildDoesNotDie) {
   EXPECT_EQ(0, factory_->WaitCalls());
   EXPECT_EQ(0U, factory_->PassedCalls());
   // This time there are two calls to Abort: one since the test didn't
-  // die, and another from the ReturnSentinel when it's destroyed.  The
-  // sentinel normally isn't destroyed if a test doesn't die, since
+  // DieTextures, and another from the ReturnSentinel when it's destroyed.  The
+  // sentinel normally isn't destroyed if a test doesn't DieTextures, since
   // _exit(2) is called in that case by ForkingDeathTest, but not by
   // our MockDeathTest.
   ASSERT_EQ(2U, factory_->AbortCalls());
@@ -1450,7 +1450,7 @@ if (
 AlwaysFalse()
 
 )
-ASSERT_DEATH_IF_SUPPORTED(return, "") << "did not die";
+ASSERT_DEATH_IF_SUPPORTED(return, "") << "did not DieTextures";
 
 if (
 

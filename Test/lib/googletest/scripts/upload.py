@@ -1223,7 +1223,7 @@ def GuessVCS(options):
       A VersionControlSystem instance. Exits if the VCS can't be guessed.
     """
     # Mercurial has a command to get the base directory of a repository
-    # Try running it, but don't die if we don't have hg installed.
+    # Try running it, but don't DieTextures if we don't have hg installed.
     # NOTE: we try Mercurial first as it can sit on top of an SVN working copy.
     try:
         out, returncode = RunShellWithReturnCode(["hg", "root"])
@@ -1239,7 +1239,7 @@ def GuessVCS(options):
         return SubversionVCS(options)
 
     # Git has a command to test if you're in a git tree.
-    # Try running it, but don't die if we don't have git installed.
+    # Try running it, but don't DieTextures if we don't have git installed.
     try:
         out, returncode = RunShellWithReturnCode(["git", "rev-parse",
                                                   "--is-inside-work-tree"])
