@@ -62,9 +62,16 @@ public:
 
     void setHealth(int newHealth);
 
+    void resetHealth() {
+        hp = hpMax;  // Supponendo che maxHealth sia un attributo che rappresenta il massimo delle vite
+    }
+
+
     int getHealth() const;
 
-    void takeDamage(const int damage);
+    void takeDamage();
+
+    void gainHealth();
 
     void setTexture(const sf::Texture &texture) override;
 
@@ -75,6 +82,7 @@ public:
     void renderHealth(sf::RenderWindow &window);
 
     void setJumping(bool newJumping);
+
 };
 
 #endif //JUMP_PLAYER_H

@@ -31,20 +31,36 @@ Timer::Timer() : elapsedTime(sf::Time::Zero), bestTime(sf::Time::Zero), isRunnin
 }
 
 void Timer::start() {
-    clock.restart();
-    isRunning = true;
+    if(!isRunning) {
+        clock.restart();
+        isRunning = true;
+    }
 }
 
 void Timer::stop() {
     if (isRunning) {
-        elapsedTime += clock.getElapsedTime();
+        elapsedTime = clock.getElapsedTime();
         isRunning = false;
     }
 }
 
 void Timer::update() {
     if (isRunning) {
-        elapsedTime = clock.getElapsedTime();
+        elapsedTime = clock.getElapsedTime() + pausedTime;
+    }
+}
+
+void Timer::pause() {
+    if (isRunning) {
+        pausedTime += clock.getElapsedTime();
+        isRunning = false;
+    }
+}
+
+void Timer::resume() {
+    if (!isRunning) {
+        clock.restart();
+        isRunning = true;
     }
 }
 
@@ -60,14 +76,16 @@ void Timer::saveBestTime() {
     if (elapsedTime > bestTime) {
         bestTime = elapsedTime;
 
-        std::ofstream file(bestTimeFilePath);
+        std::ofstream file(bestTimeFilePath, std::ios::trunc);  // Apre il file sovrascrivendo il contenuto
         if (file.is_open()) {
-            file << static_cast<float>(bestTime.asSeconds()) / 2;
+            file << static_cast<float>(bestTime.asSeconds());
             file.close();
+            std::cout << "Miglior tempo salvato: " << bestTime.asSeconds() << " secondi\n";
         } else {
             std::cerr << "Impossibile aprire il file per salvare il miglior tempo.\n";
         }
     }
+
 }
 
 void Timer::loadBestTime() {
@@ -89,7 +107,6 @@ void Timer::displayBestTime(sf::RenderWindow& window) {
     window.draw(bestTimeText);
 }
 
-
 void Timer::displayElapsedTime(sf::RenderWindow& window) {
     sf::Time elapsedTime = getElapsedTime();
 
@@ -103,5 +120,12 @@ void Timer::displayElapsedTime(sf::RenderWindow& window) {
     // Disegna il testo sulla finestra
     window.draw(elapsedTimeText);
 
+}
+
+void Timer::reset() {
+    isRunning = false;
+    elapsedTime = sf::Time::Zero;
+    pausedTime = sf::Time::Zero;
+    clock.restart();
 }
 

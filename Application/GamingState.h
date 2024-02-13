@@ -10,6 +10,7 @@
 #include <valarray>
 #include <iostream>
 #include "GameState.h"
+#include "MenuState.h"
 #include "../Controllers/CollisionManager.h"
 #include "../GUI/Player.h"
 #include "../Utilities/PhysicsSystem.h"
@@ -18,10 +19,23 @@
 #include "../GUI/Pumpkin.h"
 #include "../GUI/Map.h"
 #include "../GUI/Timer.h"
+#include "../GUI/MenuButton.h"
+#include "../GUI/Heart.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 675
+
+// Dimensioni e posizioni dei pulsanti del menu
+#define PAUSE_BUTTON_WIDTH 200
+#define PAUSE_BUTTON_HEIGHT 75
+#define PAUSE_BUTTON_DISTANCE 50
+#define PAUSE_BUTTONS_NUMBER 3
+
+// Percorsi delle texture dei pulsanti del menu
+#define PAUSE_RESUME_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
+#define PAUSE_QUIT_BUTTON_PATH "PNG/MenuButton/ExitButton.png"
+
 
 class GamingState : public GameState {
 
@@ -39,7 +53,7 @@ public:
 
     GameState *changeState(sf::RenderWindow &window) override;
 
-    GamingState(const GamingState &) = delete;
+    GamingState(const GamingState &);
 
     void operator=(GamingState const &) = delete;
 
@@ -60,9 +74,7 @@ private:
 
     void handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime);
 
-    void handleFireBallsMovements(float deltaTime);
-
-    void spawnPumpkin();
+    void handleEnemyMovements(float deltaTime);
 
     void adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime);
 
@@ -72,9 +84,9 @@ private:
 
     void handleAnimations(float deltaTime);
 
-    void handleFireBallsAnimations(float deltaTime);
+    void handleEnemyAnimations(float deltaTime);
 
-    void setTextureForFire();
+    void setTextureForEnemy();
 
     void handleCollisions();
 
@@ -84,20 +96,48 @@ private:
 
     void handleMovements(float deltaTime);
 
+    void initHearts();
+
+    void setTextureForHeart();
+
+    void handleHeartSpawn(float deltaTime);
+
+    void spawnHeart();
+
+    sf::Time getRandomSpawnInterval();
+
+    void handleHeartCollisions(Heart &heart);
+
+    void updateHearts(float deltaTime);
+
     //attributi relativi al gioco
+    bool paused = false;
     TextureManager textureManager;
     Player player;
     Fire fire;
     Pumpkin pumpkin;
 	Map gameMap;
     CollisionManager collisionManager;
-    float animationTimer = 0.f;
-    int currentFrame = 0;
     Timer gameTimer;
-    float elapsedTimeOnDeath;
+    std::vector<std::unique_ptr<MenuButton>> pauseButtons;
 
-    float pumpkinSpawnTimer;
-    float pumpkinSpawnFrequency;
+
+    std::vector<Heart> hearts;
+    int currentNumHearts= 0;
+    sf::Clock heartSpawnTimer;
+
+    std::unique_ptr<MenuButton> gameOverButton;
+
+    bool gameOver = false;
+
+    void handleGameOver(sf::RenderWindow &window);
+
+    void initGameOverButton();
+
+    void initPauseButtons();
+
+    void drawPause(sf::RenderWindow &window);
+
 
     void handlePlayerJump(bool isKeyPressedW, float deltaTime);
 

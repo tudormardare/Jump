@@ -5,41 +5,106 @@
 #define FRAME_DURATION 0.016f
 
 #include <valarray>
-#include <iostream>
-#include "GamingState.h"
+#include <iomanip>
+#include <string>
+#include <sstream>
 
-GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
+#include "GamingState.h"
+#include "MenuState.h"
+
+GamingState &GamingState::GetInstance(sf::RenderWindow &window){
     static GamingState instance(window);
+    instance.initState();
     return instance;
 }
 
 void GamingState::initState() {
-    //inizializzazione di tutti gli elementi dello stato
+    gameOver = false;
+    paused = false;
+    changeStateToNext = false;
+
+    // Clear degli elementi
+    hearts.clear();
+    pauseButtons.clear();
+    player.resetHealth();
+
+    // Inizializzazione di tutti gli elementi dello stato
     loadAllTextures();
-// Avvia il timer
+    initPauseButtons();
+    initGameOverButton();
+    initHearts();
+
+
+    // Avvia i timer
+    heartSpawnTimer.restart();
+    gameTimer.reset();
     gameTimer.start();
-    //startTimers(); TODO(da inserire la gestione dei timers per gli spawn dei nemici)
-    //setTextureForPlayer();
 }
 
-std::string GamingState::getBackgroundPath() const {
-    return GAME_BACKGROUND_PATH;
-}
 
+//Game logic functions
 GameState *GamingState::changeState(sf::RenderWindow &window) {
     //inserire il cambio di stato quando finisce il gioco o quando viene premuto esc
+    if (changeStateToNext) {
+        changeStateToNext = false;
+        if (pauseButtons[1]->isClicked(window)) {
+            gameTimer.saveBestTime();
+            return &MenuState::GetInstance(window);
+        }
+
+    }
     return nullptr;
 }
 
 void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+        window.close();
+    }
+
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 
-        // Ferma e salva il tempo quando esce dal gioco
         gameTimer.stop();
         gameTimer.saveBestTime();
 
         window.close();
     }
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P){
+        if (!gameOver) {
+            paused = !paused;
+            if (paused) {
+                gameTimer.pause();
+            } else {
+                gameTimer.resume();
+            }
+        }
+    }
+
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            if(paused) {
+                if (pauseButtons[1]->isClicked(window)) {
+                    pauseButtons[1]->update(window);
+                    changeStateToNext = true;
+                    paused = false;
+                }
+                if (pauseButtons[0]->isClicked(window)) {
+                    pauseButtons[0]->update(window);
+                    gameTimer.resume();
+                    paused = false;
+                }
+            }
+            else if (gameOver) {
+                if (gameOverButton->isClicked(window)) {
+                    gameOverButton->update(window);
+                    initState();
+                }
+            }
+
+        }
+    }
+
     if (event.type == sf::Event::KeyReleased) {
         if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D) {
             player.setTexture(textureManager.getTexture("Player", "Idle", 0));
@@ -47,45 +112,295 @@ void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event)
     }
 }
 
+void GamingState::initPauseButtons()
+{
+    // Inizializzazione dei pulsanti di pausa con texture diverse
+    sf::Texture resumeButtonTexture, quitButtonTexture;
+
+    if (!resumeButtonTexture.loadFromFile(PAUSE_RESUME_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante RESUME." << std::endl;
+    }
+    if (!quitButtonTexture.loadFromFile(PAUSE_QUIT_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante QUIT." << std::endl;
+    }
+
+    sf::Vector2f size(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_HEIGHT);
+    float totalHeight = (PAUSE_BUTTONS_NUMBER * PAUSE_BUTTON_HEIGHT) + (PAUSE_BUTTON_DISTANCE * (PAUSE_BUTTONS_NUMBER - 1));
+    sf::Vector2f startingPosition((WINDOW_WIDTH) / (float) 2, (WINDOW_HEIGHT - totalHeight) / (float) 1.5);
+
+    // Inizializzazione dei pulsanti di pausa con texture diverse
+    pauseButtons.emplace_back(std::make_unique<MenuButton>(size, startingPosition, resumeButtonTexture));
+    pauseButtons.emplace_back(std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, PAUSE_BUTTON_HEIGHT + PAUSE_BUTTON_DISTANCE), quitButtonTexture));
+
+
+}
+
+void GamingState::initGameOverButton()
+{
+    // Inizializzazione del pulsante di gioco terminato con texture diversa
+    sf::Texture gameOverButtonTexture;
+
+    if (!gameOverButtonTexture.loadFromFile(PAUSE_RESUME_BUTTON_PATH)) {
+        std::cout << "Errore durante il caricamento della texture del pulsante GAME OVER." << std::endl;
+    }
+
+    sf::Vector2f size(PAUSE_BUTTON_WIDTH, PAUSE_BUTTON_HEIGHT);
+    sf::Vector2f position((WINDOW_WIDTH) / 2.0f, (WINDOW_HEIGHT) / 1.2f);
+
+    // Inizializzazione del pulsante di gioco terminato con texture diversa
+    gameOverButton = std::make_unique<MenuButton>(size, position, gameOverButtonTexture);
+}
+
+void GamingState::drawPause(sf::RenderWindow &window) {
+
+    // Renderizza "Press "P" to pause"
+    sf::Font font;
+    if (!font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
+        std::cerr << "Impossibile caricare il font\n";
+        return;
+    }
+    sf::Text pauseText;
+    pauseText.setFont(font);
+    pauseText.setCharacterSize(20);
+    pauseText.setFillColor(sf::Color::White);
+    pauseText.setPosition(window.getSize().x - 300, 10);
+    pauseText.setString("Press \"P\" to pause");
+    window.draw(pauseText);
+
+    if (paused)
+    {
+        // Disegna lo sfondo della pausa semitrasparente
+        sf::Texture pauseTexture;
+        if (!pauseTexture.loadFromFile("PNG/PauseBackground/TransparentBackground.png")) {
+            std::cerr << "Impossibile caricare l'immagine di pausa.\n";
+            return;
+        }
+        sf::Sprite pauseSprite(pauseTexture);
+        float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
+        float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
+        pauseSprite.setScale(scaleX, scaleY);
+        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
+        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
+        pauseSprite.setPosition(posX, posY);
+        window.draw(pauseSprite);
+
+
+        // Disegna i pulsanti di pausa
+        for (auto &button : pauseButtons) {
+            button->draw(window);
+        }
+    }
+}
+
+void GamingState::handleGameOver(sf::RenderWindow &window) {
+    if (player.getHealth() <= 0) {
+        gameOver = true;
+
+        // Ferma e salva il tempo quando finisce il gioco
+        gameTimer.stop();
+        gameTimer.saveBestTime();
+
+
+
+        // Disegna lo sfondo del Game Over semitrasparente
+        sf::Texture pauseTexture;
+        if (!pauseTexture.loadFromFile("PNG/PauseBackground/TransparentBackground.png")) {
+            std::cerr << "Impossibile caricare l'immagine di pausa.\n";
+            return;
+        }
+        sf::Sprite pauseSprite(pauseTexture);
+        float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
+        float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
+        pauseSprite.setScale(scaleX, scaleY);
+        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
+        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
+        pauseSprite.setPosition(posX, posY);
+        window.draw(pauseSprite);
+
+
+        // Mostra un messaggio di game over
+        sf::Font font;
+        if (!font.loadFromFile("PNG/TimerFont/TimerFont.TTF")) {
+            std::cerr << "Impossibile caricare il font\n";
+            return;
+        }
+        sf::Text gameOverText;
+        gameOverText.setFont(font);
+        gameOverText.setCharacterSize(60);
+        gameOverText.setFillColor(sf::Color::Red);
+        gameOverText.setPosition(290, 200);
+        gameOverText.setString("GAME OVER!");
+        window.draw(gameOverText);
+
+        sf::Text exitText;
+        exitText.setFont(font);
+        exitText.setCharacterSize(20);
+        exitText.setFillColor(sf::Color::Red);
+        exitText.setPosition(390, 300);
+        exitText.setString("Press \"ESC\" to exit");
+        window.draw(exitText);
+
+        sf::Text bestTimeText;
+        bestTimeText.setFont(font);
+        bestTimeText.setCharacterSize(20);
+        bestTimeText.setFillColor(sf::Color::White);
+        bestTimeText.setPosition(395, 350);
+        std::ostringstream formattedTime;
+        formattedTime << std::fixed << std::setprecision(2) << gameTimer.getElapsedTime().asSeconds();
+        bestTimeText.setString("Time: " + formattedTime.str() + " seconds");
+        window.draw(bestTimeText);
+
+        // Button to restart the game
+        gameOverButton->draw(window);
+    }
+}
+
+std::string GamingState::getBackgroundPath() const {
+    return GAME_BACKGROUND_PATH;
+}
+
+void GamingState::handleAnimations(float deltaTime) {
+    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+    bool isJumping = isKeyPressedW;
+    bool isMovingHorizontally = isKeyPressedA || isKeyPressedD;
+    bool isFalling = player.getVelocity().y > 0;
+    bool isOnGround = player.getVelocity().y == 0;
+    bool isIdle = player.getVelocity().x == 0 && isOnGround;
+
+    if (isJumping) {
+        // Se il player sta saltando, visualizza l'animazione di salto
+        textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
+    } else if (isFalling) {
+        // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
+        textureManager.updateAnimation("Player", "Falling", deltaTime, player);
+    } else if (isMovingHorizontally && isOnGround) {
+        // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
+        textureManager.updateAnimation("Player", "Running", deltaTime, player);
+    } else if (isIdle) {
+        // Se il player non si sta muovendo, visualizza l'animazione d'inattività
+        textureManager.updateAnimation("Player", "Idle", deltaTime, player);
+    }
+
+    handleEnemyAnimations(deltaTime);
+}
+
+void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction) {
+    switch (direction) {
+        case CollisionManager::CollisionDirection::Top:
+            std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
+            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            break;
+        case CollisionManager::CollisionDirection::Bottom:
+            std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
+            break;
+        case CollisionManager::CollisionDirection::Left:
+            std::cout << "Collisione sul lato sinistro" << std::endl;
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            break;
+        case CollisionManager::CollisionDirection::Right:
+            std::cout << "Collisione sul lato destro" << std::endl;
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            break;
+        case CollisionManager::CollisionDirection::None:
+            break;
+    }
+}
+
+void GamingState::loadAllTextures() {
+    setTextureForPlayer();
+    setTextureForEnemy();
+    setTextureForHeart();
+
+    //Aggiungi altre texture
+}
+
+void GamingState::handleCollisions() {
+    //Prova collisioni con i nemici
+    //std::vector<Entity*> colliders;
+    //colliders.push_back(&pumpkin);
+    //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
+    if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
+        std::cout << "Collisione ";
+        pumpkin.setHit(true);
+        pumpkin.setPosition(sf::Vector2f(-1000, -1000));
+        fire.setPosition(sf::Vector2f(-1000, -1000));
+
+        // Decrementa la vita del giocatore
+        player.takeDamage();
+    }
+
+    /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
+         std::cout << "Collisione con la mappa";
+         player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+     }*/
+}
+
+
+//Rendering functions
 void GamingState::render(sf::RenderWindow &window) {
 
-    //inserire tutti i draw di tutti gli elemenenti
+    // Inserire tutti i draw di tutti gli elemenenti
     gameMap.render(window);
     player.draw(window);
     fire.draw(window);
     pumpkin.draw(window);
-
-    player.draw(window);
+    gameTimer.displayElapsedTime(window);
     player.renderHealth(window);
 
-    gameTimer.displayElapsedTime(window);
+    for (auto &heart : hearts) {
+        heart.draw(window);
+    }
+
+    drawPause(window);
+    handleGameOver(window);
 
 }
 
 void GamingState::update(sf::RenderWindow &window, float deltaTime) {
-	gameTimer.update();
-    //Aggiorna la posizione degli Sprite
-    handleMovements(deltaTime);
-    //Aggiorna animazione degli sprite
-    handleAnimations(deltaTime);
-    //Verifica le collisioni
-    handleCollisions();
+    if(!paused && !gameOver)
+    {
 
-    //Aggiorna gli sprite
-    player.update(deltaTime);
+        gameTimer.update();
+        //Aggiorna la posizione degli Sprite
+        handleMovements(deltaTime);
+        //Aggiorna animazione degli sprite
+        handleAnimations(deltaTime);
+        //Verifica le collisioni
+        handleCollisions();
+        //Game over
+        handleGameOver(window);
 
-    //Aggiorna il pumpkin solo se non è stato colpito
-    if (!pumpkin.isHit()) {
-        fire.update(deltaTime);
-        pumpkin.update(deltaTime);
+        //Aggiorna gli sprite
+        player.update(deltaTime);
+        updateHearts(deltaTime);
+
+        //Aggiorna il pumpkin solo se non è stato colpito
+        if (!pumpkin.isHit()) {
+            fire.update(deltaTime);
+            pumpkin.update(deltaTime);
+        }
+    }
+    else if (paused)
+    {
+        for (auto &button : pauseButtons) {
+            button->update(window);
+        }
+    }
+    else if (gameOver)
+    {
+        gameOverButton->update(window);
     }
 }
 
+
+// Player functions
 void GamingState::handleMovements(float deltaTime) {
     //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
     //PhysicsSystem::applyGravity(player, deltaTime);
     handlePlayerMovements(deltaTime);
-    handleFireBallsMovements(deltaTime);
+    handleEnemyMovements(deltaTime);
 }
 
 void GamingState::handlePlayerMovements(float deltaTime) {
@@ -93,7 +408,7 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
     bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 
-    PhysicsSystem::applyGravity(player, deltaTime);
+   PhysicsSystem::applyGravity(player, deltaTime);
 
     handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
     handlePlayerJump(isKeyPressedW, deltaTime);
@@ -157,65 +472,6 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     player.setVerticalVelocity(currentVelocity.y);
 }
 
-
-
-void GamingState::handleAnimations(float deltaTime) {
-    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-    bool isJumping = isKeyPressedW;
-    bool isMovingHorizontally = isKeyPressedA || isKeyPressedD;
-    bool isFalling = player.getVelocity().y > 0;
-    bool isOnGround = player.getVelocity().y == 0;
-    bool isIdle = player.getVelocity().x == 0 && isOnGround;
-
-    if (isJumping) {
-        // Se il player sta saltando, visualizza l'animazione di salto
-        textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
-    } else if (isFalling) {
-        // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
-        textureManager.updateAnimation("Player", "Falling", deltaTime, player);
-    } else if (isMovingHorizontally && isOnGround) {
-        // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
-        textureManager.updateAnimation("Player", "Running", deltaTime, player);
-    } else if (isIdle) {
-        // Se il player non si sta muovendo, visualizza l'animazione d'inattività
-        textureManager.updateAnimation("Player", "Idle", deltaTime, player);
-    }
-
-    handleFireBallsAnimations(deltaTime);
-}
-
-
-void  GamingState::handleCollisionMap(CollisionManager::CollisionDirection direction) {
-    switch (direction) {
-        case CollisionManager::CollisionDirection::Top:
-            std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-            player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-            break;
-        case CollisionManager::CollisionDirection::Bottom:
-            std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
-            break;
-        case CollisionManager::CollisionDirection::Left:
-            std::cout << "Collisione sul lato sinistro" << std::endl;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-            break;
-        case CollisionManager::CollisionDirection::Right:
-            std::cout << "Collisione sul lato destro" << std::endl;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-            break;
-        case CollisionManager::CollisionDirection::None:
-            break;
-    }
-}
-
-
-void GamingState::loadAllTextures() {
-    setTextureForPlayer();
-    setTextureForFire();
-    //Aggiungi altre texture
-}
-
 void GamingState::setTextureForPlayer() {
 
     std::map<std::string, AnimationConfig> playerAnimations = {
@@ -268,25 +524,8 @@ void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
 }
 
 
-void GamingState::handleCollisions() {
-    //Prova collisioni con i nemici
-    //std::vector<Entity*> colliders;
-    //colliders.push_back(&pumpkin);
-    //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
-    if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
-        std::cout << "Collisione ";
-        pumpkin.setHit(true);
-        pumpkin.setPosition(sf::Vector2f(-1000, -1000));
-        fire.setPosition(sf::Vector2f(-1000, -1000));
-    }
-
-   /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
-        std::cout << "Collisione con la mappa";
-        player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-    }*/
-}
-
-void GamingState::setTextureForFire() {
+//Enemy functions
+void GamingState::setTextureForEnemy() {
    std::map<std::string, AnimationConfig> fireAnimations = {
             {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES, FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION, false}}
    };
@@ -307,11 +546,11 @@ void GamingState::setTextureForFire() {
         pumpkin.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0)   );
 }
 
-void GamingState::handleFireBallsAnimations(float deltaTime) {
+void GamingState::handleEnemyAnimations(float deltaTime) {
     textureManager.updateAnimation("Fire", "Fire", deltaTime, fire);
 }
 
-void GamingState::handleFireBallsMovements(float deltaTime) {
+void GamingState::handleEnemyMovements(float deltaTime) {
     //Verficare se il fuoco è uscito dallo schermo
     if (fire.getPosition().x > WINDOW_WIDTH) {
         fire.setPosition(sf::Vector2f(- 200, 100));
@@ -321,36 +560,93 @@ void GamingState::handleFireBallsMovements(float deltaTime) {
         pumpkin.setPosition(sf::Vector2f(- 85, 190));
     }
     //Aggiorna la velocità in base al tempo passato dall'inzio del gioco
-}
-
-void GamingState::spawnPumpkin() {
-    // Da quale lato spawna
-    int side = rand() % 2;
-
-    Pumpkin newPumpkin;
-
-    // Imposta la posizione in base al lato scelto
-    if (side == 0) {
-        newPumpkin.setPosition(sf::Vector2f(-85, 190));
-        newPumpkin.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0));
-    } else {
-        newPumpkin.setPosition(sf::Vector2f(WINDOW_WIDTH + 85, 190));
-        newPumpkin.setVelocity(sf::Vector2f(-FIRE_DEFAULT_SPEED, 0));
-    }
-
-    // Aggiungi la nuova zucca alla tua collezione di zucche (o gestiscila come preferisci)
-    // pumpkinCollection.push_back(newPumpkin);
-
-    // Controlla se c'è una collisione con il player e gestisci la scomparsa del pumpkin
-    if (CollisionManager::checkCollision(player.getHitbox(), newPumpkin.getHitbox())) {
-        std::cout << "Collisione con nuova zucca!\n";
-        newPumpkin.setHit(true);
-        newPumpkin.setPosition(sf::Vector2f(-1000, -1000));
-        fire.setPosition(sf::Vector2f(-1000, -1000));
-    }
 
 }
 
+
+//Heart functions
+void GamingState::initHearts() {
+    setTextureForHeart();
+    currentNumHearts = 0;
+}
+
+void GamingState::setTextureForHeart() {
+    std::map<std::string, AnimationConfig> heartAnimations = {
+            {"Heart", {HEART_TEXTURE_PATH, HEART_TEXTURES, HEART_MIN_FRAME_DURATION, HEART_MAX_FRAME_DURATION, false}}
+    };
+    textureManager.loadEntityTextures("Heart", heartAnimations);
+}
+
+void GamingState::handleHeartSpawn(float deltaTime) {
+
+    sf::Time spawnInterval = getRandomSpawnInterval();
+    if (heartSpawnTimer.getElapsedTime() > spawnInterval && currentNumHearts < 2) {
+        spawnHeart();
+        currentNumHearts++;
+        heartSpawnTimer.restart();
+    }
+}
+
+void GamingState::spawnHeart() {
+    Heart heart;
+    heart.setTexture(textureManager.getTexture("Heart", "Heart", 0));
+
+    // Imposta la posizione iniziale in alto
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+    float spawnX = static_cast<float>(std::rand() % WINDOW_WIDTH);
+    float spawnY = 0;
+
+    heart.setPosition(sf::Vector2f(spawnX, spawnY));
+    heart.setVelocity(sf::Vector2f(0, HEART_FALL_SPEED));
+
+    hearts.push_back(heart);
+}
+
+sf::Time GamingState::getRandomSpawnInterval() {
+    // Inizializza il generatore di numeri casuali con il tempo corrente
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+
+    // Definisci il limite inferiore e superiore per l'intervallo casuale
+    float minInterval = 1.0f;
+    float maxInterval = 10.0f;
+
+    // Genera un intervallo casuale tra minInterval e maxInterval
+    float randomInterval = minInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (maxInterval - minInterval)));
+
+    return sf::seconds(randomInterval);
+}
+
+void GamingState::handleHeartCollisions(Heart &heart) {
+    if (CollisionManager::checkCollision(player.getHitbox(), heart.getHitbox())) {
+        heart.setCollected(true);
+        player.gainHealth();
+        heart.setPosition(sf::Vector2f(-1000, -1000));
+
+        currentNumHearts--;
+    }
+
+    std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(heart, gameMap.getMapHitboxes());
+    for (const auto& collision : collisions) {
+        if (collision.hasCollision) {
+            heart.setVelocity(sf::Vector2f(0, 0));
+        }
+    }
+}
+
+void GamingState::updateHearts(float deltaTime) {
+    handleHeartSpawn(deltaTime);
+
+    // Itera attraverso i cuori e applica le operazioni necessarie
+    for (auto &heart : hearts) {
+        heart.update(deltaTime);
+        handleHeartCollisions(heart);
+    }
+
+    // Rimuovi i cuori raccolti dal vettore
+    hearts.erase(std::remove_if(hearts.begin(), hearts.end(), [](const Heart& heart) {
+        return heart.isCollected();
+    }), hearts.end());
+}
 
 
 

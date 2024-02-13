@@ -13,7 +13,8 @@
 #define PUMPKIN_TEXTURES 1
 #define PUMPKIN_MIN_FRAME_DURATION 1.f
 #define PUMPKIN_MAX_FRAME_DURATION 1.f
-
+#define PUMPKIN_SPAWN_INTERVAL 5.f
+#define PUMPKIN_SPEED 100.f
 
 class Pumpkin: public Entity{
 public:

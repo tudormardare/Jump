@@ -27,6 +27,7 @@ public:
     virtual ~GameState() = default;
 
     virtual std::string getBackgroundPath() const = 0;
+
 };
 
 
