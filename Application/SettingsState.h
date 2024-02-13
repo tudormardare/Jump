@@ -6,12 +6,12 @@
 #define JUMPER_GAME_H
 
 
-#define PLAYING_BUTTON_PATH "PNG/MenuButton/BackButton.png"
-#define PLAYING_BUTTON_WIDTH 200
-#define PLAYING_BUTTON_HEIGHT 450
-#define PLAYING_BUTTON_DISTANCE 100
-#define PLAYING_BUTTON_NUMBER 1
-#define PLAYING_MENU_BACKGROUND_PATH "PNG/KeybindingsGuide/Keybindings.png"
+#define SETTINGS_BUTTON_PATH "PNG/MenuButton/BackButton.png"
+#define SETTINGS_BUTTON_WIDTH 200
+#define SETTINGS_BUTTON_HEIGHT 450
+#define SETTINGS_BUTTON_DISTANCE 100
+#define SETTINGS_BUTTON_NUMBER 1
+#define SETTINGS_MENU_BACKGROUND_PATH "PNG/KeybindingsGuide/Keybindings.png"
 
 #include "GameState.h"
 #include "MenuState.h"
@@ -45,12 +45,12 @@ private:
 
     void initState();
 
-    const std::string backgroundPath = PLAYING_MENU_BACKGROUND_PATH;
+    const std::string backgroundPath = SETTINGS_MENU_BACKGROUND_PATH;
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
     bool changeStateToNext = false;
     sf::Texture buttonTexture;
-    std::unique_ptr<MenuButton> buttons[PLAYING_BUTTON_NUMBER];
+    std::unique_ptr<MenuButton> buttons[SETTINGS_BUTTON_NUMBER];
 
 };
 

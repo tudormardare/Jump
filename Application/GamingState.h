@@ -28,10 +28,7 @@
 #define WINDOW_HEIGHT 675
 
 // Dimensioni e posizioni dei pulsanti del menu
-#define PAUSE_BUTTON_WIDTH 200
 #define PAUSE_BUTTON_HEIGHT 75
-#define PAUSE_BUTTON_DISTANCE 50
-#define PAUSE_BUTTONS_NUMBER 3
 
 // Percorsi delle texture dei pulsanti del menu
 #define PAUSE_RESUME_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
@@ -140,7 +137,6 @@ private:
     void initPauseButtons();
 
     void drawPause(sf::RenderWindow &window);
-
 
     void handlePlayerJump(bool isKeyPressedW, float deltaTime);
 

@@ -61,23 +61,23 @@ std::string SettingsState::getBackgroundPath() const {
 
 void SettingsState::initState() {
 
-    if (!buttonTexture.loadFromFile(PLAYING_BUTTON_PATH)) {
+    if (!buttonTexture.loadFromFile(SETTINGS_BUTTON_PATH)) {
         std::cout << "Errore durante il caricamento della backgroundTexture del pulsante." << std::endl;
     }
 
     if (!backgroundTexture.loadFromFile(backgroundPath)) {
         std::cout << "Errore durante il caricamento della backgroundTexture." << std::endl;
     }
-    sf::Vector2f size(PLAYING_BUTTON_WIDTH, PLAYING_BUTTON_HEIGHT);
+    sf::Vector2f size(SETTINGS_BUTTON_WIDTH, SETTINGS_BUTTON_HEIGHT);
     float totalHeight =
-            (PLAYING_BUTTON_NUMBER * PLAYING_BUTTON_HEIGHT) + (PLAYING_BUTTON_DISTANCE * (PLAYING_BUTTON_NUMBER - 1));
+            (SETTINGS_BUTTON_NUMBER * SETTINGS_BUTTON_HEIGHT) + (SETTINGS_BUTTON_DISTANCE * (SETTINGS_BUTTON_NUMBER - 1));
     sf::Vector2f startingPosition((WINDOW_WIDTH) / (float) 2, (WINDOW_HEIGHT - totalHeight) / (float) 2);
 
     float i = 0;
     //Inizializzazione dei bottoni
     for (auto &button: buttons) {
-        button = std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, PLAYING_BUTTON_HEIGHT +
-                                                                                       PLAYING_BUTTON_DISTANCE * i),
+        button = std::make_unique<MenuButton>(size, startingPosition + sf::Vector2f(0, SETTINGS_BUTTON_HEIGHT +
+                                                                                       SETTINGS_BUTTON_DISTANCE * i),
                                               buttonTexture);
         i++;
     }
