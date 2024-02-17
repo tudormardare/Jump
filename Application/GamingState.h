@@ -143,6 +143,7 @@ private:
 
     static int randomBetween(int min, int max);
 
+    void handleTimers(float deltaTime);
 };
 
 

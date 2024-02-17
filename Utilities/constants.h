@@ -22,6 +22,7 @@ enum class eTimer {
     ePumpkinSpawn = 0,
     eHearthSpawn = 1,
     eHeartDespawn = 2,
+    eBlinking = 3,
 };
 
 

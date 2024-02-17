@@ -84,6 +84,14 @@ enum class eTimerMode {
         return -1; // Restituisce -1 se il timer non esiste
     }
 
+    bool isStarted(eTimer type) {
+        std::lock_guard<std::mutex> guard(mutex);
+        if (timers.find(static_cast<int>(type)) != timers.end()) {
+            return timers[static_cast<int>(type)].started;
+        }
+        return false; // Assumi che sia scaduto se non esiste
+    }
+
 
 private:
     struct TimerInfo {

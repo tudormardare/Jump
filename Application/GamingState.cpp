@@ -22,7 +22,6 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 }
 
 void GamingState::initState() {
-    srand(static_cast<unsigned int>(time(nullptr)));
     gameOver = false;
     paused = false;
     changeStateToNext = false;
@@ -291,15 +290,27 @@ void GamingState::render(sf::RenderWindow &window) {
     player.renderHealth(window);
     gameTimer.displayElapsedTime(window);
 
-    for (auto &heart: hearts) {
-        heart.draw(window);
 
-        heart.getHitbox();
-        sf::RectangleShape rectangle(sf::Vector2f(heart.getHitbox().width, heart.getHitbox().height));
+    for (int i = 0; i < hearts.size(); i++) {
+
+        if(i == 0 && Timers.isStarted(eTimer::eBlinking) && !Timers.isExpired(eTimer::eBlinking)) {
+                hearts[i].draw(window);
+        }else if(i == 0 && !Timers.isStarted(eTimer::eBlinking)){
+                hearts[i].draw(window);
+        }else if (i != 0){
+            hearts[i].draw(window);
+        }
+
+        if(Timers.isExpired(eTimer::eBlinking)){
+            Timers.restartTimer(eTimer::eBlinking);
+        }
+
+
+        sf::RectangleShape rectangle(sf::Vector2f(hearts[i].getHitbox().width, hearts[i].getHitbox().height));
         sf::VertexArray points(sf::Points, 1);
-        points[0].position = sf::Vector2f(heart.getCenter().x, heart.getCenter().y);
+        points[0].position = sf::Vector2f(hearts[i].getCenter().x, hearts[i].getCenter().y);
         points[0].color = sf::Color::Red;
-        rectangle.setPosition(heart.getHitbox().left, heart.getHitbox().top);
+        rectangle.setPosition(hearts[i].getHitbox().left, hearts[i].getHitbox().top);
         rectangle.setFillColor(sf::Color::Transparent);
         rectangle.setOutlineColor(sf::Color::Red);
         rectangle.setOutlineThickness(1.f);
@@ -317,6 +328,9 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
     if (!paused && !gameOver) {
 
         gameTimer.update();
+
+        //Gestisce i timers
+        handleTimers(deltaTime);
 
         //Aggiorna la posizione degli Sprite
         handleMovements(deltaTime);
@@ -340,6 +354,11 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 
             heart.setVelocity(sf::Vector2f(0, heartVelocity * deltaTime));
 
+        }
+
+        if(Timers.isExpired(eTimer::eHeartDespawn)){
+            std::cout << "Dentro" << std::endl;
+            Timers.restartTimer(eTimer::eHeartDespawn);
         }
 
 
@@ -368,6 +387,7 @@ void GamingState::handleMovements(float deltaTime) {
     handlePlayerMovements(deltaTime);
     for (auto &heart: hearts) {
         PhysicsSystem::applyGravity(heart);
+        //heart.setVelocity(sf::Vector2f(0, 3));
     }
 }
 
@@ -380,10 +400,6 @@ void GamingState::handlePlayerMovements(float deltaTime) {
     handlePlayerJump(isKeyPressedW, deltaTime);
 
     PhysicsSystem::applyGravity(player);
-
-
-    //Applica la velocità al giocatore
-
 
 }
 
@@ -603,8 +619,8 @@ void GamingState::setTextureForHeart() {
                                                              32,
                                                              32, GAMING_MAX_HEARTS);
 }
+
 void GamingState::spawnHeart() {
-    std::cout << "Spawned heart" << std::endl;
     Heart heart;
     heart.setTexture(textureManager.getTexture("Heart1", "Heart", 0));
 
@@ -616,21 +632,31 @@ void GamingState::spawnHeart() {
         heart.setName("Heart" + std::to_string(hearts.size() + 1));
         hearts.push_back(heart);
     }
+
 }
 
-sf::Time GamingState::getRandomSpawnInterval() {
-    // Inizializza il generatore di numeri casuali con il tempo corrente
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
+void GamingState::handleTimers(float deltaTime) {
+    if(Timers.isExpired(eTimer::eHeartDespawn)){
+        hearts.erase(hearts.begin());
+        int i = 1;
+        for(auto &heart : hearts){
+            heart.setName("Heart" + std::to_string(i));
+            i++;
+        }
+        if(!hearts.empty())
+            Timers.restartTimer(eTimer::eHeartDespawn);
+    }
 
-    // Definisci il limite inferiore e superiore per l'intervallo casuale
-    float minInterval = 1.0f;
-    float maxInterval = 10.0f;
+  if(Timers.isExpired(eTimer::eHearthSpawn)){
+    spawnHeart();
+    if(!Timers.isStarted(eTimer::eHeartDespawn))
+      Timers.startTimer(eTimer::eHeartDespawn);
+    Timers.restartTimer(eTimer::eHearthSpawn);
+  }
 
-    // Genera un intervallo casuale tra minInterval e maxInterval
-    float randomInterval = minInterval + static_cast<float>(std::rand()) /
-                                         (static_cast<float>(RAND_MAX / (maxInterval - minInterval)));
-
-    return sf::seconds(randomInterval);
+  if(Timers.getElapsedTime(eTimer::eHeartDespawn) > 2000){
+      Timers.startTimer(eTimer::eBlinking);
+  }
 }
 
 void GamingState::handleHeartCollisions(Heart &heart) {
@@ -645,6 +671,8 @@ void GamingState::handleHeartCollisions(Heart &heart) {
     for (const auto &collision: collisions) {
         if (collision.hasCollision) {
             heart.setVelocity(sf::Vector2f(0, 0));
+            heart.setAcceleration(sf::Vector2f(0, 0));
+            heart.setPosition(sf::Vector2f(heart.getPosition().x, heart.getPosition().y - collision.overlap));
         }
     }
 }
@@ -679,9 +707,11 @@ void GamingState::drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::R
 void GamingState::initTimer() {
     gameTimer.reset();
     gameTimer.start();
-    Timers.addTimer(eTimer::eHearthSpawn, std::chrono::milliseconds(2000), [&]() { spawnHeart(); },
-                    TimerClass::eTimerMode::Cyclic);
-    Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(5000), [&]() { spawnHeart(); },
+    Timers.addTimer(eTimer::eHearthSpawn, std::chrono::milliseconds(8000), [&]() { },
+                    TimerClass::eTimerMode::OnceDown);
+    Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(12000), [&]() { std::cout << "Despawned heart"; },
+                    TimerClass::eTimerMode::OnceDown);
+    Timers.addTimer(eTimer::eBlinking, std::chrono::milliseconds(1000), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
     Timers.startTimer(eTimer::eHearthSpawn);
 
