@@ -67,6 +67,8 @@ public:
     sf::FloatRect getHitbox() const;
 
     std::string getName() const;
+
+    void setName(std::string newName);
 };
 
 #endif //JUMP_ENTITY_H

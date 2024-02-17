@@ -18,7 +18,6 @@ nlohmann::json j;
 
 GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
     static GamingState instance(window);
-    instance.initState();
     return instance;
 }
 
@@ -37,7 +36,6 @@ void GamingState::initState() {
     loadAllTextures();
     initPauseButtons();
     initGameOverButton();
-    initHearts();
     initTimer();
 
     std::ifstream i("hitbox/MapHitBoxes.json"); // Sostituisci con il percorso corretto del file
@@ -439,8 +437,7 @@ void GamingState::handleAnimations(float deltaTime) {
 
     handleEnemyAnimations(deltaTime);
     for(auto &heart: hearts){
-        std::cout<< "frame: " << textureManager.getCurrentIndex("Heart") << std::endl;
-        textureManager.updateAnimation("Heart", "Heart", deltaTime, heart);
+        textureManager.updateAnimation(heart.getName(), "Heart", deltaTime, heart);
     }
 }
 
@@ -596,35 +593,27 @@ void GamingState::handleEnemyAnimations(float deltaTime) {
     textureManager.updateAnimation("Fire", "Fire", deltaTime, fireBall.getFire());
 }
 
-//Heart functions
-void GamingState::initHearts() {
-    setTextureForHeart();
-}
-
 void GamingState::setTextureForHeart() {
     std::map<std::string, AnimationConfig> heartAnimations = {
             {"Heart",
              {HEART_TEXTURE_PATH, HEART_TEXTURES, HEART_MIN_FRAME_DURATION, HEART_MAX_FRAME_DURATION, false}}
     };
 
-    std::map<std::string, std::pair<int, int>> heartDetails = {
-            {"Heart", {5, 0}}
-    };
-
-    textureManager.loadTexturesFromSpriteSheetWithLineNumber("Heart", "PNG/Heart/heartAnimation.png", heartAnimations, 32,
-                                                             32);
+    textureManager.loadTexturesFromSpriteSheetWithLineNumber("Heart", "PNG/Heart/heartAnimation.png", heartAnimations,
+                                                             32,
+                                                             32, GAMING_MAX_HEARTS);
 }
-
 void GamingState::spawnHeart() {
     std::cout << "Spawned heart" << std::endl;
     Heart heart;
-    heart.setTexture(textureManager.getTexture("Heart", "Heart", 0));
+    heart.setTexture(textureManager.getTexture("Heart1", "Heart", 0));
 
     // Controlla se ci sono già 2 cuori sulla mappa
-    if (hearts.size() < 1) {
+    if (hearts.size() < GAMING_MAX_HEARTS) {
         int xPosition = randomBetween(40, WINDOW_WIDTH - 40);
         std::cout << "Spawned heart at " << xPosition << std::endl;
         heart.setPosition(sf::Vector2f((float) xPosition, 0));
+        heart.setName("Heart" + std::to_string(hearts.size() + 1));
         hearts.push_back(heart);
     }
 }

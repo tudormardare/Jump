@@ -2,6 +2,7 @@
 // Created by Denis Jaupi on 22/06/23.
 //
 #include <iostream>
+#include <utility>
 #include "Entity.h"
 
 //Functions
@@ -101,6 +102,10 @@ void Entity::setCollisionRect()  {
 
 std::string Entity::getName() const {
     return name;
+}
+
+void Entity::setName(std::string newName) {
+    name = std::move(newName);
 }
 
 

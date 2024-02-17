@@ -98,6 +98,7 @@ void TextureManager::updateAnimation(const std::string &entityName, const std::s
     }
 }
 
+
 void TextureManager::setSpecificFrame(const std::string &entityName, const std::string &animationType, int frameIndex, Entity &entity) {
     AnimationInfo& animInfo = textures[entityName][animationType];
     animInfo.currentFrame = frameIndex;
@@ -128,7 +129,8 @@ void TextureManager::resetAnimation(const std::string &entityName, const std::st
 void TextureManager::loadTexturesFromSpriteSheetWithLineNumber(const std::string &entityName,
                                                                const std::string &spriteSheetPath,
                                                                const std::map<std::string, AnimationConfig> &animations,
-                                                               int frameWidth, int frameHeight, int rows) {
+                                                               int frameWidth, int frameHeight, int entityNum,
+                                                               int rows) {
 
     sf::Texture spriteSheet;
     if (!spriteSheet.loadFromFile(spriteSheetPath)) {
@@ -153,7 +155,13 @@ void TextureManager::loadTexturesFromSpriteSheetWithLineNumber(const std::string
         info.maxFrameDuration = details.maxFrameDuration;
         info.dynamicFrameCount = details.isDynamic;
 
-        textures[entityName][animationName] = std::move(info);
+        if(entityNum > 1){
+            for (int i = 0; i < entityNum; i++) {
+                textures[entityName + std::to_string(i + 1)][animationName] = info;
+            }
+        }else{
+            textures[entityName][animationName] = std::move(info);
+        }
     }
 
 }
