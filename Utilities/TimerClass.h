@@ -32,6 +32,15 @@ enum class eTimerMode {
         timers[static_cast<int>(type)] = TimerInfo{duration, std::chrono::system_clock::now(), callback, mode, false, false};
     }
 
+    void startTimer(eTimer type) {
+        std::lock_guard<std::mutex
+        > guard(mutex);
+        if (timers.find(static_cast<int>(type)) != timers.end()) {
+            timers[static_cast<int>(type)].started = true;
+            timers[static_cast<int>(type)].last = std::chrono::system_clock::now();
+        }
+    }
+
     void pauseTimer(eTimer type) {
         std::lock_guard<std::mutex
         > guard(mutex);
@@ -78,12 +87,13 @@ enum class eTimerMode {
 
 private:
     struct TimerInfo {
-        std::chrono::milliseconds duration;
+        std::chrono::milliseconds duration{};
         std::chrono::time_point<std::chrono::system_clock> last;
         std::function<void()> callback;
         eTimerMode mode;
-        bool expired;
-        bool paused; // Aggiunto il flag di pausa
+        bool started{};
+        bool expired{};
+        bool paused{}; // Aggiunto il flag di pausa
     };
 
     std::unordered_map<int, TimerInfo> timers;
@@ -109,7 +119,7 @@ private:
                 std::lock_guard<std::mutex> guard(mutex);
                 for (auto &it: timers) {
                     auto &timer = it.second;
-                     if (!timer.expired && !timer.paused && now - timer.last >= timer.duration) {
+                     if (!timer.expired && !timer.paused && now - timer.last >= timer.duration && timer.started) {
                         if(timer.callback != nullptr) timer.callback();
                         if (timer.mode == eTimerMode::Cyclic) {
                             timer.last = now; // Resetta il timer per la modalità ciclica

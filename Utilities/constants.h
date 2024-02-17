@@ -5,6 +5,9 @@
 #ifndef JUMP_CONSTANTS_H
 #define JUMP_CONSTANTS_H
 
+//GamingState
+#define GAMING_MAX_HEARTS 3
+
 //Player
 #define PLAYER_HEALTH_MAX 3
 
@@ -17,7 +20,8 @@
 
 enum class eTimer {
     ePumpkinSpawn = 0,
-    ePlayerScore = 1,
+    eHearthSpawn = 1,
+    eHeartDespawn = 2,
 };
 
 

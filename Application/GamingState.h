@@ -101,8 +101,6 @@ private:
 
     void setTextureForHeart();
 
-    void handleHeartSpawn(float deltaTime);
-
     void spawnHeart();
 
     sf::Time getRandomSpawnInterval();
@@ -115,18 +113,13 @@ private:
     bool paused = false;
     TextureManager textureManager;
     Player player;
-    Fire fire;
-    Pumpkin pumpkin;
 	Map gameMap;
-    CollisionManager collisionManager;
     Timer gameTimer;
     std::vector<std::unique_ptr<MenuButton>> pauseButtons;
     Ball fireBall;
 
 
     std::vector<Heart> hearts;
-    int currentNumHearts= 0;
-    sf::Clock heartSpawnTimer;
 
     std::unique_ptr<MenuButton> gameOverButton;
 
@@ -147,6 +140,8 @@ private:
     void handleCollisionMap(CollisionManager::CollisionResult collision);
 
     void drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::RenderWindow &window);
+
+    static int randomBetween(int min, int max);
 
 };
 

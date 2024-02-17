@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <random>
 
 #include "GamingState.h"
 #include "MenuState.h"
@@ -22,6 +23,7 @@ GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
 }
 
 void GamingState::initState() {
+    srand(static_cast<unsigned int>(time(nullptr)));
     gameOver = false;
     paused = false;
     changeStateToNext = false;
@@ -36,12 +38,8 @@ void GamingState::initState() {
     initPauseButtons();
     initGameOverButton();
     initHearts();
+    initTimer();
 
-
-    // Avvia i timer
-    heartSpawnTimer.restart();
-    gameTimer.reset();
-    gameTimer.start();
     std::ifstream i("hitbox/MapHitBoxes.json"); // Sostituisci con il percorso corretto del file
     i >> j;
 }
@@ -203,7 +201,6 @@ void GamingState::handleGameOver(sf::RenderWindow &window) {
         // Ferma e salva il tempo quando finisce il gioco
         gameTimer.stop();
         gameTimer.saveBestTime();
-        pumpkin.setHit(false);
 
 
 
@@ -339,6 +336,14 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
         clampPlayerVelocity(currentVelocity);
         player.setVelocity(currentVelocity * deltaTime);
 
+        for(auto &heart: hearts){
+            float heartVelocity = heart.getVelocity().y;
+            heartVelocity += heart.getAcceleration().y;
+
+            heart.setVelocity(sf::Vector2f(0, heartVelocity * deltaTime));
+
+        }
+
 
 
         //Aggiorna gli sprite
@@ -347,10 +352,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
 
         fireBall.update(deltaTime);
         //TODO:GESTIRE COLLISIONI CON I NEMICI
-        if (!pumpkin.isHit()) {
-            fire.update(deltaTime);
-            pumpkin.update(deltaTime);
-        } else if (paused) {
+       if (paused) {
             for (auto &button: pauseButtons) {
                 button->update(window);
             }
@@ -366,7 +368,9 @@ void GamingState::handleMovements(float deltaTime) {
     //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
     //PhysicsSystem::applyGravity(player, deltaTime);
     handlePlayerMovements(deltaTime);
-    handleEnemyMovements(deltaTime);
+    for (auto &heart: hearts) {
+        PhysicsSystem::applyGravity(heart);
+    }
 }
 
 void GamingState::handlePlayerMovements(float deltaTime) {
@@ -434,6 +438,10 @@ void GamingState::handleAnimations(float deltaTime) {
     }
 
     handleEnemyAnimations(deltaTime);
+    for(auto &heart: hearts){
+        std::cout<< "frame: " << textureManager.getCurrentIndex("Heart") << std::endl;
+        textureManager.updateAnimation("Heart", "Heart", deltaTime, heart);
+    }
 }
 
 
@@ -483,7 +491,6 @@ void GamingState::handleCollisionMap(CollisionManager::CollisionResult collision
             break;
     }
 
-    std::cout << "player velocity: " << player.getAcceleration().y << std::endl;
 }
 
 void GamingState::setTextureForPlayer() {
@@ -549,20 +556,13 @@ void GamingState::handleCollisions() {
     //std::vector<Entity*> colliders;
     //colliders.push_back(&pumpkin);
     //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
-    if (CollisionManager::checkCollision(player.getHitbox(), pumpkin.getHitbox())) {
-        std::cout << "Collisione ";
-        pumpkin.setHit(true);
-        pumpkin.setPosition(sf::Vector2f(-1000, -1000));
-        fire.setPosition(sf::Vector2f(-1000, -1000));
-        player.takeDamage();
-    }
 
     /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
          std::cout << "Collisione con la mappa";
          player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
      }*/
 
-    std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(player,
+    std::vector<CollisionManager::CollisionResult> collisions = CollisionManager::checkMapCollision(player,
                                                                                                    gameMap.getMapHitboxes());
     for (const auto &collision: collisions) {
         if (collision.hasCollision) {
@@ -590,38 +590,15 @@ void GamingState::setTextureForEnemy() {
     fireBall.setPosition(sf::Vector2f(-200, 100));
     fireBall.setVelocity(FIRE_DEFAULT_SPEED, 0);
 
-    fire.setTexture(textureManager.getTexture("Fire", "Fire", 0));
-    fire.setPosition(sf::Vector2f(-200, 100));
-    fire.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0));
-
-    //Aggiungi funzione per centrare l'immagine TODO(Settare il global bounds per centrare l'immagine)
-    pumpkin.setTexture(textureManager.getTexture("Pumpkin", "Pumpkin", 0));
-    pumpkin.setPosition(sf::Vector2f(-85, 190));
-    pumpkin.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0));
 }
 
 void GamingState::handleEnemyAnimations(float deltaTime) {
     textureManager.updateAnimation("Fire", "Fire", deltaTime, fireBall.getFire());
 }
 
-void GamingState::handleEnemyMovements(float deltaTime) {
-    //Verficare se il fuoco è uscito dallo schermo
-    if (fire.getPosition().x > WINDOW_WIDTH) {
-        fire.setPosition(sf::Vector2f(-200, 100));
-    }
-
-    if (pumpkin.getPosition().x > WINDOW_WIDTH + 115) {
-        pumpkin.setPosition(sf::Vector2f(-85, 190));
-    }
-    //Aggiorna la velocità in base al tempo passato dall'inzio del gioco
-
-}
-
-
 //Heart functions
 void GamingState::initHearts() {
     setTextureForHeart();
-    currentNumHearts = 0;
 }
 
 void GamingState::setTextureForHeart() {
@@ -629,32 +606,27 @@ void GamingState::setTextureForHeart() {
             {"Heart",
              {HEART_TEXTURE_PATH, HEART_TEXTURES, HEART_MIN_FRAME_DURATION, HEART_MAX_FRAME_DURATION, false}}
     };
-    textureManager.loadEntityTextures("Heart", heartAnimations);
-}
 
-void GamingState::handleHeartSpawn(float deltaTime) {
+    std::map<std::string, std::pair<int, int>> heartDetails = {
+            {"Heart", {5, 0}}
+    };
 
-    sf::Time spawnInterval = getRandomSpawnInterval();
-    if (heartSpawnTimer.getElapsedTime() > spawnInterval && currentNumHearts < 2) {
-        spawnHeart();
-        currentNumHearts++;
-        heartSpawnTimer.restart();
-    }
+    textureManager.loadTexturesFromSpriteSheetWithLineNumber("Heart", "PNG/Heart/heartAnimation.png", heartAnimations, 32,
+                                                             32);
 }
 
 void GamingState::spawnHeart() {
+    std::cout << "Spawned heart" << std::endl;
     Heart heart;
     heart.setTexture(textureManager.getTexture("Heart", "Heart", 0));
 
-    // Imposta la posizione iniziale in alto
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
-    float spawnX = static_cast<float>(std::rand() % WINDOW_WIDTH);
-    float spawnY = 0;
-
-    heart.setPosition(sf::Vector2f(spawnX, spawnY));
-    heart.setVelocity(sf::Vector2f(0, HEART_FALL_SPEED));
-
-    hearts.push_back(heart);
+    // Controlla se ci sono già 2 cuori sulla mappa
+    if (hearts.size() < 1) {
+        int xPosition = randomBetween(40, WINDOW_WIDTH - 40);
+        std::cout << "Spawned heart at " << xPosition << std::endl;
+        heart.setPosition(sf::Vector2f((float) xPosition, 0));
+        hearts.push_back(heart);
+    }
 }
 
 sf::Time GamingState::getRandomSpawnInterval() {
@@ -677,11 +649,9 @@ void GamingState::handleHeartCollisions(Heart &heart) {
         heart.setCollected(true);
         player.gainHealth();
         heart.setPosition(sf::Vector2f(-1000, -1000));
-
-        currentNumHearts--;
     }
 
-    std::vector<CollisionManager::CollisionResult> collisions = collisionManager.checkMapCollision(heart,
+    std::vector<CollisionManager::CollisionResult> collisions = CollisionManager::checkMapCollision(heart,
                                                                                                    gameMap.getMapHitboxes());
     for (const auto &collision: collisions) {
         if (collision.hasCollision) {
@@ -691,7 +661,7 @@ void GamingState::handleHeartCollisions(Heart &heart) {
 }
 
 void GamingState::updateHearts(float deltaTime) {
-    handleHeartSpawn(deltaTime);
+    //handleHeartSpawn(deltaTime);
 
     // Itera attraverso i cuori e applica le operazioni necessarie
     for (auto &heart: hearts) {
@@ -715,6 +685,26 @@ void GamingState::drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::R
 
         window.draw(rectangle);
     }
+}
+
+void GamingState::initTimer() {
+    gameTimer.reset();
+    gameTimer.start();
+    Timers.addTimer(eTimer::eHearthSpawn, std::chrono::milliseconds(2000), [&]() { spawnHeart(); },
+                    TimerClass::eTimerMode::Cyclic);
+    Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(5000), [&]() { spawnHeart(); },
+                    TimerClass::eTimerMode::OnceDown);
+    Timers.startTimer(eTimer::eHearthSpawn);
+
+
+}
+
+int GamingState::randomBetween(int min, int max) {
+    if (max <= min) return min;
+
+    int range = max - min + 1;
+    int randomNumber = min + (rand() % range);
+    return randomNumber;
 }
 
 
