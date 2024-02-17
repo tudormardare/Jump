@@ -15,7 +15,7 @@ void Pumpkin::draw(sf::RenderWindow &window) {
 }
 
 void Pumpkin::update(float deltaTime) {
-    move(velocity.x * deltaTime , velocity.y * deltaTime);
+    move(velocity.x  , velocity.y);
 }
 
 void Pumpkin::move(float offsetX, float offsetY) {

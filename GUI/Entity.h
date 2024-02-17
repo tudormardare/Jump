@@ -16,6 +16,7 @@ protected:
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
     sf::Vector2f maxSpeed;
+    std::string name;
 
     void setCollisionRect() ;
 
@@ -64,6 +65,8 @@ public:
     sf::Sprite getSprite() const;
 
     sf::FloatRect getHitbox() const;
+
+    std::string getName() const;
 };
 
 #endif //JUMP_ENTITY_H

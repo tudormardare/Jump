@@ -197,12 +197,13 @@ void GamingState::drawPause(sf::RenderWindow &window) {
 }
 
 void GamingState::handleGameOver(sf::RenderWindow &window) {
-    if (player.getHealth() <= 0) {
+    if (player.getHealth() <= 2) {
         gameOver = true;
 
         // Ferma e salva il tempo quando finisce il gioco
         gameTimer.stop();
         gameTimer.saveBestTime();
+        pumpkin.setHit(false);
 
 
 
@@ -288,8 +289,9 @@ void GamingState::render(sf::RenderWindow &window) {
     window.draw(points);
     drawHitboxes(gameMap.getMapHitboxes(), window);
     gameMap.render(window);
-    fire.draw(window);
-    pumpkin.draw(window);
+    //fire.draw(window);
+    fireBall.draw(window);
+    //pumpkin.draw(window);
     player.draw(window);
     player.renderHealth(window);
     gameTimer.displayElapsedTime(window);
@@ -343,6 +345,7 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
         player.update(deltaTime);
         updateHearts(deltaTime);
 
+        fireBall.update(deltaTime);
         //TODO:GESTIRE COLLISIONI CON I NEMICI
         if (!pumpkin.isHit()) {
             fire.update(deltaTime);
@@ -582,6 +585,11 @@ void GamingState::setTextureForEnemy() {
     textureManager.loadEntityTextures("Fire", fireAnimations);
     textureManager.loadEntityTextures("Pumpkin", pumpkinAnimation);
 
+    fireBall.setFireTexture(textureManager.getTexture("Fire", "Fire", 0));
+    fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "Pumpkin", 0));
+    fireBall.setPosition(sf::Vector2f(-200, 100));
+    fireBall.setVelocity(FIRE_DEFAULT_SPEED, 0);
+
     fire.setTexture(textureManager.getTexture("Fire", "Fire", 0));
     fire.setPosition(sf::Vector2f(-200, 100));
     fire.setVelocity(sf::Vector2f(FIRE_DEFAULT_SPEED, 0));
@@ -593,7 +601,7 @@ void GamingState::setTextureForEnemy() {
 }
 
 void GamingState::handleEnemyAnimations(float deltaTime) {
-    textureManager.updateAnimation("Fire", "Fire", deltaTime, fire);
+    textureManager.updateAnimation("Fire", "Fire", deltaTime, fireBall.getFire());
 }
 
 void GamingState::handleEnemyMovements(float deltaTime) {

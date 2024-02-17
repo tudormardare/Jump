@@ -22,6 +22,8 @@ set(SOURCE_FILES
         GUI/Ghost.cpp
         GUI/Ghost.h
         GUI/Pumpkin.cpp
+        GUI/Ball.h
+        GUI/Ball.cpp
         GUI/Pumpkin.h
         GUI/Map.cpp
         Utilities/TextureManager.cpp

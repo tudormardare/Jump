@@ -7,6 +7,7 @@ Player::Player() : hpMax(3), hp(hpMax) {
 }
 
 void Player::initSprite() {
+    name = "Player";
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
     maxSpeed = sf::Vector2f(PLAYER_MAX_SPEED , PLAYER_MAX_SPEED );

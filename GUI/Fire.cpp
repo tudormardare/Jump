@@ -9,7 +9,7 @@ void Fire::move(float offsetX, float offsetY) {
 }
 
 void Fire::update(float deltaTime) {
-    move(velocity.x * deltaTime , velocity.y * deltaTime);
+    move(velocity.x , velocity.y);
 }
 
 void Fire::draw(sf::RenderWindow &window) {

@@ -12,7 +12,7 @@
 #define FIRE_MAX_FRAME_DURATION 1.f
 #define FIRE_RECTANGLE_WIDTH 16
 #define FIRE_RECTANGLE_HEIGHT 16
-#define FIRE_DEFAULT_SPEED 20.f
+#define FIRE_DEFAULT_SPEED 1.f
 
 #include "Entity.h"
 

@@ -22,6 +22,7 @@
 #include "../Utilities/TimerClass.h"
 #include "../Utilities/constants.h"
 #include "../GUI/Heart.h"
+#include "../GUI/Ball.h"
 
 #define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 #define WINDOW_WIDTH 1080
@@ -120,6 +121,7 @@ private:
     CollisionManager collisionManager;
     Timer gameTimer;
     std::vector<std::unique_ptr<MenuButton>> pauseButtons;
+    Ball fireBall;
 
 
     std::vector<Heart> hearts;

@@ -99,6 +99,10 @@ void Entity::setCollisionRect()  {
    hitbox = sf::IntRect(left, top, right - left + 1, bottom - top + 1);
 }
 
+std::string Entity::getName() const {
+    return name;
+}
+
 
 
 
