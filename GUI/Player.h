@@ -37,6 +37,7 @@ private:
 
     int hp;
     int hpMax = PLAYER_HEALTH;
+    bool invincible;
 
     bool inverseX = false;
     bool jumping = false;
@@ -86,6 +87,10 @@ public:
     void renderHealth(sf::RenderWindow &window);
 
     void setJumping(bool newJumping);
+
+    void setInvincible(bool value);
+
+    bool isInvincible() const;
 
 };
 

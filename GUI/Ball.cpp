@@ -4,9 +4,12 @@
 
 #include "Ball.h"
 
+#include <utility>
+
 Ball::Ball() {
     pumpkin.setPosition(0, 0);
     fire.setPosition(0, 0);
+    inverse = false;
 }
 
 void Ball::update(float deltaTime) {
@@ -52,8 +55,13 @@ void Ball::setAcceleration(sf::Vector2f newAcceleration) {
 }
 
 void Ball::setPosition(sf::Vector2f newPosition) {
-    pumpkin.setPosition(newPosition + sf::Vector2f(OFFSET_FIREBALL_X, OFFSET_FIREBALL_Y));
-    fire.setPosition(newPosition);
+    if(!inverse) {
+        pumpkin.setPosition(newPosition + sf::Vector2f(OFFSET_FIREBALL_X, OFFSET_FIREBALL_Y));
+        fire.setPosition(newPosition);
+    } else {
+        pumpkin.setPosition(newPosition + sf::Vector2f(-OFFSET_FIREBALL_X, OFFSET_FIREBALL_Y));
+        fire.setPosition(newPosition);
+    }
 }
 
 Fire &Ball::getFire() {
@@ -62,4 +70,33 @@ Fire &Ball::getFire() {
 
 Pumpkin &Ball::getPumpkin() {
     return pumpkin;
+}
+
+std::string Ball::getName() const {
+    return name;
+}
+
+void Ball::setName(std::string newName) {
+    name = std::move(newName);
+}
+
+void Ball::setScale(float x, float y) {
+    pumpkin.setScale(x, y);
+    fire.setScale(x, y);
+}
+
+void Ball::setPumpkinScale(float x, float y) {
+    pumpkin.setScale(x, y);
+}
+
+void Ball::setFireScale(float x, float y) {
+    fire.setScale(x, y);
+}
+
+void Ball::setInverse(bool value) {
+    inverse = value;
+}
+
+bool Ball::getInverse() const {
+    return inverse;
 }

@@ -97,17 +97,17 @@ private:
 
     void handleMovements(float deltaTime);
 
-    void initHearts();
-
     void setTextureForHeart();
 
-    void spawnHeart();
+    void spawnFireBall();
 
-    sf::Time getRandomSpawnInterval();
+    void spawnHeart();
 
     void handleHeartCollisions(Heart &heart);
 
     void updateHearts(float deltaTime);
+
+    void updateFireBalls(float deltaTime);
 
     //attributi relativi al gioco
     bool paused = false;
@@ -116,10 +116,10 @@ private:
 	Map gameMap;
     Timer gameTimer;
     std::vector<std::unique_ptr<MenuButton>> pauseButtons;
-    Ball fireBall;
 
 
     std::vector<Heart> hearts;
+    std::vector<Ball> fireBalls;
 
     std::unique_ptr<MenuButton> gameOverButton;
 

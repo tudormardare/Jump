@@ -62,6 +62,8 @@ public:
 
     sf::Vector2f getAcceleration() const;
 
+    void setScale(float x, float y);
+
     sf::Sprite getSprite() const;
 
     sf::FloatRect getHitbox() const;

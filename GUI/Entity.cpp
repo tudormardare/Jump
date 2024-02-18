@@ -108,6 +108,10 @@ void Entity::setName(std::string newName) {
     name = std::move(newName);
 }
 
+void Entity::setScale(float x, float y) {
+    sprite.setScale(x, y);
+}
+
 
 
 

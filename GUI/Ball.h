@@ -14,6 +14,9 @@ class Ball{
 private:
     Pumpkin pumpkin;
     Fire fire;
+    std::string name;
+
+    bool inverse;
 public:
 
     Ball();
@@ -24,6 +27,13 @@ public:
     void setFireTexture( const sf::Texture &firetexture);
     void setPumpkinTexture( const sf::Texture &pumpkintexture);
     void setPosition(sf::Vector2f newPosition);
+    void setName(std::string newName);
+    std::string getName() const;
+    void setScale(float x, float y);
+    void setPumpkinScale(float x, float y);
+    void setFireScale(float x, float y);
+    void setInverse(bool value);
+    bool getInverse() const;
     Fire& getFire() ;
     Pumpkin& getPumpkin() ;
     void setPosition(float x, float y);

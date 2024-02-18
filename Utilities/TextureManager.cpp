@@ -7,7 +7,7 @@
 
 TextureManager::TextureManager() = default;
 
-void TextureManager::loadEntityTextures(const std::string& entityName, const std::map<std::string, AnimationConfig>& animations) {
+void TextureManager::loadEntityTextures(const std::string& entityName, const std::map<std::string, AnimationConfig>& animations, int entityNum) {
     for (const auto& [animationType, config] : animations) {
         AnimationData data;
         for (int i = 0; i < config.frameCount; ++i) {
@@ -27,7 +27,13 @@ void TextureManager::loadEntityTextures(const std::string& entityName, const std
         info.dynamicFrameCount = config.isDynamic;
         // currentFrame e animationTimer sono già inizializzati a
 
-        textures[entityName][animationType] = std::move(info);
+        if(entityNum > 1){
+            for (int i = 0; i < entityNum; i++) {
+                textures[entityName + std::to_string(i + 1)][animationType] = info;
+            }
+        }else{
+            textures[entityName][animationType] = std::move(info);
+        }
     }
 }
 

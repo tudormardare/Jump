@@ -50,17 +50,15 @@ enum class eTimerMode {
     }
 
     void restartTimer(eTimer type) {
-
-        std::cout << "Restarting timer1" << std::endl;
-
         std::lock_guard<std::mutex> guard(mutex);
-        std::cout << "Restarting timer2" << std::endl;
         if (timers.find(static_cast<int>(type)) != timers.end()) {
-            std::cout << "Restarting timer3" << std::endl;
             auto& timer = timers[static_cast<int>(type)];
             timer.last = std::chrono::system_clock::now();
             timer.paused = false; // Riattiva il timer se era in pausa
             timer.expired = false; // Consente la ri-esecuzione per OnceUp e OnceDown
+            if(timer.mode == eTimerMode::OnceDown) {
+                timer.started = true; // Riattiva il timer se era scaduto
+            }
         }
     }
 

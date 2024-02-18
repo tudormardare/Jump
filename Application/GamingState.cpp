@@ -192,7 +192,7 @@ void GamingState::drawPause(sf::RenderWindow &window) {
 }
 
 void GamingState::handleGameOver(sf::RenderWindow &window) {
-    if (player.getHealth() <= 2) {
+    if (player.getHealth() <= 0) {
         gameOver = true;
 
         // Ferma e salva il tempo quando finisce il gioco
@@ -284,7 +284,9 @@ void GamingState::render(sf::RenderWindow &window) {
     drawHitboxes(gameMap.getMapHitboxes(), window);
     gameMap.render(window);
     //fire.draw(window);
-    fireBall.draw(window);
+    for(auto &fireBall: fireBalls){
+        fireBall.draw(window);
+    }
     //pumpkin.draw(window);
     player.draw(window);
     player.renderHealth(window);
@@ -317,6 +319,19 @@ void GamingState::render(sf::RenderWindow &window) {
         window.draw(rectangle);
         window.draw(points);
 
+    }
+
+    for(auto &fireBall: fireBalls){
+        sf::RectangleShape rectangle(sf::Vector2f(fireBall.getPumpkin().getHitbox().width, fireBall.getPumpkin().getHitbox().height));
+        sf::VertexArray points(sf::Points, 1);
+        points[0].position = sf::Vector2f(fireBall.getPumpkin().getCenter().x, fireBall.getPumpkin().getCenter().y);
+        points[0].color = sf::Color::Red;
+        rectangle.setPosition(fireBall.getPumpkin().getHitbox().left, fireBall.getPumpkin().getHitbox().top);
+        rectangle.setFillColor(sf::Color::Transparent);
+        rectangle.setOutlineColor(sf::Color::Red);
+        rectangle.setOutlineThickness(1.f);
+        window.draw(rectangle);
+        window.draw(points);
     }
 
     drawPause(window);
@@ -367,7 +382,8 @@ void GamingState::update(sf::RenderWindow &window, float deltaTime) {
         player.update(deltaTime);
         updateHearts(deltaTime);
 
-        fireBall.update(deltaTime);
+
+        updateFireBalls(deltaTime);
         //TODO:GESTIRE COLLISIONI CON I NEMICI
        if (paused) {
             for (auto &button: pauseButtons) {
@@ -416,7 +432,6 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
     }
 }
 
-
 void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     if (isKeyPressedW && !player.isJumping() && player.getVelocity().y == 0) {
         player.setAccelerationY(-JUMP_FORCE); // Imposta la velocità iniziale verso l'alto
@@ -425,7 +440,6 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     }
 
 }
-
 
 void GamingState::handleAnimations(float deltaTime) {
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
@@ -456,7 +470,6 @@ void GamingState::handleAnimations(float deltaTime) {
         textureManager.updateAnimation(heart.getName(), "Heart", deltaTime, heart);
     }
 }
-
 
 void GamingState::handleCollisionMap(CollisionManager::CollisionResult collision) {
     switch (collision.direction) {
@@ -563,7 +576,6 @@ void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
     velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED * 4, PLAYER_MAX_SPEED * 2);
 }
 
-
 void GamingState::handleCollisions() {
     //Prova collisioni con i nemici
     //std::vector<Entity*> colliders;
@@ -582,6 +594,17 @@ void GamingState::handleCollisions() {
             handleCollisionMap(collision);
         }
     }
+    bool hitted = false;
+    for(auto &fireBall: fireBalls){
+        if (CollisionManager::checkCircleCollision(fireBall.getPumpkin(), player)) {
+            hitted = true;
+        }
+    }
+    if(hitted && !player.isInvincible()) {
+        player.takeDamage();
+        player.setInvincible(true);
+        Timers.restartTimer(eTimer::ePlayerInvincible);
+    }
 }
 
 //Enemy functions
@@ -595,18 +618,14 @@ void GamingState::setTextureForEnemy() {
              {PUMPKIN_TEXTURE_PATH, PUMPKIN_TEXTURES, PUMPKIN_MIN_FRAME_DURATION, PUMPKIN_MAX_FRAME_DURATION,
               false}}
     };
-    textureManager.loadEntityTextures("Fire", fireAnimations);
+    textureManager.loadEntityTextures("FireBall", fireAnimations, GAMING_MAX_FIREBALLS);
     textureManager.loadEntityTextures("Pumpkin", pumpkinAnimation);
-
-    fireBall.setFireTexture(textureManager.getTexture("Fire", "Fire", 0));
-    fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "Pumpkin", 0));
-    fireBall.setPosition(sf::Vector2f(-200, 100));
-    fireBall.setVelocity(FIRE_DEFAULT_SPEED, 0);
-
 }
 
 void GamingState::handleEnemyAnimations(float deltaTime) {
-    textureManager.updateAnimation("Fire", "Fire", deltaTime, fireBall.getFire());
+    for(auto &fireBall: fireBalls){
+        textureManager.updateAnimation(fireBall.getName(), "Fire", deltaTime, fireBall.getFire());
+    }
 }
 
 void GamingState::setTextureForHeart() {
@@ -713,7 +732,14 @@ void GamingState::initTimer() {
                     TimerClass::eTimerMode::OnceDown);
     Timers.addTimer(eTimer::eBlinking, std::chrono::milliseconds(1000), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
+    Timers.addTimer(eTimer::eFireballSpawn, std::chrono::milliseconds(1000), [&]() { spawnFireBall(); },
+                    TimerClass::eTimerMode::Cyclic);
+
+    Timers.addTimer(eTimer::ePlayerInvincible, std::chrono::milliseconds(3000), [&]() { player.setInvincible(false); },
+                    TimerClass::eTimerMode::OnceDown);
+
     Timers.startTimer(eTimer::eHearthSpawn);
+    Timers.startTimer(eTimer::eFireballSpawn);
 
 
 }
@@ -726,9 +752,68 @@ int GamingState::randomBetween(int min, int max) {
     return randomNumber;
 }
 
+void GamingState::spawnFireBall() {
+    Ball fireBall;
+    fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "Pumpkin", 0));
 
+    if (fireBalls.size() < GAMING_MAX_FIREBALLS) {
+        int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
+        int xPosition = randomBetween(1, 2);
+        if (xPosition == 1) {
+            fireBall.setInverse(false);
+            fireBall.setFireScale(FIRE_SCALE, FIRE_SCALE);
+            fireBall.setPumpkinScale(PUMPKIN_SCALE, PUMPKIN_SCALE);
+            fireBall.setPosition(sf::Vector2f( -200 , (float) yPosition));
+            fireBall.setVelocity(1, 0);
+        }else{
+            fireBall.setInverse(true);
+            fireBall.setFireScale(-FIRE_SCALE, FIRE_SCALE);
+            fireBall.setPumpkinScale(-PUMPKIN_SCALE, PUMPKIN_SCALE);
+            fireBall.setPosition(sf::Vector2f(WINDOW_WIDTH + 200, (float) yPosition));
+            fireBall.setVelocity(-1, 0);
+            fireBall.setName("FireBall" + std::to_string(fireBalls.size() + 1));
+        }
 
+        fireBall.setName("FireBall" + std::to_string(fireBalls.size() + 1));
+        fireBall.setFireTexture(textureManager.getTexture(fireBall.getName(), "Fire", 0));
+        fireBalls.push_back(fireBall);
+    }
+}
 
+void GamingState::updateFireBalls(float deltaTime) {
 
+    for(auto &fireBall: fireBalls){
+        if(fireBall.getInverse() && fireBall.getPosition().x < -200){
+            int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
+            int xPosition = randomBetween(1, 2);
+            if(xPosition == 1)
+                fireBall.setPosition(sf::Vector2f(WINDOW_WIDTH + 200, (float) yPosition));
+            else {
+                fireBall.setInverse(false);
+                fireBall.setPosition(sf::Vector2f(-200, (float) yPosition));
+                fireBall.setFireScale(FIRE_SCALE, FIRE_SCALE);
+                fireBall.setPumpkinScale(PUMPKIN_SCALE, PUMPKIN_SCALE);
+                fireBall.setVelocity(1, 0);
+            }
 
+        }else if(!fireBall.getInverse() && fireBall.getPosition().x > WINDOW_WIDTH + 200){
+            int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
+            int xPosition = randomBetween(1, 2);
+            if(xPosition == 1)
+                fireBall.setPosition(sf::Vector2f(-200, (float) yPosition));
+            else {
+                fireBall.setInverse(true);
+                fireBall.setPosition(sf::Vector2f(WINDOW_WIDTH + 200, (float) yPosition));
+                fireBall.setFireScale(-FIRE_SCALE, FIRE_SCALE);
+                fireBall.setPumpkinScale(-PUMPKIN_SCALE, PUMPKIN_SCALE);
+                fireBall.setVelocity(-1, 0);
+            }
+        }
+    }
+
+    for(auto &fireBall: fireBalls){
+        fireBall.update(deltaTime);
+    }
+
+}
 

@@ -4,6 +4,7 @@
 Player::Player() : hpMax(3), hp(hpMax) {
     initSprite();
     setHealth(hpMax);
+    invincible = false;
 }
 
 void Player::initSprite() {
@@ -118,6 +119,15 @@ void Player::renderHealth(sf::RenderWindow &window) {
     } else {
         std::cerr << "Impossibile caricare il font per la salute del giocatore.\n";
     }
+}
+
+bool Player::isInvincible() const {
+    return invincible;
+}
+
+void Player::setInvincible(bool value) {
+    invincible = value;
+    std::cout << "Invincibilità: " << invincible << std::endl;
 }
 
 

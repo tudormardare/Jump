@@ -18,7 +18,6 @@ void Fire::draw(sf::RenderWindow &window) {
 
 void Fire::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
-    sprite.setOrigin(0,0);
 }
 
 Fire::Fire() {
