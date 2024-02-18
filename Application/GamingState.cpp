@@ -395,7 +395,6 @@ void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyP
     }
 }
 
-
 void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     if (isKeyPressedW && !player.isJumping() && player.getVelocity().y == 0) {
         player.setAccelerationY(-JUMP_FORCE); // Imposta la velocità iniziale verso l'alto
@@ -404,7 +403,6 @@ void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
     }
 
 }
-
 
 void GamingState::handleAnimations(float deltaTime) {
     bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
@@ -432,7 +430,6 @@ void GamingState::handleAnimations(float deltaTime) {
 
     handleEnemyAnimations(deltaTime);
 }
-
 
 void GamingState::handleCollisionMap(CollisionManager::CollisionResult collision) {
     switch (collision.direction) {
@@ -540,7 +537,6 @@ void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
     velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED * 4, PLAYER_MAX_SPEED * 2);
 }
 
-
 void GamingState::handleCollisions() {
     //Prova collisioni con i nemici
     //std::vector<Entity*> colliders;
@@ -638,9 +634,11 @@ void GamingState::spawnHeart() {
     Heart heart;
     heart.setTexture(textureManager.getTexture("Heart", "Heart", 0));
 
-    // Imposta la posizione iniziale in alto
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
-    float spawnX = static_cast<float>(std::rand() % WINDOW_WIDTH);
+    std::random_device rd;  // Genera un numero casuale per l'inizializzazione
+    std::mt19937 gen(rd()); // Generatore di numeri casuali basato su Mersenne Twister
+    std::uniform_real_distribution<> dis(0, WINDOW_WIDTH); // Distribuzione uniforme tra 0 e WINDOW_WIDTH
+
+    float spawnX = static_cast<float>(dis(gen));
     float spawnY = 0;
 
     heart.setPosition(sf::Vector2f(spawnX, spawnY));
@@ -654,7 +652,7 @@ sf::Time GamingState::getRandomSpawnInterval() {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
     // Definisci il limite inferiore e superiore per l'intervallo casuale
-    float minInterval = 1.0f;
+    float minInterval = 5.0f;
     float maxInterval = 10.0f;
 
     // Genera un intervallo casuale tra minInterval e maxInterval

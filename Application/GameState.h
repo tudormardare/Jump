@@ -14,6 +14,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "../Utilities/json.hpp"
+#include <random>
 
 class GameState {
 public:
