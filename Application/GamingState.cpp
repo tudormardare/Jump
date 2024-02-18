@@ -4,14 +4,7 @@
 
 #define FRAME_DURATION 0.016f
 
-#include <valarray>
-#include <iomanip>
-#include <string>
-#include <sstream>
-#include <fstream>
-
 #include "GamingState.h"
-#include "MenuState.h"
 
 nlohmann::json j;
 

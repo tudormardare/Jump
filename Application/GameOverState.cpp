@@ -1,7 +1,6 @@
 //
 // Created by Denis Jaupi on 18/02/24.
 //
-
 #include "GameOverState.h"
 
 GameOverState &GameOverState::GetInstance(sf::RenderWindow &window) {

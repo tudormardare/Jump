@@ -5,7 +5,6 @@
 #ifndef JUMP_MENUBUTTON_H
 #define JUMP_MENUBUTTON_H
 
-
 #include <SFML/Graphics.hpp>
 #include <memory>
 

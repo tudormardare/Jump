@@ -9,15 +9,15 @@
 #ifndef JUMPER_JUMPERAPPLICATION_H
 #define JUMPER_JUMPERAPPLICATION_H
 
-#define WINDOW_WIDTH 1080
-#define WINDOW_HEIGHT 675
-
 #include <iostream>
+#include <thread>
+#include "GamingState.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "SettingsState.h"
 #include "GameState.h"
 #include "PauseState.h"
 #include "MenuState.h"
+#include "../Utilities/constants.h"
 
 class JumperApplication {
 

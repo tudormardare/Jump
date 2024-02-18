@@ -6,6 +6,7 @@
 #define JUMP_ENTITY_H
 
 #include "SFML/Graphics.hpp"
+#include <iostream>
 
 
 class Entity {

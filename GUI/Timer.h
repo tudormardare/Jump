@@ -8,6 +8,10 @@
 
 #pragma once
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>

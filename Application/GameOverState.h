@@ -18,8 +18,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-
-#define GAMEOVER_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
+#include "../Utilities/constants.h"
 
 class GameOverState : public GameState {
 public:

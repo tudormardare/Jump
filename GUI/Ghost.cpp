@@ -1,8 +1,6 @@
 //
 // Created by Denis Jaupi on 26/06/23.
 //
-#define GHOST_TEXTURE "PNG/Ghost/Ghost.png"
-
 #include "Ghost.h"
 
 Ghost::Ghost(sf::Vector2f playerPosition) {

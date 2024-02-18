@@ -1,9 +1,8 @@
 //
 // Created by tudor on 04/10/2023.
 //
-
 #include "TextureManager.h"
-#include <iostream>
+
 
 TextureManager::TextureManager() = default;
 

@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "Player.h"
 
 Player::Player() : hpMax(3), hp(hpMax) {

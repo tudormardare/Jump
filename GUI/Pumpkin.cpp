@@ -1,8 +1,6 @@
 //
 // Created by tudor on 22/11/2023.
 //
-
-#include <iostream>
 #include "Pumpkin.h"
 
 void Pumpkin::setTexture(const sf::Texture &texture) {

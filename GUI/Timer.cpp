@@ -3,10 +3,6 @@
 //
 
 #include "Timer.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <iomanip>
 
 Timer::Timer() : elapsedTime(sf::Time::Zero), bestTime(sf::Time::Zero), isRunning(false), bestTimeFilePath("best_time.txt") {
     // Carica il font

@@ -9,6 +9,10 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <valarray>
 #include <iostream>
+#include <iomanip>
+#include <string>
+#include <sstream>
+#include <fstream>
 #include "GameState.h"
 #include "MenuState.h"
 #include "../Controllers/CollisionManager.h"
@@ -22,18 +26,7 @@
 #include "../Utilities/TimerClass.h"
 #include "../Utilities/constants.h"
 #include "../GUI/Heart.h"
-
-#define GAME_BACKGROUND_PATH "PNG/Background/background.png"
-#define WINDOW_WIDTH 1080
-#define WINDOW_HEIGHT 675
-
-// Dimensioni e posizioni dei pulsanti del menu
-#define PAUSE_BUTTON_HEIGHT 75
-
-// Percorsi delle texture dei pulsanti del menu
-#define PAUSE_RESUME_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
-#define PAUSE_QUIT_BUTTON_PATH "PNG/MenuButton/ExitButton.png"
-
+#include "../Utilities/constants.h"
 
 class GamingState : public GameState {
 

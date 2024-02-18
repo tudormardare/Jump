@@ -1,7 +1,6 @@
 //
 // Created by tudor on 15/11/2023.
 //
-
 #include "Fire.h"
 
 void Fire::move(float offsetX, float offsetY) {

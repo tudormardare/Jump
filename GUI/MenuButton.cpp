@@ -3,6 +3,7 @@
 //
 #include "MenuButton.h"
 
+
 MenuButton::MenuButton(sf::Vector2f size, sf::Vector2f position, const sf::Texture &texture) {
     buttonTexture = std::make_shared<sf::Texture>(texture);
     buttonTexture->setSmooth(true);

@@ -5,23 +5,6 @@
 #ifndef JUMPER_MAINMENU_H
 #define JUMPER_MAINMENU_H
 
-// Dimensioni della finestra
-#define WINDOW_WIDTH 1080
-#define WINDOW_HEIGHT 675
-
-// Dimensioni e posizioni dei pulsanti del menu
-#define MENU_BUTTON_WIDTH 200
-#define MENU_BUTTON_HEIGHT 75
-#define MENU_BUTTON_DISTANCE 50
-#define MENU_BUTTONS_NUMBER 3
-
-// Percorsi delle texture dei pulsanti del menu
-#define MENU_SETTINGS_BUTTON_PATH "PNG/MenuButton/GuideButton.png"
-#define MENU_PLAY_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
-#define MENU_EXIT_BUTTON_PATH "PNG/MenuButton/ExitButton.png"
-
-// Percorso dell'immagine di sfondo del menu
-#define MENU_BACKGROUND_PATH "PNG/Background/background.png"
 
 
 #include "GameState.h"
@@ -30,7 +13,11 @@
 #include "../GUI/Timer.h"
 #include "PauseState.h"
 #include "SettingsState.h"
+#include "GamingState.h"
 #include <iostream>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include "SFML/Graphics.hpp"
+#include "../Utilities/constants.h"
 
 class MenuState : public GameState {
 public:
