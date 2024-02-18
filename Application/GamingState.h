@@ -57,6 +57,10 @@ public:
 
     std::string getBackgroundPath() const override;
 
+    const Player& getPlayer() const { return player; }
+
+    const Pumpkin& getPumpkin() const { return pumpkin; }
+
 private:
     explicit GamingState(sf::RenderWindow &window) {
         initState();

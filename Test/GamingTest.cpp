@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include "GamingState.h"
 
+#include <gtest/gtest.h>
+#include "GamingState.h"
+
 class GamingStateTest : public ::testing::Test {
 protected:
     sf::RenderWindow window;
@@ -31,13 +34,23 @@ TEST_F(GamingStateTest, HandleEvents) {
 TEST_F(GamingStateTest, Update) {
     float deltaTime = 0.016f;
 
+    // Salva lo stato iniziale del giocatore e degli Sprite degli avversari
+    sf::Vector2f initialPlayerPosition = gamingState.getPlayer().getPosition();
+    sf::Vector2f initialPumpkinPosition = gamingState.getPumpkin().getPosition();
+    // Salva lo stato iniziale di altri elementi, se necessario
+
     gamingState.update(window, deltaTime);
 
-    // TODO()Verifica che lo stato del gioco sia aggiornato come previsto
-    // TODO()Ad esempio, controlla se il player si è mosso o se gli stati dei nemici sono cambiati
+    // Verifica che il giocatore si sia mosso come previsto
+    sf::Vector2f expectedPlayerPosition = initialPlayerPosition + gamingState.getPlayer().getVelocity() * deltaTime;
+    EXPECT_EQ(gamingState.getPlayer().getPosition(), expectedPlayerPosition);
+
+    // Verifica che lo stato degli Sprite degli avversari sia aggiornato come previsto
+    sf::Vector2f expectedPumpkinPosition = initialPumpkinPosition + gamingState.getPumpkin().getVelocity() * deltaTime;
+    EXPECT_EQ(gamingState.getPumpkin().getPosition(), expectedPumpkinPosition);
+
 }
 
 TEST_F(GamingStateTest, Render) {
     ASSERT_NO_THROW(gamingState.render(window));
 }
-
