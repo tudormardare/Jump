@@ -56,7 +56,7 @@ enum class eTimerMode {
             timer.last = std::chrono::system_clock::now();
             timer.paused = false; // Riattiva il timer se era in pausa
             timer.expired = false; // Consente la ri-esecuzione per OnceUp e OnceDown
-            if(timer.mode == eTimerMode::OnceDown) {
+            if(timer.mode == eTimerMode::OnceDown || timer.mode == eTimerMode::OnceUp) {
                 timer.started = true; // Riattiva il timer se era scaduto
             }
         }
@@ -86,6 +86,14 @@ enum class eTimerMode {
         std::lock_guard<std::mutex> guard(mutex);
         if (timers.find(static_cast<int>(type)) != timers.end()) {
             return timers[static_cast<int>(type)].started;
+        }
+        return false; // Assumi che sia scaduto se non esiste
+    }
+
+    bool isPaused(eTimer type) {
+        std::lock_guard<std::mutex> guard(mutex);
+        if (timers.find(static_cast<int>(type)) != timers.end()) {
+            return timers[static_cast<int>(type)].paused;
         }
         return false; // Assumi che sia scaduto se non esiste
     }

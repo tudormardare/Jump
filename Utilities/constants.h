@@ -28,6 +28,7 @@ enum class eTimer {
     eBlinking = 3,
     eFireballSpawn = 4,
     ePlayerInvincible = 5,
+    ePlayerBlinking = 6,
 };
 
 

@@ -288,7 +288,19 @@ void GamingState::render(sf::RenderWindow &window) {
         fireBall.draw(window);
     }
     //pumpkin.draw(window);
-    player.draw(window);
+
+    if(Timers.isStarted(eTimer::ePlayerInvincible) && !Timers.isExpired(eTimer::ePlayerInvincible)){
+        if(Timers.isExpired(eTimer::ePlayerBlinking) && !Timers.isPaused(eTimer::ePlayerBlinking)){
+            player.setVisibility(!player.isVisible());
+            Timers.restartTimer(eTimer::ePlayerBlinking);
+            std::cout << "Dentro a invincibilità" << std::endl;
+        }
+        if(player.isVisible()){
+            player.draw(window);
+        }
+    }else {
+        player.draw(window);
+    }
     player.renderHealth(window);
     gameTimer.displayElapsedTime(window);
 
@@ -604,6 +616,11 @@ void GamingState::handleCollisions() {
         player.takeDamage();
         player.setInvincible(true);
         Timers.restartTimer(eTimer::ePlayerInvincible);
+        if(player.getHealth() > 0) {
+            Timers.restartTimer(eTimer::ePlayerBlinking);
+        }else{
+            Timers.pauseTimer(eTimer::ePlayerBlinking);
+        }
     }
 }
 
@@ -735,7 +752,13 @@ void GamingState::initTimer() {
     Timers.addTimer(eTimer::eFireballSpawn, std::chrono::milliseconds(1000), [&]() { spawnFireBall(); },
                     TimerClass::eTimerMode::Cyclic);
 
-    Timers.addTimer(eTimer::ePlayerInvincible, std::chrono::milliseconds(3000), [&]() { player.setInvincible(false); },
+    Timers.addTimer(eTimer::ePlayerInvincible, std::chrono::milliseconds(5000), [&]() {
+        player.setInvincible(false);
+        player.setVisibility(true);
+        },
+                    TimerClass::eTimerMode::OnceDown);
+
+    Timers.addTimer(eTimer::ePlayerBlinking, std::chrono::milliseconds(200), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
 
     Timers.startTimer(eTimer::eHearthSpawn);

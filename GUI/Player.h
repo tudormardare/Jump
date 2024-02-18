@@ -38,6 +38,7 @@ private:
     int hp;
     int hpMax = PLAYER_HEALTH;
     bool invincible;
+    bool isVisibile;
 
     bool inverseX = false;
     bool jumping = false;
@@ -91,6 +92,10 @@ public:
     void setInvincible(bool value);
 
     bool isInvincible() const;
+
+    void setVisibility(bool value);
+
+    bool isVisible() const;
 
 };
 
