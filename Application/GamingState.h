@@ -115,6 +115,8 @@ private:
     Player player;
 	Map gameMap;
     Timer gameTimer;
+    sf::Vector2f explosionPosition;
+    sf::Sprite explosionSprite;
     std::vector<std::unique_ptr<MenuButton>> pauseButtons;
 
 

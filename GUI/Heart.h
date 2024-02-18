@@ -19,6 +19,8 @@
 
 
 class Heart : public Entity {
+private:
+    bool visible;
 public:
     Heart();
 
@@ -26,6 +28,14 @@ public:
     void update(float deltaTime) override;
     void draw(sf::RenderWindow &window) override;
     void setTexture(const sf::Texture &texture) override;
+
+    bool isVisible() const {
+        return visible;
+    }
+
+    void setVisible(bool value) {
+        visible = value;
+    }
 
     bool isCollected() const {
         return collected;

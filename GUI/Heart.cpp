@@ -25,6 +25,7 @@ void Heart::move(float offsetX, float offsetY) {
 
 Heart::Heart() : collected(false) {
     name = "Heart";
+    visible = true;
     sprite.setScale(1, 1);
     setVelocity(sf::Vector2f(0, 0));
     setAcceleration(sf::Vector2f(0, 0));

@@ -304,12 +304,11 @@ void GamingState::render(sf::RenderWindow &window) {
 
 
     for (int i = 0; i < hearts.size(); i++) {
-
-        if(i == 0 && Timers.isStarted(eTimer::eBlinking) && !Timers.isExpired(eTimer::eBlinking)) {
-                hearts[i].draw(window);
-        }else if(i == 0 && !Timers.isStarted(eTimer::eBlinking)){
-                hearts[i].draw(window);
-        }else if (i != 0){
+        if(i == 0 && Timers.isStarted(eTimer::eHeartDespawn) && !Timers.isExpired(eTimer::eHeartDespawn)) {
+            if (Timers.isExpired(eTimer::eBlinking))
+                hearts[0].setVisible(!hearts[0].isVisible());
+        }
+        if(hearts[i].isVisible()){
             hearts[i].draw(window);
         }
 
@@ -609,17 +608,18 @@ void GamingState::handleCollisions() {
         }
     }
 
-
     for(auto &fireBall: fireBalls){
         if (CollisionManager::checkCircleCollision(*fireBall.getPumpkin(), player)) {
             if(!player.isInvincible()) {
                 player.takeDamage();
                 player.setInvincible(true);
                 Timers.restartTimer(eTimer::ePlayerInvincible);
-                fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "explo", 0));
                 fireBall.setHit(true);
+                fireBall.getPumpkin()->setTexture(textureManager.getTexture("Pumpkin", "explo", 0));
                 fireBall.setPumpkinScale(0.3, 0.3);
-                fireBall.setVelocity(0,0);
+
+
+                explosionPosition = fireBall.getPumpkin()->getCenter();
 
 
                 if(player.getHealth() > 0) {
@@ -717,7 +717,7 @@ void GamingState::handleTimers(float deltaTime) {
     Timers.restartTimer(eTimer::eHearthSpawn);
   }
 
-  if(Timers.getElapsedTime(eTimer::eHeartDespawn) > 2000){
+  if(Timers.getElapsedTime(eTimer::eHeartDespawn) > 8000 && (!Timers.isStarted(eTimer::eBlinking) || Timers.isExpired(eTimer::eBlinking))){
       Timers.startTimer(eTimer::eBlinking);
   }
 
@@ -779,7 +779,7 @@ void GamingState::initTimer() {
                     TimerClass::eTimerMode::OnceDown);
     Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(12000), [&]() { std::cout << "Despawned heart"; },
                     TimerClass::eTimerMode::OnceDown);
-    Timers.addTimer(eTimer::eBlinking, std::chrono::milliseconds(1000), [&]() { },
+    Timers.addTimer(eTimer::eBlinking, std::chrono::milliseconds(200), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
     Timers.addTimer(eTimer::eFireballSpawn, std::chrono::milliseconds(1000), [&]() { spawnFireBall(); },
                     TimerClass::eTimerMode::Cyclic);
