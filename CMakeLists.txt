@@ -34,6 +34,8 @@ set(SOURCE_FILES
         GUI/Heart.h
 	Utilities/TimerClass.cpp
         Utilities/TimerClass.h
+        Application/GameOverState.cpp
+        Application/GameOverState.h
 
 )
 
