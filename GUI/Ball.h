@@ -15,6 +15,7 @@ private:
     Pumpkin pumpkin;
     Fire fire;
     std::string name;
+    bool hit;
 
     bool inverse;
 public:
@@ -34,8 +35,10 @@ public:
     void setFireScale(float x, float y);
     void setInverse(bool value);
     bool getInverse() const;
-    Fire& getFire() ;
-    Pumpkin& getPumpkin() ;
+    void setHit(bool value);
+    bool isHit() const;
+    Fire* getFire() ;
+    Pumpkin* getPumpkin() ;
     void setPosition(float x, float y);
     sf::Vector2f getPosition() const;
     sf::Vector2f getVelocity() const;

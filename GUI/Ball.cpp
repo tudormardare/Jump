@@ -10,6 +10,7 @@ Ball::Ball() {
     pumpkin.setPosition(0, 0);
     fire.setPosition(0, 0);
     inverse = false;
+    hit = false;
 }
 
 void Ball::update(float deltaTime) {
@@ -19,7 +20,8 @@ void Ball::update(float deltaTime) {
 
 void Ball::draw(sf::RenderWindow &window) {
     //Diseganre sempre prima il fuoco e poi la zucca
-    fire.draw(window);
+   if (!hit)
+       fire.draw(window);
     pumpkin.draw(window);
 }
 
@@ -55,7 +57,7 @@ void Ball::setAcceleration(sf::Vector2f newAcceleration) {
 }
 
 void Ball::setPosition(sf::Vector2f newPosition) {
-    if(!inverse) {
+    if (!inverse) {
         pumpkin.setPosition(newPosition + sf::Vector2f(OFFSET_FIREBALL_X, OFFSET_FIREBALL_Y));
         fire.setPosition(newPosition);
     } else {
@@ -64,12 +66,12 @@ void Ball::setPosition(sf::Vector2f newPosition) {
     }
 }
 
-Fire &Ball::getFire() {
-    return fire;
+Fire *Ball::getFire() {
+    return &fire;
 }
 
-Pumpkin &Ball::getPumpkin() {
-    return pumpkin;
+Pumpkin *Ball::getPumpkin() {
+    return &pumpkin;
 }
 
 std::string Ball::getName() const {
@@ -100,3 +102,13 @@ void Ball::setInverse(bool value) {
 bool Ball::getInverse() const {
     return inverse;
 }
+
+void Ball::setHit(bool value) {
+    hit = value;
+}
+
+bool Ball::isHit() const {
+    return hit;
+}
+
+

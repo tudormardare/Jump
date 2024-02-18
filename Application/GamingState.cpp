@@ -284,9 +284,7 @@ void GamingState::render(sf::RenderWindow &window) {
     drawHitboxes(gameMap.getMapHitboxes(), window);
     gameMap.render(window);
     //fire.draw(window);
-    for(auto &fireBall: fireBalls){
-        fireBall.draw(window);
-    }
+
     //pumpkin.draw(window);
 
     if(Timers.isStarted(eTimer::ePlayerInvincible) && !Timers.isExpired(eTimer::ePlayerInvincible)){
@@ -334,16 +332,20 @@ void GamingState::render(sf::RenderWindow &window) {
     }
 
     for(auto &fireBall: fireBalls){
-        sf::RectangleShape rectangle(sf::Vector2f(fireBall.getPumpkin().getHitbox().width, fireBall.getPumpkin().getHitbox().height));
+        sf::RectangleShape rectangle(sf::Vector2f(fireBall.getPumpkin()->getHitbox().width, fireBall.getPumpkin()->getHitbox().height));
         sf::VertexArray points(sf::Points, 1);
-        points[0].position = sf::Vector2f(fireBall.getPumpkin().getCenter().x, fireBall.getPumpkin().getCenter().y);
+        points[0].position = sf::Vector2f(fireBall.getPumpkin()->getCenter().x, fireBall.getPumpkin()->getCenter().y);
         points[0].color = sf::Color::Red;
-        rectangle.setPosition(fireBall.getPumpkin().getHitbox().left, fireBall.getPumpkin().getHitbox().top);
+        rectangle.setPosition(fireBall.getPumpkin()->getHitbox().left, fireBall.getPumpkin()->getHitbox().top);
         rectangle.setFillColor(sf::Color::Transparent);
         rectangle.setOutlineColor(sf::Color::Red);
         rectangle.setOutlineThickness(1.f);
         window.draw(rectangle);
         window.draw(points);
+    }
+
+    for(auto &fireBall: fireBalls){
+        fireBall.draw(window);
     }
 
     drawPause(window);
@@ -460,26 +462,26 @@ void GamingState::handleAnimations(float deltaTime) {
     bool isFalling = player.getVelocity().y > 0;
     bool isIdle = player.getVelocity().x == 0 && !player.isJumping();
 
-    if (player.isJumping() && textureManager.getCurrentIndex("Player") < 2) {
+    if (player.isJumping() && textureManager.getCurrentIndex("Player", "Jumping") < 2) {
         // Se il player sta saltando, visualizza l'animazione di salto
-        textureManager.updateAnimation("Player", "Jumping", deltaTime, player);
+        textureManager.updateAnimation("Player", "Jumping", deltaTime, &player);
     } else if (player.isJumping() && player.getAcceleration().y >= -2 && player.getVelocity().y <= 0 &&
-               textureManager.getCurrentIndex("Player") != 3) {
+               textureManager.getCurrentIndex("Player", "Jumping") != 3) {
         textureManager.setSpecificFrame("Player", "Jumping", 3, player);
     } else if (isFalling) {
         // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
-        textureManager.updateAnimation("Player", "Falling", deltaTime, player);
+        textureManager.updateAnimation("Player", "Falling", deltaTime, &player);
     } else if (isMovingHorizontally && !player.isJumping()) {
         // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
-        textureManager.updateAnimation("Player", "Running", deltaTime, player);
+        textureManager.updateAnimation("Player", "Running", deltaTime, &player);
     } else if (isIdle) {
         // Se il player non si sta muovendo, visualizza l'animazione d'inattività
-        textureManager.updateAnimation("Player", "Idle", deltaTime, player);
+        textureManager.updateAnimation("Player", "Idle", deltaTime, &player);
     }
 
     handleEnemyAnimations(deltaTime);
     for(auto &heart: hearts){
-        textureManager.updateAnimation(heart.getName(), "Heart", deltaTime, heart);
+        textureManager.updateAnimation(heart.getName(), "Heart", deltaTime, &heart);
     }
 }
 
@@ -606,22 +608,30 @@ void GamingState::handleCollisions() {
             handleCollisionMap(collision);
         }
     }
-    bool hitted = false;
+
+
     for(auto &fireBall: fireBalls){
-        if (CollisionManager::checkCircleCollision(fireBall.getPumpkin(), player)) {
-            hitted = true;
+        if (CollisionManager::checkCircleCollision(*fireBall.getPumpkin(), player)) {
+            if(!player.isInvincible()) {
+                player.takeDamage();
+                player.setInvincible(true);
+                Timers.restartTimer(eTimer::ePlayerInvincible);
+                fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "explo", 0));
+                fireBall.setHit(true);
+                fireBall.setPumpkinScale(0.3, 0.3);
+                fireBall.setVelocity(0,0);
+
+
+                if(player.getHealth() > 0) {
+                    Timers.restartTimer(eTimer::ePlayerBlinking);
+                }else{
+                    Timers.pauseTimer(eTimer::ePlayerBlinking);
+                }
+            }
+            break;
         }
     }
-    if(hitted && !player.isInvincible()) {
-        player.takeDamage();
-        player.setInvincible(true);
-        Timers.restartTimer(eTimer::ePlayerInvincible);
-        if(player.getHealth() > 0) {
-            Timers.restartTimer(eTimer::ePlayerBlinking);
-        }else{
-            Timers.pauseTimer(eTimer::ePlayerBlinking);
-        }
-    }
+
 }
 
 //Enemy functions
@@ -631,10 +641,15 @@ void GamingState::setTextureForEnemy() {
     };
 
     std::map<std::string, AnimationConfig> pumpkinAnimation = {
-            {"Pumpkin",
+            {"afk",
              {PUMPKIN_TEXTURE_PATH, PUMPKIN_TEXTURES, PUMPKIN_MIN_FRAME_DURATION, PUMPKIN_MAX_FRAME_DURATION,
-              false}}
+              false}},
+            {"explo",
+                {"PNG/Explosion/row-1-column-0", 12, 1, 1,
+                false}}
     };
+
+
     textureManager.loadEntityTextures("FireBall", fireAnimations, GAMING_MAX_FIREBALLS);
     textureManager.loadEntityTextures("Pumpkin", pumpkinAnimation);
 }
@@ -642,6 +657,17 @@ void GamingState::setTextureForEnemy() {
 void GamingState::handleEnemyAnimations(float deltaTime) {
     for(auto &fireBall: fireBalls){
         textureManager.updateAnimation(fireBall.getName(), "Fire", deltaTime, fireBall.getFire());
+        if(fireBall.isHit()){
+            textureManager.updateAnimation("Pumpkin", "explo", deltaTime, fireBall.getPumpkin());
+        }
+
+        if(textureManager.getCurrentIndex("Pumpkin", "explo") == 11){
+            fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "afk", 0));
+            fireBall.setPumpkinScale(PUMPKIN_SCALE, PUMPKIN_SCALE);
+            fireBall.setHit(false);
+            fireBall.setPosition(sf::Vector2f(-1000, -1000));
+            std::cout << "Dentro a explo" << std::endl;
+        }
     }
 }
 
@@ -654,6 +680,7 @@ void GamingState::setTextureForHeart() {
     textureManager.loadTexturesFromSpriteSheetWithLineNumber("Heart", "PNG/Heart/heartAnimation.png", heartAnimations,
                                                              32,
                                                              32, GAMING_MAX_HEARTS);
+
 }
 
 void GamingState::spawnHeart() {
@@ -692,6 +719,11 @@ void GamingState::handleTimers(float deltaTime) {
 
   if(Timers.getElapsedTime(eTimer::eHeartDespawn) > 2000){
       Timers.startTimer(eTimer::eBlinking);
+  }
+
+  if(Timers.isExpired(eTimer::ePlayerInvincible)){
+        player.setInvincible(false);
+        player.setVisibility(true);
   }
 }
 
@@ -753,8 +785,6 @@ void GamingState::initTimer() {
                     TimerClass::eTimerMode::Cyclic);
 
     Timers.addTimer(eTimer::ePlayerInvincible, std::chrono::milliseconds(5000), [&]() {
-        player.setInvincible(false);
-        player.setVisibility(true);
         },
                     TimerClass::eTimerMode::OnceDown);
 
@@ -777,7 +807,7 @@ int GamingState::randomBetween(int min, int max) {
 
 void GamingState::spawnFireBall() {
     Ball fireBall;
-    fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "Pumpkin", 0));
+    fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "afk", 0));
 
     if (fireBalls.size() < GAMING_MAX_FIREBALLS) {
         int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);

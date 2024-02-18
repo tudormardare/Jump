@@ -5,7 +5,7 @@ Player::Player() : hpMax(3), hp(hpMax) {
     initSprite();
     setHealth(hpMax);
     invincible = false;
-    isVisibile = true;
+    visible = true;
 }
 
 void Player::initSprite() {
@@ -132,12 +132,12 @@ void Player::setInvincible(bool value) {
 }
 
 bool Player::isVisible() const {
-    return isVisibile;
+    return visible;
 }
 
 void Player::setVisibility(bool value) {
-    isVisibile = value;
-    std::cout << "Visibilità: " << isVisibile << std::endl;
+    visible = value;
+    std::cout << "Visibilità: " << visible << std::endl;
 }
 
 

@@ -70,19 +70,23 @@ TextureManager::getTexture(const std::string& entity, const std::string& animati
     return textures.at(entity).at(animationType).animationData.frames.at(frameIndex);
 }
 
-void TextureManager::updateAnimation(const std::string &entityName, const std::string &animationType, float deltaTime, Entity &entity) {
+void TextureManager::updateAnimation(const std::string &entityName, const std::string &animationType, float deltaTime, Entity *entity) {
+
+    if(animationType == "explo"){
+        std::cout << "explo" << std::endl;
+    }
     AnimationInfo& animInfo = textures[entityName][animationType];
     animInfo.animationTimer += deltaTime;
     auto frameCount = (float) animInfo.animationData.frames.size();
     float frameDuration = animInfo.minFrameDuration /  frameCount;
-    float entitySpeed = entity.getVelocity().x;
+    float entitySpeed = entity->getVelocity().x;
 
     // Calcola la durata del frame in base alla velocità
     if(animInfo.dynamicFrameCount) {
         if( entitySpeed < 0) {
             entitySpeed = -entitySpeed;
         }
-        frameDuration = (animInfo.minFrameDuration - ( entitySpeed / entity.getMaxSpeed().x) * (animInfo.minFrameDuration - animInfo.maxFrameDuration)) /frameCount;
+        frameDuration = (animInfo.minFrameDuration - ( entitySpeed / entity->getMaxSpeed().x) * (animInfo.minFrameDuration - animInfo.maxFrameDuration)) /frameCount;
         if(frameDuration < animInfo.maxFrameDuration / (float) frameCount) {
             frameDuration = animInfo.maxFrameDuration / (float) frameCount ;
         }
@@ -95,7 +99,7 @@ void TextureManager::updateAnimation(const std::string &entityName, const std::s
         // Imposta la texture solo se il frame è cambiato
         if (newFrame != animInfo.currentFrame) {
             animInfo.currentFrame = newFrame;
-            entity.setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
+            entity->setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
         }
 
         //Vecchia implementazione
@@ -111,8 +115,8 @@ void TextureManager::setSpecificFrame(const std::string &entityName, const std::
     entity.setTexture(animInfo.animationData.frames[animInfo.currentFrame]);
 }
 
-int TextureManager::getCurrentIndex(const std::string &entityName){
-    return textures.at("Player").at("Jumping").currentFrame;
+int TextureManager::getCurrentIndex(const std::string &entityName, const std::string &animationType) {
+    return textures.at(entityName).at(animationType).currentFrame;
 }
 
 void TextureManager::resetAnimation(const std::string &entityName, const std::string &animationType) {

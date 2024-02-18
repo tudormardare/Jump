@@ -43,9 +43,9 @@ public:
     void loadTexturesFromSpriteSheetRegular(const std::string& entityName, const std::string& spriteSheetPath, const std::map<std::string, std::tuple<int, int, int>>& animationDetails, int frameWidth, int frameHeight);
     [[nodiscard]] const sf::Texture &
     getTexture(const std::string& entity, const std::string& animationType, int frameIndex);
-    void updateAnimation(const std::string& entityName, const std::string& animationType, float deltaTime, Entity& entity);
+    void updateAnimation(const std::string& entityName, const std::string& animationType, float deltaTime, Entity* entity);
     void setSpecificFrame(const std::string &entityName, const std::string &animationType, int frameIndex, Entity &entity);
-    int getCurrentIndex(const std::string &entityName);
+    int getCurrentIndex(const std::string &entityName, const std::string &animationType);
 
     void resetAnimation(const std::string &entityName, const std::string &animationType);
 
