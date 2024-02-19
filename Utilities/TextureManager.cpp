@@ -66,7 +66,7 @@ void TextureManager::loadTexturesFromSpriteSheetRegular(const std::string& entit
 
 const sf::Texture &
 TextureManager::getTexture(const std::string& entity, const std::string& animationType, int frameIndex) {
-    resetAnimation(entity, "Jumping");
+    resetAnimation(entity, animationType);
     return textures.at(entity).at(animationType).animationData.frames.at(frameIndex);
 }
 

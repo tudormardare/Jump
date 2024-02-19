@@ -315,8 +315,7 @@ void GamingState::render(sf::RenderWindow &window) {
         if(Timers.isExpired(eTimer::eBlinking)){
             Timers.restartTimer(eTimer::eBlinking);
         }
-
-
+        
         sf::RectangleShape rectangle(sf::Vector2f(hearts[i].getHitbox().width, hearts[i].getHitbox().height));
         sf::VertexArray points(sf::Points, 1);
         points[0].position = sf::Vector2f(hearts[i].getCenter().x, hearts[i].getCenter().y);
@@ -327,7 +326,6 @@ void GamingState::render(sf::RenderWindow &window) {
         rectangle.setOutlineThickness(1.f);
         window.draw(rectangle);
         window.draw(points);
-
     }
 
     for(auto &fireBall: fireBalls){
@@ -608,6 +606,7 @@ void GamingState::handleCollisions() {
         }
     }
 
+    std::allocator<Entity> allocator;
     for(auto &fireBall: fireBalls){
         if (CollisionManager::checkCircleCollision(*fireBall.getPumpkin(), player)) {
             if(!player.isInvincible()) {
@@ -615,13 +614,6 @@ void GamingState::handleCollisions() {
                 player.setInvincible(true);
                 Timers.restartTimer(eTimer::ePlayerInvincible);
                 fireBall.setHit(true);
-                fireBall.getPumpkin()->setTexture(textureManager.getTexture("Pumpkin", "explo", 0));
-                fireBall.setPumpkinScale(0.3, 0.3);
-
-
-                explosionPosition = fireBall.getPumpkin()->getCenter();
-
-
                 if(player.getHealth() > 0) {
                     Timers.restartTimer(eTimer::ePlayerBlinking);
                 }else{
@@ -657,17 +649,6 @@ void GamingState::setTextureForEnemy() {
 void GamingState::handleEnemyAnimations(float deltaTime) {
     for(auto &fireBall: fireBalls){
         textureManager.updateAnimation(fireBall.getName(), "Fire", deltaTime, fireBall.getFire());
-        if(fireBall.isHit()){
-            textureManager.updateAnimation("Pumpkin", "explo", deltaTime, fireBall.getPumpkin());
-        }
-
-        if(textureManager.getCurrentIndex("Pumpkin", "explo") == 11){
-            fireBall.setPumpkinTexture(textureManager.getTexture("Pumpkin", "afk", 0));
-            fireBall.setPumpkinScale(PUMPKIN_SCALE, PUMPKIN_SCALE);
-            fireBall.setHit(false);
-            fireBall.setPosition(sf::Vector2f(-1000, -1000));
-            std::cout << "Dentro a explo" << std::endl;
-        }
     }
 }
 
@@ -837,6 +818,7 @@ void GamingState::updateFireBalls(float deltaTime) {
 
     for(auto &fireBall: fireBalls){
         if(fireBall.getInverse() && fireBall.getPosition().x < -200){
+            fireBall.setHit(false);
             int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
             int xPosition = randomBetween(1, 2);
             if(xPosition == 1)
@@ -850,6 +832,7 @@ void GamingState::updateFireBalls(float deltaTime) {
             }
 
         }else if(!fireBall.getInverse() && fireBall.getPosition().x > WINDOW_WIDTH + 200){
+            fireBall.setHit(false);
             int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
             int xPosition = randomBetween(1, 2);
             if(xPosition == 1)

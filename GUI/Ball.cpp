@@ -20,9 +20,10 @@ void Ball::update(float deltaTime) {
 
 void Ball::draw(sf::RenderWindow &window) {
     //Diseganre sempre prima il fuoco e poi la zucca
-   if (!hit)
+   if (!hit) {
        fire.draw(window);
-    pumpkin.draw(window);
+       pumpkin.draw(window);
+   }
 }
 
 void Ball::move(float offsetX, float offsetY) {
