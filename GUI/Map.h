@@ -23,19 +23,20 @@ class Map{
 private:
 
     sf::Texture texture;
-    sf::Sprite sprite;
+
     sf::Vector2u size;
+
     std::vector<bool> bitMask;
 
     std::vector<sf::FloatRect> mapHitboxes;
+
 public:
+
+    sf::Sprite sprite;
+
     std::vector<sf::FloatRect> getMapHitboxes() const;
 
-
-public:
-
     Map();
-
 
     void loadTexture(const std::string& filePath);
 

@@ -45,7 +45,7 @@ public:
 
     GameState *changeState(sf::RenderWindow &window) override;
 
-    GamingState(const GamingState &) = delete;
+    GamingState(const GamingState &) = default;
 
     void operator=(GamingState const &) = delete;
 
@@ -56,7 +56,6 @@ private:
         initState();
     };
 
-    // attributi relativo allo stato
     void initState();
 
     void initTimer();
