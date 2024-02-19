@@ -15,6 +15,7 @@ set(TEST_SOURCE_FILES
 		../GUI/Timer.cpp
 		../GUI/MenuButton.cpp
 		../GUI/Heart.cpp
+        ../GUI/Ball.cpp
         ../Application/GamingState.cpp
 		../Application/MenuState.cpp
 		../Application/SettingsState.cpp

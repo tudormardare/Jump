@@ -103,16 +103,20 @@
 #define GAMING_MAX_HEARTS 3
 #define GAMING_MAX_FIREBALLS 12
 
-//Player
-#define PLAYER_HEALTH_MAX 3
-
 
 //FireBall
-#define FIREBALL_SPEED 0.5f
+#define FIREBALL_SPEED 1.f
 #define OFFSET_FIREBALL_X 115
 #define OFFSET_FIREBALL_Y 90
 #define FIRE_SCALE 2.f
 #define PUMPKIN_SCALE 1.f
+
+//Timers
+#define TIMER_INVINCIBILE 3000
+#define TIMER_FIREBALL_SPAWN 2000
+#define TIMER_HEARTH_DESPAWN 15000
+#define TIMER_HEARTH_SPAWN 8000
+#define TIMER_BLINKING 200
 
 
 enum class eTimer {

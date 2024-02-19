@@ -713,6 +713,7 @@ void GamingState::handleHeartCollisions(Heart &heart) {
         if (collision.hasCollision) {
             heart.setVelocity(sf::Vector2f(0, 0));
             heart.setAcceleration(sf::Vector2f(0, 0));
+            Timers.restartTimer(eTimer::eHeartDespawn);
             heart.setPosition(sf::Vector2f(heart.getPosition().x, heart.getPosition().y - collision.overlap));
         }
     }
@@ -748,20 +749,20 @@ void GamingState::drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::R
 void GamingState::initTimer() {
     gameTimer.reset();
     gameTimer.start();
-    Timers.addTimer(eTimer::eHearthSpawn, std::chrono::milliseconds(8000), [&]() { },
+    Timers.addTimer(eTimer::eHearthSpawn, std::chrono::milliseconds(TIMER_HEARTH_SPAWN), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
-    Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(12000), [&]() { std::cout << "Despawned heart"; },
+    Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(TIMER_HEARTH_DESPAWN), [&]() { std::cout << "Despawned heart"; },
                     TimerClass::eTimerMode::OnceDown);
-    Timers.addTimer(eTimer::eBlinking, std::chrono::milliseconds(200), [&]() { },
+    Timers.addTimer(eTimer::eBlinking, std::chrono::milliseconds(TIMER_BLINKING), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
-    Timers.addTimer(eTimer::eFireballSpawn, std::chrono::milliseconds(1000), [&]() { spawnFireBall(); },
+    Timers.addTimer(eTimer::eFireballSpawn, std::chrono::milliseconds(TIMER_FIREBALL_SPAWN), [&]() { spawnFireBall(); },
                     TimerClass::eTimerMode::Cyclic);
 
-    Timers.addTimer(eTimer::ePlayerInvincible, std::chrono::milliseconds(5000), [&]() {
+    Timers.addTimer(eTimer::ePlayerInvincible, std::chrono::milliseconds(TIMER_INVINCIBILE), [&]() {
         },
                     TimerClass::eTimerMode::OnceDown);
 
-    Timers.addTimer(eTimer::ePlayerBlinking, std::chrono::milliseconds(200), [&]() { },
+    Timers.addTimer(eTimer::ePlayerBlinking, std::chrono::milliseconds(TIMER_BLINKING), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
 
     Timers.startTimer(eTimer::eHearthSpawn);
