@@ -13,9 +13,12 @@ set(TEST_SOURCE_FILES
         ../Utilities/TextureManager.cpp
         ../Utilities/PhysicsSystem.cpp
 		../GUI/Timer.cpp
-        # Aggiungi altri file sorgente dei test qui
+		../GUI/MenuButton.cpp
+		../GUI/Heart.cpp
         ../Application/GamingState.cpp
-	../Controllers/CollisionManager.cpp
+		../Application/MenuState.cpp
+		../Application/SettingsState.cpp
+		../Controllers/CollisionManager.cpp
         ../Controllers/CameraManager.cpp GamingTest.cpp
 		)
 
