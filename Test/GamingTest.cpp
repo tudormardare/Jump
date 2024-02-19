@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include "GamingState.h"
 
+#include <gtest/gtest.h>
+#include "GamingState.h"
+
 class GamingStateTest : public ::testing::Test {
 protected:
     sf::RenderWindow window;
@@ -28,16 +31,7 @@ TEST_F(GamingStateTest, HandleEvents) {
 
 }
 
-TEST_F(GamingStateTest, Update) {
-    float deltaTime = 0.016f;
-
-    gamingState.update(window, deltaTime);
-
-    // TODO()Verifica che lo stato del gioco sia aggiornato come previsto
-    // TODO()Ad esempio, controlla se il player si è mosso o se gli stati dei nemici sono cambiati
-}
 
 TEST_F(GamingStateTest, Render) {
     ASSERT_NO_THROW(gamingState.render(window));
 }
-

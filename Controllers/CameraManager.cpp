@@ -1,7 +1,6 @@
 //
 // Created by Denis Jaupi on 27/11/23.
 //
-
 #include "CameraManager.h"
 
 

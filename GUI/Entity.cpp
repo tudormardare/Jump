@@ -1,8 +1,6 @@
 //
 // Created by Denis Jaupi on 22/06/23.
 //
-#include <iostream>
-#include <utility>
 #include "Entity.h"
 
 //Functions

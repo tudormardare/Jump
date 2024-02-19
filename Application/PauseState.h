@@ -6,18 +6,11 @@
 #define JUMPER_PAUSEMENU_H
 
 
-#define PAUSE_BUTTON_WIDTH 300
-#define PAUSE_BUTTON_HEIGHT 75
-#define PAUSE_BUTTON_DISTANCE 100
-#define PAUSE_BUTTONS_NUMBER 2
-#define PAUSE_BUTTONS_PATH "PNG/MenuButton/Button.png"
-#define PAUSE_MENU_BACKGROUND_PATH "PNG/Background/background.png"
-
-
 #include "GameState.h"
 #include "MenuState.h"
 #include "../GUI/MenuButton.h"
 #include "SFML/Graphics.hpp"
+#include "../Utilities/constants.h"
 
 class PauseState : public GameState {
 public:

@@ -5,20 +5,13 @@
 #ifndef JUMPER_GAME_H
 #define JUMPER_GAME_H
 
-
-#define SETTINGS_BUTTON_PATH "PNG/MenuButton/BackButton.png"
-#define SETTINGS_BUTTON_WIDTH 200
-#define SETTINGS_BUTTON_HEIGHT 450
-#define SETTINGS_BUTTON_DISTANCE 100
-#define SETTINGS_BUTTON_NUMBER 1
-#define SETTINGS_MENU_BACKGROUND_PATH "PNG/KeybindingsGuide/Keybindings.png"
-
 #include "GameState.h"
 #include "MenuState.h"
 #include "PauseState.h"
 #include "../GUI/MenuButton.h"
 #include "SFML/Graphics.hpp"
 #include "iostream"
+#include "../Utilities/constants.h"
 
 class SettingsState : public GameState {
 public:

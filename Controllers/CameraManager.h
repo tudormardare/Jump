@@ -5,7 +5,6 @@
 #ifndef JUMP_CAMERAMANAGER_H
 #define JUMP_CAMERAMANAGER_H
 
-
 #include <SFML/Graphics/View.hpp>
 #include <SFML/System/Time.hpp>
 

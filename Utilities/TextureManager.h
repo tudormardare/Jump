@@ -8,6 +8,7 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "../GUI/Entity.h"

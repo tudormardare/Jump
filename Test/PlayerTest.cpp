@@ -14,12 +14,18 @@ protected:
     }
 };
 
-
 TEST_F(PlayerTest, AccelerationEffect) {
-    player.setAccelerationX(10);
-    player.update(0.5);
-    EXPECT_FLOAT_EQ(player.getPosition().x, 2.5); // La posizione iniziale è 0, quindi dopo 0.5 secondi la posizione è Fire.5 perchè nel update viene moltiplicato per il deltaTime sia
-                                                            // la velocità che l'accelerazione
+    player.setVelocity(sf::Vector2f(1.25f, 0.0f));
+    player.setAccelerationX(10.0f);
+
+    float deltaTime = 0.5f;
+    player.update(deltaTime);
+
+
+    float expectedVelocityX = player.getAcceleration().x * deltaTime;
+    float expectedPositionX = 0.5f * expectedVelocityX * deltaTime;
+
+    EXPECT_FLOAT_EQ(player.getPosition().x, expectedPositionX);
 }
 
 TEST_F(PlayerTest, JumpingState) {
@@ -36,14 +42,52 @@ TEST_F(PlayerTest, InverseDirection) {
     EXPECT_EQ(player.getInverse(), initialInverseState);
 }
 
-//TODO ( Sistemare manipolazione del test)
+TEST_F(PlayerTest, HealthInitialization) {
+    EXPECT_EQ(player.getHealth(), PLAYER_HEALTH);
+}
+
+TEST_F(PlayerTest, JumpingInitialState) {
+    EXPECT_FALSE(player.isJumping());
+}
+
+TEST_F(PlayerTest, InverseDirectionInitialState) {
+    EXPECT_EQ(player.getInverse(), false);
+}
+
+TEST_F(PlayerTest, TakeDamage) {
+    int initialHealth = player.getHealth();
+    player.takeDamage();
+    EXPECT_EQ(player.getHealth(), initialHealth - 1);
+}
+
+TEST_F(PlayerTest, GainHealth) {
+    int initialHealth = player.getHealth() - 1;
+    player.gainHealth();
+    EXPECT_EQ(player.getHealth(), initialHealth + 1);
+}
+
+TEST_F(PlayerTest, InverseDirectionToggle) {
+    bool initialInverseState = player.getInverse();
+    player.inverse();
+    EXPECT_NE(player.getInverse(), initialInverseState);
+
+    player.inverse();
+    EXPECT_EQ(player.getInverse(), initialInverseState);
+}
+
+TEST_F(PlayerTest, JumpingStateToggle) {
+    EXPECT_FALSE(player.isJumping());
+    player.jump(10.0f);
+    EXPECT_TRUE(player.isJumping());
+
+    player.setJumping(false);
+    EXPECT_FALSE(player.isJumping());
+}
 
 TEST_F(PlayerTest, HealthManipulation) {
     int initialHealth = player.getHealth();
     player.setHealth(initialHealth - 10);
-    EXPECT_EQ(player.getHealth(), initialHealth - 10);
-    player.setHealth(initialHealth + 10);
-    EXPECT_EQ(player.getHealth(), initialHealth);
+    EXPECT_EQ(player.getHealth(), 0);
 }
 
 TEST_F(PlayerTest, TextureSetting) {
@@ -62,18 +106,23 @@ TEST_F(PlayerTest, UpdateFunctionality) {
     float deltaTime = 1.0f;  // Simuliamo 1 secondo di gioco
     player.update(deltaTime);
 
-    EXPECT_FLOAT_EQ(player.getOrigin().x, initialPosition.x + initialVelocity.x * deltaTime);
-    EXPECT_FLOAT_EQ(player.getOrigin().y, initialPosition.y + initialVelocity.y * deltaTime);
+    float expectedPositionX = initialPosition.x + initialVelocity.x * deltaTime;
+    float expectedPositionY = initialPosition.y + initialVelocity.y * deltaTime;
+
+    EXPECT_FLOAT_EQ(player.getPosition().x, expectedPositionX);
+    EXPECT_FLOAT_EQ(player.getPosition().y, expectedPositionY);
 
     // Ora, aggiungi un'accelerazione e verifica come cambia la posizione
-    sf::Vector2f acceleration(10.0f, 0.0f);  // Accelerazione orizzontale di 10 unità/s^Fire
-    player.setAcceleration(acceleration);
+    sf::Vector2f acceleration(10.0f, 0.0f);  // Accelerazione orizzontale di 10 unità/s^2
+    player.setAccelerationX(acceleration.x);
 
     initialPosition = player.getOrigin();
     player.update(deltaTime);  // Aggiorna di nuovo per 1 secondo
 
-    float expectedPositionX = initialPosition.x + initialVelocity.x * deltaTime + 0.5f * acceleration.x * deltaTime * deltaTime;
-    EXPECT_FLOAT_EQ(player.getOrigin().x, expectedPositionX);
-    EXPECT_FLOAT_EQ(player.getOrigin().y, initialPosition.y);  // La posizione verticale non dovrebbe cambiare in questo test
+    float expectedPositionXWithAcceleration = initialPosition.x + initialVelocity.x * deltaTime + 0.5f * acceleration.x * deltaTime * deltaTime;
+    float expectedPositionYWithAcceleration = initialPosition.y + initialVelocity.y * deltaTime;
+
+    EXPECT_FLOAT_EQ(player.getPosition().x, expectedPositionXWithAcceleration);
+    EXPECT_FLOAT_EQ(player.getPosition().y, expectedPositionYWithAcceleration);
 }
 

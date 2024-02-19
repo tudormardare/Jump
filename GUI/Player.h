@@ -2,35 +2,10 @@
 #define JUMP_PLAYER_H
 
 #include "SFML/Graphics.hpp"
+#include <iostream>
 #include "Entity.h"
 #include <memory>
-
-#define PLAYER_TEXTURE "PNG/Player/Player.png"
-#define PLAYER_HEALTH 3
-#define PLAYER_RUNNING_TEXTURES 6
-#define PLAYER_JUMPING_TEXTURES 4
-#define PLAYER_FALLING_TEXTURES 2
-#define PLAYER_IDLE_TEXTURES 2
-#define PLAYER_CRUNCH_TEXTURES 4
-#define PLAYER_DEAD_TEXTURES 7
-#define PLAYER_FALLING_PATH "PNG/Player/FallingTextures/adventurer-fall-0"
-#define PLAYER_RUNNING_PATH "PNG/Player/RunningTextures/adventurer-run-0"
-#define PLAYER_JUMPING_PATH "PNG/Player/JumpingTextures/adventurer-jump-0"
-#define PLAYER_CRUNCH_PATH "PNG/Player/CrunchTextures/adventurer-crouch-0"
-#define PLAYER_DEAD_PATH "PNG/Player/DieTextures/adventurer-die-0"
-#define PLAYER_IDLE_PATH "PNG/Player/IdleTextures/adventurer-idle-0"
-#define PLAYER_SCALE 2.f
-#define PLAYER_ACCELERATION_RATE 200.f
-#define PLAYER_MAX_SPEED 250.f
-#define PLAYER_DECELERATION_RATE 5.f
-#define PLAYER_RUNNING_MIN_FRAME_DURATION 0.6f
-#define PLAYER_RUNNING_MAX_FRAME_DURATION 0.6f
-#define PLAYER_JUMPING_MIN_FRAME_DURATION 0.3f
-#define PLAYER_JUMPING_MAX_FRAME_DURATION 0.2f
-#define PLAYER_IDLE_MIN_FRAME_DURATION 0.5f
-#define PLAYER_IDLE_MAX_FRAME_DURATION 1.f
-#define PLAYER_FALLING_MIN_FRAME_DURATION 0.5f
-#define PLAYER_FALLING_MAX_FRAME_DURATION 1.f
+#include "../Utilities/constants.h"
 
 class Player : public Entity {
 private:

@@ -2,11 +2,7 @@
 // Created by tudor on 15/06/2023.
 //
 
-#include <iostream>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include "SFML/Graphics.hpp"
 #include "MenuState.h"
-#include "GamingState.h"
 
 MenuState &MenuState::GetInstance(sf::RenderWindow &window) {
     static MenuState instance(window);

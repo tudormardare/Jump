@@ -2,9 +2,7 @@
 // Created by tudor on 15/06/2023.
 //
 
-#include <thread>
 #include "JumperApplication.h"
-#include "GamingState.h"
 
 JumperApplication::JumperApplication() {
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Jumper", sf::Style::Titlebar);

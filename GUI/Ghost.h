@@ -4,6 +4,7 @@
 
 #ifndef JUMP_GHOST_H
 #define JUMP_GHOST_H
+#define GHOST_TEXTURE "PNG/Ghost/Ghost.png"
 
 #include "Entity.h"
 #include <cstdlib>

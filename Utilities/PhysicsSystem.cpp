@@ -1,7 +1,6 @@
 //
 // Created by tudor on 04/10/2023.
 //
-
 #include "PhysicsSystem.h"
 
 const float PhysicsSystem::GRAVITY = 5.f;

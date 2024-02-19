@@ -11,9 +11,10 @@
 #include "../Controllers/CollisionManager.h"
 #include <iostream>
 #include <queue>
-#define WINDOW_WIDTH 1080
-#define WINDOW_HEIGHT 675
-#define GAME_FOREGROUND_PATH "PNG/Map-platforms/Map.png"
+#include <fstream>
+#include "../Utilities/json.hpp"
+#include "../Utilities/constants.h"
+
 
 
 

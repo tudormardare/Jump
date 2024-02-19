@@ -1,8 +1,6 @@
 //
 // Created by Denis Jaupi on 10/02/24.
 //
-
-
 #include "Heart.h"
 
 void Heart::setTexture(const sf::Texture &texture) {

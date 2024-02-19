@@ -7,14 +7,7 @@
 
 
 #include "Entity.h"
-
-#define PUMPKIN_TEXTURE_PATH "PNG/Pumpkin/Pumpkin_1_"
-#define PUMPKIN_SCALE 1.f
-#define PUMPKIN_TEXTURES 1
-#define PUMPKIN_MIN_FRAME_DURATION 1.f
-#define PUMPKIN_MAX_FRAME_DURATION 1.f
-#define PUMPKIN_SPAWN_INTERVAL 5.f
-#define PUMPKIN_SPEED 100.f
+#include "../Utilities/constants.h"
 
 class Pumpkin: public Entity{
 public:
