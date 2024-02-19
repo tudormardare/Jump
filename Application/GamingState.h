@@ -53,7 +53,6 @@ public:
 
 private:
     explicit GamingState(sf::RenderWindow &window) {
-        initState();
     };
 
     void initState();
@@ -138,6 +137,8 @@ private:
     static int randomBetween(int min, int max);
 
     void handleTimers(float deltaTime);
+
+    void drawEntityHitboxes(const Entity &entity, sf::RenderWindow &window);
 };
 
 

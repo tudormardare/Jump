@@ -1,15 +1,13 @@
-//
-// Created by tudor on 15/06/2023.
-//
-
 #define FRAME_DURATION 0.016f
 
 #include "GamingState.h"
 
-nlohmann::json j;
 
+
+//Game logic functions
 GamingState &GamingState::GetInstance(sf::RenderWindow &window) {
     static GamingState instance(window);
+    instance.initState();
     return instance;
 }
 
@@ -22,6 +20,8 @@ void GamingState::initState() {
     hearts.clear();
     pauseButtons.clear();
     player.resetHealth();
+    fireBalls.clear();
+    player.setPosition(PLAYER_DEFAULT_X, PLAYER_DEFAULT_Y);
 
     // Inizializzazione di tutti gli elementi dello stato
     loadAllTextures();
@@ -29,12 +29,11 @@ void GamingState::initState() {
     initGameOverButton();
     initTimer();
 
+    nlohmann::json j;
     std::ifstream i("hitbox/MapHitBoxes.json"); // Sostituisci con il percorso corretto del file
     i >> j;
 }
 
-
-//Game logic functions
 GameState *GamingState::changeState(sf::RenderWindow &window) {
     //inserire il cambio di stato quando finisce il gioco o quando viene premuto esc
     if (changeStateToNext) {
@@ -48,59 +47,333 @@ GameState *GamingState::changeState(sf::RenderWindow &window) {
     return nullptr;
 }
 
-void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
+std::string GamingState::getBackgroundPath() const {
+    return GAME_BACKGROUND_PATH;
+}
 
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-        window.close();
+
+//Rendering functions
+void GamingState::render(sf::RenderWindow &window) {
+
+    //drawEntityHitboxes(player,window);
+    //drawHitboxes(gameMap.getMapHitboxes(), window);
+    gameMap.render(window);
+
+
+    if(Timers.isStarted(eTimer::ePlayerInvincible) && !Timers.isExpired(eTimer::ePlayerInvincible)){
+        if(Timers.isExpired(eTimer::ePlayerBlinking) && !Timers.isPaused(eTimer::ePlayerBlinking)){
+            player.setVisibility(!player.isVisible());
+            Timers.restartTimer(eTimer::ePlayerBlinking);
+        }
+        if(player.isVisible()){
+            player.draw(window);
+        }
+    }else {
+        player.draw(window);
+    }
+    player.renderHealth(window);
+    gameTimer.displayElapsedTime(window);
+
+
+    for (int i = 0; i < hearts.size(); i++) {
+        if(i == 0 && Timers.isStarted(eTimer::eHeartDespawn) && !Timers.isExpired(eTimer::eHeartDespawn)) {
+            if (Timers.isExpired(eTimer::eBlinking))
+                hearts[0].setVisible(!hearts[0].isVisible());
+        }
+        if(hearts[i].isVisible()){
+            hearts[i].draw(window);
+        }
+        if(Timers.isExpired(eTimer::eBlinking)){
+            Timers.restartTimer(eTimer::eBlinking);
+        }
+        //drawEntityHitboxes(hearts[i], window);
     }
 
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-
-        gameTimer.stop();
-        gameTimer.saveBestTime();
-        window.close();
+    for(auto &fireBall: fireBalls){
+        //drawEntityHitboxes(*fireBall.getPumpkin(), window);
+        fireBall.draw(window);
     }
 
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P) {
-        if (!gameOver) {
-            paused = !paused;
-            if (paused) {
-                gameTimer.pause();
-            } else {
-                gameTimer.resume();
+    drawPause(window);
+    handleGameOver(window);
+
+}
+
+void GamingState::update(sf::RenderWindow &window, float deltaTime) {
+    if (!paused && !gameOver) {
+
+        gameTimer.update();
+
+        //Gestisce i timers
+        handleTimers(deltaTime);
+
+        //Aggiorna la posizione degli Sprite
+        handleMovements(deltaTime);
+
+        //Aggiorna animazione degli sprite
+        handleAnimations(deltaTime);
+
+        //Verifica le collisioni
+        handleCollisions();
+
+        sf::Vector2f currentVelocity = player.getVelocity();
+        currentVelocity.y += player.getAcceleration().y;
+        currentVelocity.x += player.getAcceleration().x;
+        clampPlayerYVelocity(currentVelocity);
+        clampPlayerVelocity(currentVelocity);
+        player.setVelocity(currentVelocity * deltaTime);
+
+        for(auto &heart: hearts){
+            float heartVelocity = heart.getVelocity().y;
+            heartVelocity += heart.getAcceleration().y;
+
+            heart.setVelocity(sf::Vector2f(0, heartVelocity * deltaTime));
+
+        }
+
+        if(Timers.isExpired(eTimer::eHeartDespawn)){
+            Timers.restartTimer(eTimer::eHeartDespawn);
+        }
+
+
+
+        //Aggiorna gli sprite
+        player.update(deltaTime);
+        updateHearts(deltaTime);
+
+
+        updateFireBalls(deltaTime);
+        if (paused) {
+            for (auto &button: pauseButtons) {
+                button->update(window);
             }
+        } else if (gameOver) {
+            gameOverButton->update(window);
         }
-    }
 
-    if (event.type == sf::Event::MouseButtonPressed) {
-        if (event.mouseButton.button == sf::Mouse::Left) {
-            if (paused) {
-                if (pauseButtons[1]->isClicked(window)) {
-                    pauseButtons[1]->update(window);
-                    changeStateToNext = true;
-                    paused = false;
-                }
-                if (pauseButtons[0]->isClicked(window)) {
-                    pauseButtons[0]->update(window);
-                    gameTimer.resume();
-                    paused = false;
-                }
-            } else if (gameOver) {
-                if (gameOverButton->isClicked(window)) {
-                    gameOverButton->update(window);
-                    initState();
-                }
-            }
-
-        }
-    }
-
-    if (event.type == sf::Event::KeyReleased) {
-        if ((event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D) && !player.isJumping()) {
-            player.setTexture(textureManager.getTexture("Player", "Idle", 0));
-        }
     }
 }
+
+
+//Caricamento texture
+void GamingState::loadAllTextures() {
+    setTextureForPlayer();
+    setTextureForEnemy();
+    setTextureForHeart();
+
+    //Aggiungi altre texture
+}
+
+void GamingState::setTextureForPlayer() {
+
+    std::map<std::string, AnimationConfig> playerAnimations = {
+            {"Running",        {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
+            {"Jumping",        {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_JUMPING_MIN_FRAME_DURATION, PLAYER_JUMPING_MIN_FRAME_DURATION, false}},
+            {"Idle",           {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES,    PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MIN_FRAME_DURATION, false}},
+            {"Falling",        {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES, PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION, false}},
+            {"CrunchTextures", {PLAYER_CRUNCH_PATH,  PLAYER_CRUNCH_TEXTURES,  PLAYER_RUNNING_MAX_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, false}},
+            {"Die",            {PLAYER_DEAD_PATH,    PLAYER_DEAD_TEXTURES,    PLAYER_RUNNING_MAX_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, false}}};
+    {
+        // Carica le texture del player
+        textureManager.loadEntityTextures("Player", playerAnimations);
+    }
+
+
+    textureManager.loadEntityTextures("Player", playerAnimations);
+
+// Imposta la texture iniziale e la posizione del player
+    player.setTexture(textureManager.getTexture("Player", "Idle", 0));
+
+}
+
+void GamingState::setTextureForEnemy() {
+    std::map<std::string, AnimationConfig> fireAnimations = {
+            {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES, FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION, false}}
+    };
+
+    std::map<std::string, AnimationConfig> pumpkinAnimation = {
+            {"afk",
+                    {PUMPKIN_TEXTURE_PATH, PUMPKIN_TEXTURES, PUMPKIN_MIN_FRAME_DURATION, PUMPKIN_MAX_FRAME_DURATION,
+                            false}},
+            {"explo",
+                    {"PNG/Explosion/row-1-column-0", 12, 1, 1,
+                            false}}
+    };
+
+
+    textureManager.loadEntityTextures("FireBall", fireAnimations, GAMING_MAX_FIREBALLS);
+    textureManager.loadEntityTextures("Pumpkin", pumpkinAnimation);
+}
+
+void GamingState::setTextureForHeart() {
+    std::map<std::string, AnimationConfig> heartAnimations = {
+            {"Heart",
+             {HEART_TEXTURE_PATH, HEART_TEXTURES, HEART_MIN_FRAME_DURATION, HEART_MAX_FRAME_DURATION, false}}
+    };
+
+    textureManager.loadTexturesFromSpriteSheetWithLineNumber("Heart", "PNG/Heart/heartAnimation.png", heartAnimations,
+                                                             32,
+                                                             32, GAMING_MAX_HEARTS);
+
+}
+
+
+//Moovimenti
+void GamingState::handleMovements(float deltaTime) {
+    handlePlayerMovements(deltaTime);
+    for (auto &heart: hearts) {
+        PhysicsSystem::applyGravity(heart);
+        //heart.setVelocity(sf::Vector2f(0, 3));
+    }
+}
+
+void GamingState::handlePlayerMovements(float deltaTime) {
+    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+
+    handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
+    handlePlayerJump(isKeyPressedW, deltaTime);
+
+    PhysicsSystem::applyGravity(player);
+
+}
+
+void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
+    int movementDirection = (isKeyPressedA ? -1 : 0) + (isKeyPressedD ? 1 : 0);
+
+    if (movementDirection != 0) {
+        if (player.getInverse() != (movementDirection < 0)) {
+            player.inverse();
+        }
+        adjustAccelerationForDirectionChange((float) movementDirection * PLAYER_ACCELERATION_RATE, deltaTime);
+    } else {
+        deceleratePlayer(deltaTime);
+    }
+}
+
+void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
+    if (isKeyPressedW && !player.isJumping() && player.getVelocity().y == 0) {
+        player.setAccelerationY(-JUMP_FORCE); // Imposta la velocità iniziale verso l'alto
+        player.setJumping(true);
+        player.setTexture(textureManager.getTexture("Player", "Jumping", 0));
+    }
+
+}
+
+
+//Animations
+
+void GamingState::handleAnimations(float deltaTime) {
+    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+    bool isMovingHorizontally = (isKeyPressedA || isKeyPressedD);
+    bool isFalling = player.getVelocity().y > 0;
+    bool isIdle = player.getVelocity().x == 0 && !player.isJumping();
+
+    if (player.isJumping() && textureManager.getCurrentIndex("Player", "Jumping") < 2) {
+        // Se il player sta saltando, visualizza l'animazione di salto
+        textureManager.updateAnimation("Player", "Jumping", deltaTime, &player);
+    } else if (player.isJumping() && player.getAcceleration().y >= -2 && player.getVelocity().y <= 0 &&
+               textureManager.getCurrentIndex("Player", "Jumping") != 3) {
+        textureManager.setSpecificFrame("Player", "Jumping", 3, player);
+    } else if (isFalling) {
+        // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
+        textureManager.updateAnimation("Player", "Falling", deltaTime, &player);
+    } else if (isMovingHorizontally && !player.isJumping()) {
+        // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
+        textureManager.updateAnimation("Player", "Running", deltaTime, &player);
+    } else if (isIdle) {
+        // Se il player non si sta muovendo, visualizza l'animazione d'inattività
+        textureManager.updateAnimation("Player", "Idle", deltaTime, &player);
+    }
+
+    handleEnemyAnimations(deltaTime);
+    for(auto &heart: hearts){
+        textureManager.updateAnimation(heart.getName(), "Heart", deltaTime, &heart);
+    }
+}
+
+void GamingState::handleEnemyAnimations(float deltaTime) {
+    for(auto &fireBall: fireBalls){
+        textureManager.updateAnimation(fireBall.getName(), "Fire", deltaTime, fireBall.getFire());
+    }
+}
+
+
+//Collision
+
+void GamingState::handleCollisions() {
+    std::vector<CollisionManager::CollisionResult> collisions = CollisionManager::checkMapCollision(player,
+                                                                                                    gameMap.getMapHitboxes());
+    for (const auto &collision: collisions) {
+        if (collision.hasCollision) {
+            handleCollisionMap(collision);
+        }
+    }
+
+    for(auto &fireBall: fireBalls){
+        if (CollisionManager::checkCircleCollision(*fireBall.getPumpkin(), player)) {
+            if(!player.isInvincible()) {
+                player.takeDamage();
+                player.setInvincible(true);
+                Timers.restartTimer(eTimer::ePlayerInvincible);
+                fireBall.setHit(true);
+                if(player.getHealth() > 0) {
+                    Timers.restartTimer(eTimer::ePlayerBlinking);
+                }else{
+                    Timers.pauseTimer(eTimer::ePlayerBlinking);
+                }
+            }
+            break;
+        }
+    }
+
+}
+
+void GamingState::handleCollisionMap(CollisionManager::CollisionResult collision) {
+    switch (collision.direction) {
+        case CollisionManager::CollisionDirection::Top:
+
+            if (!player.isJumping()) {
+                PhysicsSystem::standOn(player);
+                if (collision.overlap > 5)
+                    player.setPosition(player.getPosition().x, player.getPosition().y - collision.overlap);
+                player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+            }
+
+            if (player.getAcceleration().y > 0 &&
+                ((player.getHitbox().top + player.getHitbox().height) - 10) <= collision.platformPosition.y) {
+                player.setJumping(false);
+                player.setTexture(textureManager.getTexture("Player", "Idle", 0));
+                textureManager.resetAnimation("Player", "Jumping");
+                player.setPosition(player.getPosition().x, player.getPosition().y - collision.overlap);
+                player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
+                player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
+            }
+            break;
+        case CollisionManager::CollisionDirection::Bottom:
+            break;
+        case CollisionManager::CollisionDirection::Left:
+            if (player.isJumping()) break;
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            player.setAccelerationX(0);
+            player.setPosition(player.getPosition().x - collision.overlap,
+                               player.getPosition().y);
+            break;
+        case CollisionManager::CollisionDirection::Right:
+            if (player.isJumping()) break;
+            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
+            player.setAccelerationX(0);
+            player.setPosition(player.getPosition().x + collision.overlap, player.getPosition().y);
+            break;
+        case CollisionManager::CollisionDirection::None:
+            break;
+    }
+
+}
+
+
 
 void GamingState::initPauseButtons() {
     // Inizializzazione dei pulsanti di pausa con texture diverse
@@ -155,7 +428,7 @@ void GamingState::drawPause(sf::RenderWindow &window) {
     pauseText.setFont(font);
     pauseText.setCharacterSize(20);
     pauseText.setFillColor(sf::Color::White);
-    pauseText.setPosition(window.getSize().x - 300, 10);
+    pauseText.setPosition((float)window.getSize().x - 300, 10);
     pauseText.setString("Press \"P\" to pause");
     window.draw(pauseText);
 
@@ -170,8 +443,8 @@ void GamingState::drawPause(sf::RenderWindow &window) {
         float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
         float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
         pauseSprite.setScale(scaleX, scaleY);
-        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
-        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
+        float posX = (float)window.getSize().x - pauseSprite.getGlobalBounds().width;
+        float posY = (float)window.getSize().y - pauseSprite.getGlobalBounds().height;
         pauseSprite.setPosition(posX, posY);
         window.draw(pauseSprite);
 
@@ -203,8 +476,8 @@ void GamingState::handleGameOver(sf::RenderWindow &window) {
         float scaleX = static_cast<float>(window.getSize().x) / pauseSprite.getLocalBounds().width;
         float scaleY = static_cast<float>(window.getSize().y) / pauseSprite.getLocalBounds().height;
         pauseSprite.setScale(scaleX, scaleY);
-        float posX = window.getSize().x - pauseSprite.getGlobalBounds().width;
-        float posY = window.getSize().y - pauseSprite.getGlobalBounds().height;
+        float posX = (float)window.getSize().x - pauseSprite.getGlobalBounds().width;
+        float posY = (float)window.getSize().y - pauseSprite.getGlobalBounds().height;
         pauseSprite.setPosition(posX, posY);
         window.draw(pauseSprite);
 
@@ -246,26 +519,91 @@ void GamingState::handleGameOver(sf::RenderWindow &window) {
     }
 }
 
-std::string GamingState::getBackgroundPath() const {
-    return GAME_BACKGROUND_PATH;
+void GamingState::handleEvents(sf::RenderWindow &window, const sf::Event &event) {
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+
+        gameTimer.stop();
+        gameTimer.saveBestTime();
+        window.close();
+    }
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P) {
+        if (!gameOver) {
+            paused = !paused;
+            if (paused) {
+                gameTimer.pause();
+            } else {
+                gameTimer.resume();
+            }
+        }
+    }
+
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            if (paused) {
+                if (pauseButtons[1]->isClicked(window)) {
+                    pauseButtons[1]->update(window);
+                    changeStateToNext = true;
+                    paused = false;
+                }
+                if (pauseButtons[0]->isClicked(window)) {
+                    pauseButtons[0]->update(window);
+                    gameTimer.resume();
+                    paused = false;
+                }
+            } else if (gameOver) {
+                if (gameOverButton->isClicked(window)) {
+                    gameOverButton->update(window);
+                    initState();
+                }
+            }
+
+        }
+    }
+
+    if (event.type == sf::Event::KeyReleased) {
+        if ((event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D) && !player.isJumping()) {
+            player.setTexture(textureManager.getTexture("Player", "Idle", 0));
+        }
+    }
 }
 
-void GamingState::loadAllTextures() {
-    setTextureForPlayer();
-    setTextureForEnemy();
-    setTextureForHeart();
 
-    //Aggiungi altre texture
+
+
+
+
+
+
+
+
+
+//utility
+void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
+    velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED * 2, PLAYER_MAX_SPEED * 2);
 }
 
-//Rendering functions
-void GamingState::render(sf::RenderWindow &window) {
+void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
+    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED * 4, PLAYER_MAX_SPEED * 2);
+}
 
-    //TODO:Inserire nei test
-    player.getHitbox();
-    sf::RectangleShape rectangle(sf::Vector2f(player.getHitbox().width, player.getHitbox().height));
+void GamingState::drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::RenderWindow &window) {
+    for (const auto &hitbox: hitboxes) {
+        sf::RectangleShape rectangle(sf::Vector2f(hitbox.width, hitbox.height));
+        rectangle.setPosition(hitbox.left, hitbox.top);
+        rectangle.setFillColor(sf::Color::Transparent);
+        rectangle.setOutlineColor(sf::Color::Red);
+        rectangle.setOutlineThickness(1.f);
+
+        window.draw(rectangle);
+    }
+}
+
+void GamingState::drawEntityHitboxes(const Entity& entity, sf::RenderWindow &window){
+    sf::RectangleShape rectangle(sf::Vector2f(entity.getHitbox().width, entity.getHitbox().height));
     sf::VertexArray points(sf::Points, 1);
-    points[0].position = sf::Vector2f(player.getCenter().x, player.getCenter().y);
+    points[0].position = sf::Vector2f(entity.getCenter().x, entity.getCenter().y);
     points[0].color = sf::Color::Red;
     rectangle.setPosition(player.getHitbox().left, player.getHitbox().top);
     rectangle.setFillColor(sf::Color::Transparent);
@@ -273,276 +611,6 @@ void GamingState::render(sf::RenderWindow &window) {
     rectangle.setOutlineThickness(1.f);
     window.draw(rectangle);
     window.draw(points);
-    drawHitboxes(gameMap.getMapHitboxes(), window);
-    gameMap.render(window);
-    //fire.draw(window);
-
-    //pumpkin.draw(window);
-
-    if(Timers.isStarted(eTimer::ePlayerInvincible) && !Timers.isExpired(eTimer::ePlayerInvincible)){
-        if(Timers.isExpired(eTimer::ePlayerBlinking) && !Timers.isPaused(eTimer::ePlayerBlinking)){
-            player.setVisibility(!player.isVisible());
-            Timers.restartTimer(eTimer::ePlayerBlinking);
-            std::cout << "Dentro a invincibilità" << std::endl;
-        }
-        if(player.isVisible()){
-            player.draw(window);
-        }
-    }else {
-        player.draw(window);
-    }
-    player.renderHealth(window);
-    gameTimer.displayElapsedTime(window);
-
-
-    for (int i = 0; i < hearts.size(); i++) {
-        if(i == 0 && Timers.isStarted(eTimer::eHeartDespawn) && !Timers.isExpired(eTimer::eHeartDespawn)) {
-            if (Timers.isExpired(eTimer::eBlinking))
-                hearts[0].setVisible(!hearts[0].isVisible());
-        }
-        if(hearts[i].isVisible()){
-            hearts[i].draw(window);
-        }
-
-        if(Timers.isExpired(eTimer::eBlinking)){
-            Timers.restartTimer(eTimer::eBlinking);
-        }
-        
-        sf::RectangleShape rectangle(sf::Vector2f(hearts[i].getHitbox().width, hearts[i].getHitbox().height));
-        sf::VertexArray points(sf::Points, 1);
-        points[0].position = sf::Vector2f(hearts[i].getCenter().x, hearts[i].getCenter().y);
-        points[0].color = sf::Color::Red;
-        rectangle.setPosition(hearts[i].getHitbox().left, hearts[i].getHitbox().top);
-        rectangle.setFillColor(sf::Color::Transparent);
-        rectangle.setOutlineColor(sf::Color::Red);
-        rectangle.setOutlineThickness(1.f);
-        window.draw(rectangle);
-        window.draw(points);
-    }
-
-    for(auto &fireBall: fireBalls){
-        sf::RectangleShape rectangle(sf::Vector2f(fireBall.getPumpkin()->getHitbox().width, fireBall.getPumpkin()->getHitbox().height));
-        sf::VertexArray points(sf::Points, 1);
-        points[0].position = sf::Vector2f(fireBall.getPumpkin()->getCenter().x, fireBall.getPumpkin()->getCenter().y);
-        points[0].color = sf::Color::Red;
-        rectangle.setPosition(fireBall.getPumpkin()->getHitbox().left, fireBall.getPumpkin()->getHitbox().top);
-        rectangle.setFillColor(sf::Color::Transparent);
-        rectangle.setOutlineColor(sf::Color::Red);
-        rectangle.setOutlineThickness(1.f);
-        window.draw(rectangle);
-        window.draw(points);
-    }
-
-    for(auto &fireBall: fireBalls){
-        fireBall.draw(window);
-    }
-
-    drawPause(window);
-    handleGameOver(window);
-
-}
-
-void GamingState::update(sf::RenderWindow &window, float deltaTime) {
-    if (!paused && !gameOver) {
-
-        gameTimer.update();
-
-        //Gestisce i timers
-        handleTimers(deltaTime);
-
-        //Aggiorna la posizione degli Sprite
-        handleMovements(deltaTime);
-
-        //Aggiorna animazione degli sprite
-        handleAnimations(deltaTime);
-
-        //Verifica le collisioni
-        handleCollisions();
-
-        sf::Vector2f currentVelocity = player.getVelocity();
-        currentVelocity.y += player.getAcceleration().y;
-        currentVelocity.x += player.getAcceleration().x;
-        clampPlayerYVelocity(currentVelocity);
-        clampPlayerVelocity(currentVelocity);
-        player.setVelocity(currentVelocity * deltaTime);
-
-        for(auto &heart: hearts){
-            float heartVelocity = heart.getVelocity().y;
-            heartVelocity += heart.getAcceleration().y;
-
-            heart.setVelocity(sf::Vector2f(0, heartVelocity * deltaTime));
-
-        }
-
-        if(Timers.isExpired(eTimer::eHeartDespawn)){
-            std::cout << "Dentro" << std::endl;
-            Timers.restartTimer(eTimer::eHeartDespawn);
-        }
-
-
-
-        //Aggiorna gli sprite
-        player.update(deltaTime);
-        updateHearts(deltaTime);
-
-
-        updateFireBalls(deltaTime);
-        //TODO:GESTIRE COLLISIONI CON I NEMICI
-       if (paused) {
-            for (auto &button: pauseButtons) {
-                button->update(window);
-            }
-        } else if (gameOver) {
-            gameOverButton->update(window);
-        }
-
-    }
-}
-
-// Player functions
-void GamingState::handleMovements(float deltaTime) {
-    //Applica la gravità al giocatore e al powerUp TODO(Aggiungi powerUp)
-    //PhysicsSystem::applyGravity(player, deltaTime);
-    handlePlayerMovements(deltaTime);
-    for (auto &heart: hearts) {
-        PhysicsSystem::applyGravity(heart);
-        //heart.setVelocity(sf::Vector2f(0, 3));
-    }
-}
-
-void GamingState::handlePlayerMovements(float deltaTime) {
-    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-    bool isKeyPressedW = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-
-    handlePlayerHorizontalMovement(isKeyPressedA, isKeyPressedD, deltaTime);
-    handlePlayerJump(isKeyPressedW, deltaTime);
-
-    PhysicsSystem::applyGravity(player);
-
-}
-
-void GamingState::handlePlayerHorizontalMovement(bool isKeyPressedA, bool isKeyPressedD, float deltaTime) {
-    int movementDirection = (isKeyPressedA ? -1 : 0) + (isKeyPressedD ? 1 : 0);
-
-    if (movementDirection != 0) {
-        if (player.getInverse() != (movementDirection < 0)) {
-            player.inverse();
-        }
-        adjustAccelerationForDirectionChange((float) movementDirection * PLAYER_ACCELERATION_RATE, deltaTime);
-    } else {
-        deceleratePlayer(deltaTime);
-    }
-}
-
-void GamingState::handlePlayerJump(bool isKeyPressedW, float deltaTime) {
-    if (isKeyPressedW && !player.isJumping() && player.getVelocity().y == 0) {
-        player.setAccelerationY(-JUMP_FORCE); // Imposta la velocità iniziale verso l'alto
-        player.setJumping(true);
-        player.setTexture(textureManager.getTexture("Player", "Jumping", 0));
-    }
-
-}
-
-void GamingState::handleAnimations(float deltaTime) {
-    bool isKeyPressedA = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-    bool isKeyPressedD = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-    bool isMovingHorizontally = (isKeyPressedA || isKeyPressedD);
-    bool isFalling = player.getVelocity().y > 0;
-    bool isIdle = player.getVelocity().x == 0 && !player.isJumping();
-
-    if (player.isJumping() && textureManager.getCurrentIndex("Player", "Jumping") < 2) {
-        // Se il player sta saltando, visualizza l'animazione di salto
-        textureManager.updateAnimation("Player", "Jumping", deltaTime, &player);
-    } else if (player.isJumping() && player.getAcceleration().y >= -2 && player.getVelocity().y <= 0 &&
-               textureManager.getCurrentIndex("Player", "Jumping") != 3) {
-        textureManager.setSpecificFrame("Player", "Jumping", 3, player);
-    } else if (isFalling) {
-        // Se il player sta cadendo (in aria con una velocità verso il basso), visualizza l'animazione di caduta
-        textureManager.updateAnimation("Player", "Falling", deltaTime, &player);
-    } else if (isMovingHorizontally && !player.isJumping()) {
-        // Se il player si sta muovendo orizzontalmente ed è sul terreno, visualizza l'animazione di corsa
-        textureManager.updateAnimation("Player", "Running", deltaTime, &player);
-    } else if (isIdle) {
-        // Se il player non si sta muovendo, visualizza l'animazione d'inattività
-        textureManager.updateAnimation("Player", "Idle", deltaTime, &player);
-    }
-
-    handleEnemyAnimations(deltaTime);
-    for(auto &heart: hearts){
-        textureManager.updateAnimation(heart.getName(), "Heart", deltaTime, &heart);
-    }
-}
-
-void GamingState::handleCollisionMap(CollisionManager::CollisionResult collision) {
-    switch (collision.direction) {
-        case CollisionManager::CollisionDirection::Top:
-
-            if (!player.isJumping()) {
-                PhysicsSystem::standOn(player);
-                if (collision.overlap > 5)
-                    player.setPosition(player.getPosition().x, player.getPosition().y - collision.overlap);
-                player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-            }
-
-            //std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-            if (player.getAcceleration().y > 0 &&
-                ((player.getHitbox().top + player.getHitbox().height) - 10) <= collision.platformPosition.y) {
-                player.setJumping(false);
-                std::cout << "Collisione con la parte superiore della piattaforma" << std::endl;
-                player.setTexture(textureManager.getTexture("Player", "Idle", 0));
-                textureManager.resetAnimation("Player", "Jumping");
-                player.setPosition(player.getPosition().x, player.getPosition().y - collision.overlap);
-                player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-                player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
-            }
-            break;
-        case CollisionManager::CollisionDirection::Bottom:
-            //std::cout << "Collisione con la parte inferiore della piattaforma" << std::endl;
-            /*player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-            player.setAcceleration(sf::Vector2f(player.getAcceleration().x, 0));
-            player.setPosition(player.getPosition().x, player.getPosition().y + collision.overlap);*/
-            break;
-        case CollisionManager::CollisionDirection::Left:
-            if (player.isJumping()) break;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-            player.setAccelerationX(0);
-            player.setPosition(player.getPosition().x - collision.overlap,
-                               player.getPosition().y); //sposta il player indietro TODO: sistemare
-            break;
-        case CollisionManager::CollisionDirection::Right:
-            if (player.isJumping()) break;
-            player.setVelocity(sf::Vector2f(0, player.getVelocity().y));
-            player.setAccelerationX(0);
-            player.setPosition(player.getPosition().x + collision.overlap, player.getPosition().y);
-            break;
-        case CollisionManager::CollisionDirection::None:
-            break;
-    }
-
-}
-
-void GamingState::setTextureForPlayer() {
-
-    std::map<std::string, AnimationConfig> playerAnimations = {
-            {"Running",        {PLAYER_RUNNING_PATH, PLAYER_RUNNING_TEXTURES, PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, true}},
-            {"Jumping",        {PLAYER_JUMPING_PATH, PLAYER_JUMPING_TEXTURES, PLAYER_JUMPING_MIN_FRAME_DURATION, PLAYER_JUMPING_MIN_FRAME_DURATION, false}},
-            {"Idle",           {PLAYER_IDLE_PATH,    PLAYER_IDLE_TEXTURES,    PLAYER_RUNNING_MIN_FRAME_DURATION, PLAYER_RUNNING_MIN_FRAME_DURATION, false}},
-            {"Falling",        {PLAYER_FALLING_PATH, PLAYER_FALLING_TEXTURES, PLAYER_FALLING_MIN_FRAME_DURATION, PLAYER_FALLING_MAX_FRAME_DURATION, false}},
-            {"CrunchTextures", {PLAYER_CRUNCH_PATH,  PLAYER_CRUNCH_TEXTURES,  PLAYER_RUNNING_MAX_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, false}},
-            {"Die",            {PLAYER_DEAD_PATH,    PLAYER_DEAD_TEXTURES,    PLAYER_RUNNING_MAX_FRAME_DURATION, PLAYER_RUNNING_MAX_FRAME_DURATION, false}}};
-    {
-        // Carica le texture del player
-        textureManager.loadEntityTextures("Player", playerAnimations);
-    }
-
-
-    textureManager.loadEntityTextures("Player", playerAnimations);
-
-// Imposta la texture iniziale e la posizione del player
-    player.setTexture(textureManager.getTexture("Player", "Idle", 0));
-    player.setPosition(sf::Vector2f(100, 500));
-
 }
 
 void GamingState::adjustAccelerationForDirectionChange(float accelerationRate, float deltaTime) {
@@ -571,90 +639,9 @@ bool GamingState::deceleratePlayer(float deltaTime) {
     return false; // Il giocatore è ancora in movimento
 }
 
-void GamingState::clampPlayerVelocity(sf::Vector2f &velocity) {
-    velocity.x = std::clamp(velocity.x, -PLAYER_MAX_SPEED * 2, PLAYER_MAX_SPEED * 2);
-}
-
-void GamingState::clampPlayerYVelocity(sf::Vector2f &velocity) {
-    velocity.y = std::clamp(velocity.y, -PLAYER_MAX_SPEED * 4, PLAYER_MAX_SPEED * 2);
-}
-
-void GamingState::handleCollisions() {
-    //Prova collisioni con i nemici
-    //std::vector<Entity*> colliders;
-    //colliders.push_back(&pumpkin);
-    //Entity* collider = CollisionManager::handleCircleEnemy(player, colliders);
-
-    /* if (CollisionManager::checkMapCollision(player, gameMap.getMapHitboxes())) {
-         std::cout << "Collisione con la mappa";
-         player.setVelocity(sf::Vector2f(player.getVelocity().x, 0));
-     }*/
-
-    std::vector<CollisionManager::CollisionResult> collisions = CollisionManager::checkMapCollision(player,
-                                                                                                   gameMap.getMapHitboxes());
-    for (const auto &collision: collisions) {
-        if (collision.hasCollision) {
-            handleCollisionMap(collision);
-        }
-    }
-
-    std::allocator<Entity> allocator;
-    for(auto &fireBall: fireBalls){
-        if (CollisionManager::checkCircleCollision(*fireBall.getPumpkin(), player)) {
-            if(!player.isInvincible()) {
-                player.takeDamage();
-                player.setInvincible(true);
-                Timers.restartTimer(eTimer::ePlayerInvincible);
-                fireBall.setHit(true);
-                if(player.getHealth() > 0) {
-                    Timers.restartTimer(eTimer::ePlayerBlinking);
-                }else{
-                    Timers.pauseTimer(eTimer::ePlayerBlinking);
-                }
-            }
-            break;
-        }
-    }
-
-}
-
-//Enemy functions
-void GamingState::setTextureForEnemy() {
-    std::map<std::string, AnimationConfig> fireAnimations = {
-            {"Fire", {FIRE_TEXTURE_PATH, FIRE_TEXTURES, FIRE_MIN_FRAME_DURATION, FIRE_MAX_FRAME_DURATION, false}}
-    };
-
-    std::map<std::string, AnimationConfig> pumpkinAnimation = {
-            {"afk",
-             {PUMPKIN_TEXTURE_PATH, PUMPKIN_TEXTURES, PUMPKIN_MIN_FRAME_DURATION, PUMPKIN_MAX_FRAME_DURATION,
-              false}},
-            {"explo",
-                {"PNG/Explosion/row-1-column-0", 12, 1, 1,
-                false}}
-    };
 
 
-    textureManager.loadEntityTextures("FireBall", fireAnimations, GAMING_MAX_FIREBALLS);
-    textureManager.loadEntityTextures("Pumpkin", pumpkinAnimation);
-}
 
-void GamingState::handleEnemyAnimations(float deltaTime) {
-    for(auto &fireBall: fireBalls){
-        textureManager.updateAnimation(fireBall.getName(), "Fire", deltaTime, fireBall.getFire());
-    }
-}
-
-void GamingState::setTextureForHeart() {
-    std::map<std::string, AnimationConfig> heartAnimations = {
-            {"Heart",
-             {HEART_TEXTURE_PATH, HEART_TEXTURES, HEART_MIN_FRAME_DURATION, HEART_MAX_FRAME_DURATION, false}}
-    };
-
-    textureManager.loadTexturesFromSpriteSheetWithLineNumber("Heart", "PNG/Heart/heartAnimation.png", heartAnimations,
-                                                             32,
-                                                             32, GAMING_MAX_HEARTS);
-
-}
 
 void GamingState::spawnHeart() {
     Heart heart;
@@ -663,7 +650,6 @@ void GamingState::spawnHeart() {
     // Controlla se ci sono già 2 cuori sulla mappa
     if (hearts.size() < GAMING_MAX_HEARTS) {
         int xPosition = randomBetween(40, WINDOW_WIDTH - 40);
-        std::cout << "Spawned heart at " << xPosition << std::endl;
         heart.setPosition(sf::Vector2f((float) xPosition, 0));
         heart.setName("Heart" + std::to_string(hearts.size() + 1));
         hearts.push_back(heart);
@@ -690,7 +676,7 @@ void GamingState::handleTimers(float deltaTime) {
     Timers.restartTimer(eTimer::eHearthSpawn);
   }
 
-  if(Timers.getElapsedTime(eTimer::eHeartDespawn) > 8000 && (!Timers.isStarted(eTimer::eBlinking) || Timers.isExpired(eTimer::eBlinking))){
+  if(Timers.getElapsedTime(eTimer::eHeartDespawn) > 15000 && (!Timers.isStarted(eTimer::eBlinking) || Timers.isExpired(eTimer::eBlinking))){
       Timers.startTimer(eTimer::eBlinking);
   }
 
@@ -719,6 +705,7 @@ void GamingState::handleHeartCollisions(Heart &heart) {
     }
 }
 
+//funzioni Update
 void GamingState::updateHearts(float deltaTime) {
     //handleHeartSpawn(deltaTime);
 
@@ -734,24 +721,53 @@ void GamingState::updateHearts(float deltaTime) {
     }), hearts.end());
 }
 
-void GamingState::drawHitboxes(const std::vector<sf::FloatRect> &hitboxes, sf::RenderWindow &window) {
-    for (const auto &hitbox: hitboxes) {
-        sf::RectangleShape rectangle(sf::Vector2f(hitbox.width, hitbox.height));
-        rectangle.setPosition(hitbox.left, hitbox.top);
-        rectangle.setFillColor(sf::Color::Transparent);
-        rectangle.setOutlineColor(sf::Color::Red);
-        rectangle.setOutlineThickness(1.f);
+void GamingState::updateFireBalls(float deltaTime) {
 
-        window.draw(rectangle);
+    for(auto &fireBall: fireBalls){
+        if(fireBall.getInverse() && fireBall.getPosition().x < -200){
+            fireBall.setHit(false);
+            int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
+            int xPosition = randomBetween(1, 2);
+            if(xPosition == 1)
+                fireBall.setPosition(sf::Vector2f(WINDOW_WIDTH + 200, (float) yPosition));
+            else {
+                fireBall.setInverse(false);
+                fireBall.setPosition(sf::Vector2f(-200, (float) yPosition));
+                fireBall.setFireScale(FIRE_SCALE, FIRE_SCALE);
+                fireBall.setPumpkinScale(PUMPKIN_SCALE, PUMPKIN_SCALE);
+                fireBall.setVelocity(1, 0);
+            }
+
+        }else if(!fireBall.getInverse() && fireBall.getPosition().x > WINDOW_WIDTH + 200){
+            fireBall.setHit(false);
+            int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
+            int xPosition = randomBetween(1, 2);
+            if(xPosition == 1)
+                fireBall.setPosition(sf::Vector2f(-200, (float) yPosition));
+            else {
+                fireBall.setInverse(true);
+                fireBall.setPosition(sf::Vector2f(WINDOW_WIDTH + 200, (float) yPosition));
+                fireBall.setFireScale(-FIRE_SCALE, FIRE_SCALE);
+                fireBall.setPumpkinScale(-PUMPKIN_SCALE, PUMPKIN_SCALE);
+                fireBall.setVelocity(-1, 0);
+            }
+        }
     }
+
+    for(auto &fireBall: fireBalls){
+        fireBall.update(deltaTime);
+    }
+
 }
+
+
 
 void GamingState::initTimer() {
     gameTimer.reset();
     gameTimer.start();
     Timers.addTimer(eTimer::eHearthSpawn, std::chrono::milliseconds(TIMER_HEARTH_SPAWN), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
-    Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(TIMER_HEARTH_DESPAWN), [&]() { std::cout << "Despawned heart"; },
+    Timers.addTimer(eTimer::eHeartDespawn, std::chrono::milliseconds(TIMER_HEARTH_DESPAWN), [&]() {},
                     TimerClass::eTimerMode::OnceDown);
     Timers.addTimer(eTimer::eBlinking, std::chrono::milliseconds(TIMER_BLINKING), [&]() { },
                     TimerClass::eTimerMode::OnceDown);
@@ -807,42 +823,4 @@ void GamingState::spawnFireBall() {
     }
 }
 
-void GamingState::updateFireBalls(float deltaTime) {
-
-    for(auto &fireBall: fireBalls){
-        if(fireBall.getInverse() && fireBall.getPosition().x < -200){
-            fireBall.setHit(false);
-            int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
-            int xPosition = randomBetween(1, 2);
-            if(xPosition == 1)
-                fireBall.setPosition(sf::Vector2f(WINDOW_WIDTH + 200, (float) yPosition));
-            else {
-                fireBall.setInverse(false);
-                fireBall.setPosition(sf::Vector2f(-200, (float) yPosition));
-                fireBall.setFireScale(FIRE_SCALE, FIRE_SCALE);
-                fireBall.setPumpkinScale(PUMPKIN_SCALE, PUMPKIN_SCALE);
-                fireBall.setVelocity(1, 0);
-            }
-
-        }else if(!fireBall.getInverse() && fireBall.getPosition().x > WINDOW_WIDTH + 200){
-            fireBall.setHit(false);
-            int yPosition = randomBetween(10, WINDOW_HEIGHT - 200);
-            int xPosition = randomBetween(1, 2);
-            if(xPosition == 1)
-                fireBall.setPosition(sf::Vector2f(-200, (float) yPosition));
-            else {
-                fireBall.setInverse(true);
-                fireBall.setPosition(sf::Vector2f(WINDOW_WIDTH + 200, (float) yPosition));
-                fireBall.setFireScale(-FIRE_SCALE, FIRE_SCALE);
-                fireBall.setPumpkinScale(-PUMPKIN_SCALE, PUMPKIN_SCALE);
-                fireBall.setVelocity(-1, 0);
-            }
-        }
-    }
-
-    for(auto &fireBall: fireBalls){
-        fireBall.update(deltaTime);
-    }
-
-}
 

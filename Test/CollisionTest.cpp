@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "gtest/gtest.h"
 #include "../Controllers/CollisionManager.h"
+#include "Pumpkin.h"
+#include "Player.h"
 
 
 TEST(CollisionManager, checkCollision){
@@ -141,5 +143,6 @@ TEST(CollisionManager, checkCollision10){
     s2.setPosition(0,0);
     EXPECT_TRUE(CollisionManager::checkCollision(s1.getGlobalBounds(),s2.getGlobalBounds()));
 }
+
 
 

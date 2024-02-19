@@ -120,7 +120,6 @@ private:
 
     ~TimerClass() {
         running = false;
-        std::cout << "Distruttore timer" << std::endl;
         if (timerThread.joinable()) {
             timerThread.join();
         }

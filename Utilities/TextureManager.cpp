@@ -70,10 +70,6 @@ TextureManager::getTexture(const std::string& entity, const std::string& animati
 }
 
 void TextureManager::updateAnimation(const std::string &entityName, const std::string &animationType, float deltaTime, Entity *entity) {
-
-    if(animationType == "explo"){
-        std::cout << "explo" << std::endl;
-    }
     AnimationInfo& animInfo = textures[entityName][animationType];
     animInfo.animationTimer += deltaTime;
     auto frameCount = (float) animInfo.animationData.frames.size();

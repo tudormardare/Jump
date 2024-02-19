@@ -128,7 +128,6 @@ bool Player::isInvincible() const {
 
 void Player::setInvincible(bool value) {
     invincible = value;
-    std::cout << "Invincibilità: " << invincible << std::endl;
 }
 
 bool Player::isVisible() const {
@@ -137,7 +136,6 @@ bool Player::isVisible() const {
 
 void Player::setVisibility(bool value) {
     visible = value;
-    std::cout << "Visibilità: " << visible << std::endl;
 }
 
 
