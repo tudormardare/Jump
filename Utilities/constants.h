@@ -4,17 +4,17 @@
 
 #ifndef JUMP_CONSTANTS_H
 #define JUMP_CONSTANTS_H
-#define GAMEOVER_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
-#define GAME_BACKGROUND_PATH "PNG/Background/background.png"
-#define WINDOW_WIDTH 1080
-#define WINDOW_HEIGHT 675
 
-// Dimensioni e posizioni dei pulsanti del menu
+// Dimensioni e posizioni dei pulsanti di pausa
 #define PAUSE_BUTTON_HEIGHT 75
-
-// Percorsi delle texture dei pulsanti del menu
 #define PAUSE_RESUME_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
 #define PAUSE_QUIT_BUTTON_PATH "PNG/MenuButton/ExitButton.png"
+#define PAUSE_BUTTON_WIDTH 300
+#define PAUSE_BUTTON_HEIGHT 75
+#define PAUSE_BUTTON_DISTANCE 100
+#define PAUSE_BUTTONS_NUMBER 2
+#define PAUSE_BUTTONS_PATH "PNG/MenuButton/Button.png"
+#define PAUSE_MENU_BACKGROUND_PATH "PNG/Background/background.png"
 
 // Dimensioni della finestra
 #define WINDOW_WIDTH 1080
@@ -25,22 +25,14 @@
 #define MENU_BUTTON_HEIGHT 75
 #define MENU_BUTTON_DISTANCE 50
 #define MENU_BUTTONS_NUMBER 3
-
-// Percorsi delle texture dei pulsanti del menu
 #define MENU_SETTINGS_BUTTON_PATH "PNG/MenuButton/GuideButton.png"
 #define MENU_PLAY_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
 #define MENU_EXIT_BUTTON_PATH "PNG/MenuButton/ExitButton.png"
-
-// Percorso dell'immagine di sfondo del menu
 #define MENU_BACKGROUND_PATH "PNG/Background/background.png"
+#define GAMEOVER_BUTTON_PATH "PNG/MenuButton/PlayButton.png"
+#define GAME_BACKGROUND_PATH "PNG/Background/background.png"
 
-#define PAUSE_BUTTON_WIDTH 300
-#define PAUSE_BUTTON_HEIGHT 75
-#define PAUSE_BUTTON_DISTANCE 100
-#define PAUSE_BUTTONS_NUMBER 2
-#define PAUSE_BUTTONS_PATH "PNG/MenuButton/Button.png"
-#define PAUSE_MENU_BACKGROUND_PATH "PNG/Background/background.png"
-
+// Percorsi delle texture dei pulsanti del settings
 #define SETTINGS_BUTTON_PATH "PNG/MenuButton/BackButton.png"
 #define SETTINGS_BUTTON_WIDTH 200
 #define SETTINGS_BUTTON_HEIGHT 450
@@ -48,6 +40,7 @@
 #define SETTINGS_BUTTON_NUMBER 1
 #define SETTINGS_MENU_BACKGROUND_PATH "PNG/KeybindingsGuide/Keybindings.png"
 
+// Fire
 #define FIRE_TEXTURE_PATH "PNG/Fire/1_"
 #define FIRE_SCALE 2.f
 #define FIRE_TEXTURES 60
@@ -57,6 +50,7 @@
 #define FIRE_RECTANGLE_HEIGHT 16
 #define FIRE_DEFAULT_SPEED 20.f
 
+// Heart
 #define HEART_SPAWN_INTERVAL 5.f
 #define HEART_FALL_SPEED 100.f
 #define HEART_SCALE 1.f
